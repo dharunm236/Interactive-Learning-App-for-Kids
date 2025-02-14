@@ -33,7 +33,6 @@ export const logIn = async (email, password) => {
   }
 };
 
-// Log Out User
 export const logOut = async () => {
   try {
     await signOut(auth);
