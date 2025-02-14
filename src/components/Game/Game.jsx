@@ -101,55 +101,57 @@ const Game = ({ numberOfBalloons, gameDuration }) => {
   };
 
   return (
-    <div className="game-container">
-      {(!gameStarted || gameStopped) && (
-        <CoverScreen
-          score={score}
-          onStartGame={startGame}
-          duration={Constants.gameDuration}
-        />
-      )}
-      <CSSTransition
-        in={gameStarted}
-        timeout={250}
-        classNames="balloons-screen"
-        mountOnEnter
-        unmountOnExit
-      >
-        {(state) => (
-          <div className={`balloons-screen balloons-screen--${state}`}>
-            <div className="game-nav">
-              <h1 className="instructions">Press the 🔊 button to hear the word</h1>
-              <Button onClick={speakWord}>🔊</Button>
-              <div className="game-settings">
-                <ScoreCard score={score} time={timeRemaining} />
-                <Button type={"alert"} onClick={stopGame}>
-                  Stop
-                </Button>
-                
-              </div>
-            </div>
-            <div className="gaps">
-              {selectedWord.split("").map((_, index) => (
-                <span key={index} className="gap">
-                  {filledGaps[index] || "_"}
-                </span>
-              ))}
-            </div>
-            <BalloonGrid
-              numberOfBalloons={numberOfBalloons}
-              onBalloonClick={handleBalloonClick}
-              selectedWord={selectedWord}
-              currentLetterIndex={currentLetterIndex}
-            />
-          </div>
+    <div className="balloon-game-wrapper"> {/* Add this wrapper */}
+      <div className="game-container">
+        {(!gameStarted || gameStopped) && (
+          <CoverScreen
+            score={score}
+            onStartGame={startGame}
+            duration={Constants.gameDuration}
+          />
         )}
-      </CSSTransition>
-      <Toast message={"+1 hits"} trigger={hit} />
-      <Celebration 
-        trigger={showCelebration} 
-        onComplete={handleCelebrationComplete}
-      />
+        <CSSTransition
+          in={gameStarted}
+          timeout={250}
+          classNames="balloons-screen"
+          mountOnEnter
+          unmountOnExit
+        >
+          {(state) => (
+            <div className={`balloons-screen balloons-screen--${state}`}>
+              <div className="game-nav">
+                <h1 className="instructions">Press the 🔊 button to hear the word</h1>
+                <Button onClick={speakWord}>🔊</Button>
+                <div className="game-settings">
+                  <ScoreCard score={score} time={timeRemaining} />
+                  <Button type={"alert"} onClick={stopGame}>
+                    Stop
+                  </Button>
+                  
+                </div>
+              </div>
+              <div className="gaps">
+                {selectedWord.split("").map((_, index) => (
+                  <span key={index} className="gap">
+                    {filledGaps[index] || "_"}
+                  </span>
+                ))}
+              </div>
+              <BalloonGrid
+                numberOfBalloons={numberOfBalloons}
+                onBalloonClick={handleBalloonClick}
+                selectedWord={selectedWord}
+                currentLetterIndex={currentLetterIndex}
+              />
+            </div>
+          )}
+        </CSSTransition>
+        <Toast message={"+1 hits"} trigger={hit} />
+        <Celebration 
+          trigger={showCelebration} 
+          onComplete={handleCelebrationComplete}
+        />
+      </div>
     </div>
   );
 };
