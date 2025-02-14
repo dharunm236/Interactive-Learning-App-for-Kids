@@ -1,0 +1,314 @@
+:root {
+  --primary-gradient: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+  --secondary-gradient: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+  --accent-color: #ff4757;
+  --text-dark: #2d3436;
+  --text-light: #f5f6fa;
+  --glass-bg: rgba(255, 255, 255, 0.15);
+  --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 15px 25px rgba(0, 0, 0, 0.2);
+  --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--primary-gradient);
+  color: var(--text-dark);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Animated Background Overlay */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--secondary-gradient);
+  opacity: 0.9;
+  z-index: -1;
+}
+
+/* Modern Navbar */
+.navbar {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  padding: 1rem 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  box-shadow: var(--shadow-sm);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+  font-family: 'Pacifico', cursive;
+  font-size: 2.8rem;
+  color: var(--text-light);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: rotate(-5deg) scale(1.05);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.nav-links a {
+  color: var(--text-light);
+  text-decoration: none;
+  font-size: 1.1rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 30px;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-links a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: left 0.4s ease;
+}
+
+.nav-links a:hover::before {
+  left: 0;
+}
+
+/* Hero Section with Parallax Effect */
+.hero-section {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 0 5%;
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-message {
+  position: relative;
+  z-index: 50;
+  max-width: 600px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(15px);
+  padding: 3rem;
+  border-radius: 30px;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(0);
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.welcome-message h1 {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(45deg, #fff, #ffeaa7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  font-size: 1.8rem;
+  color: var(--text-light);
+  margin-bottom: 2rem;
+  line-height: 1.3;
+}
+
+.cta-button {
+  background: var(--primary-gradient);
+  color: var(--text-light);
+  padding: 1.2rem 3rem;
+  border-radius: 50px;
+  font-size: 1.3rem;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: rotate(45deg);
+  transition: left 0.6s ease;
+}
+
+.cta-button:hover::after {
+  left: 150%;
+}
+
+/* Modern Mascot Cards */
+.mascot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 3rem;
+  padding: 5rem 5%;
+}
+
+.mascot-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 25px;
+  padding: 2rem;
+  text-align: center;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.mascot-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.mascot-card:hover::before {
+  left: 100%;
+}
+
+.mascot-card img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+}
+
+/* Interactive Activities Grid */
+.activities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 3rem;
+  padding: 5rem 5%;
+}
+
+.activity-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 25px;
+  padding: 2.5rem;
+  text-align: center;
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.activity-card:hover {
+  transform: translateY(-15px) scale(1.02);
+}
+
+.activity-card h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-light);
+}
+
+/* Floating Bouncing Ball */
+.bouncing-ball {
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle at 30% 30%, #fff, #ffd700);
+  border-radius: 50%;
+  margin: 2rem auto;
+  cursor: pointer;
+  animation: 
+    bounce 2s ease infinite,
+    glow 1.5s ease-in-out infinite alternate;
+  position: relative;
+  box-shadow: 0 0 40px rgba(255,215,0,0.4);
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 20px rgba(255,215,0,0.2); }
+  to { box-shadow: 0 0 40px rgba(255,215,0,0.6); }
+}
+
+/* Enhanced Confetti */
+.confetti {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(45deg, #ff9ff3, #f368e0);
+  z-index: 2000;
+  pointer-events: none;
+  animation: 
+    confettiFall 1.8s linear forwards,
+    spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .nav-links {
+    gap: 1.5rem;
+  }
+  
+  .nav-links a {
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
+  }
+  
+  .welcome-message h1 {
+    font-size: 3rem;
+  }
+  
+  .mascot-grid,
+  .activities-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Loading Animation */
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+.skeleton-loader {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(to right, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+  background-size: 1000px 100%;
+}

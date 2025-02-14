@@ -1,135 +1,61 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import './Homepage.css'; // Assuming you place your CSS in this file
+import './homepageCSS/Homepage.css'; // Assuming you place your CSS in this file
+import './homepageCSS/dropdown.css';
+import { FaUser, FaSignOutAlt, FaBook, FaGamepad, FaChartLine, FaHome } from 'react-icons/fa';
+import { GiBouncingSword, GiChemicalDrop, GiAlphabet } from 'react-icons/gi';
+import { Link } from 'react-router-dom';
 
-function Homepage() {
-  const canvasRef = useRef(null); // ✅ Added useRef
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
 
-    // Three.js Scene Setup
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
-
-    const renderer = new THREE.WebGLRenderer({
-      canvas: canvas,
-      alpha: true,
-      antialias: true,
-    });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    // Create playful floating toy shapes (mascots)
-    const createFloatingToy = (shape, color, size = 1) => {
-      let geometry;
-      switch (shape) {
-        case 'sphere':
-          geometry = new THREE.SphereGeometry(size, 32, 32);
-          break;
-        case 'box':
-          geometry = new THREE.BoxGeometry(size, size, size);
-          break;
-        case 'cone':
-          geometry = new THREE.ConeGeometry(size, size * 2, 32);
-          break;
-        default:
-          geometry = new THREE.SphereGeometry(size, 32, 32);
-      }
-      const material = new THREE.MeshPhongMaterial({
-        color,
-        transparent: true,
-        opacity: 0.9,
-      });
-      const mesh = new THREE.Mesh(geometry, material);
-      scene.add(mesh);
-      return mesh;
+function Homepage({ onLogout, onProfileClick }) {
+    const [showDropdown, setShowDropdown] = useState(false);
+    const canvasRef = useRef(null); 
+    const toggleDropdown = () => {
+      setShowDropdown(!showDropdown);
     };
 
-    // Create multiple floating toys with different speeds and shapes
-    const toys = [
-      { mesh: createFloatingToy('sphere', 0xff6b6b, 0.8), speed: 0.01 },
-      { mesh: createFloatingToy('box', 0x6bcb77, 1), speed: 0.015 },
-      { mesh: createFloatingToy('cone', 0x4d96ff, 0.9), speed: 0.012 },
-    ];
-
-    // Position camera
-    camera.position.z = 10;
-
-    // Add Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-    scene.add(ambientLight);
-    const pointLight = new THREE.PointLight(0xffffff, 1);
-    pointLight.position.set(5, 5, 5);
-    scene.add(pointLight);
-
-    // Animation Loop
-    const animate = () => {
-      requestAnimationFrame(animate);
-      toys.forEach((toy, i) => {
-        toy.mesh.rotation.x += toy.speed;
-        toy.mesh.rotation.y += toy.speed;
-        toy.mesh.position.y = Math.sin(Date.now() * toy.speed + i) * 2;
-      });
-      renderer.render(scene, camera);
+    const handleLogout = () => {
+        setShowDropdown(false); // Close the dropdown
+        onLogout(); // Actually log the user out
     };
-    animate();
-
-    // Responsive Handling
-    const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    };
-    window.addEventListener('resize', handleResize);
-
-    // Fun Zone: Bouncing Ball & Confetti Effect
-    const ball = document.getElementById('bouncing-ball');
-    ball.addEventListener('click', (e) => {
-      for (let i = 0; i < 30; i++) {
-        const confetti = document.createElement('div');
-        confetti.classList.add('confetti');
-        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
-        confetti.style.left = `${e.clientX + (Math.random() - 0.5) * 200}px`;
-        confetti.style.top = `${e.clientY + (Math.random() - 0.5) * 200}px`;
-        document.body.appendChild(confetti);
-        confetti.animate(
-          [
-            { transform: 'translateY(0)', opacity: 1 },
-            { transform: 'translateY(100px)', opacity: 0 },
-          ],
-          {
-            duration: 1000 + Math.random() * 500,
-            easing: 'ease-out',
-          }
-        ).onfinish = () => confetti.remove();
-      }
-    });
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      renderer.dispose();
-    };
-  }, []);
+      
 
   return (
     <div>
       <nav className="navbar">
         <div className="logo">FunLearn 🎓</div>
         <div className="nav-links">
-          <a href="#home">🏠 Home</a>
-          <a href="#lessons">📚 Lessons</a>
-          <a href="#games">🎮 Games</a>
-          <a href="#progress">📈 Progress</a>
-          <a href="#profile">👤 Profile</a>
+            <a href="#home" className="nav-item">
+                <FaHome className="nav-icon" /> Home
+            </a>
+            <a href="#lessons" className="nav-item">
+                <FaBook className="nav-icon" /> Lessons
+            </a>
+            <Link to="/games" className="nav-item">
+                <FaGamepad className="nav-icon" /> Games
+            </Link>
+            <a href="#progress" className="nav-item">
+                <FaChartLine className="nav-icon" /> Progress
+            </a>
+            <div className="profile-menu" onClick={toggleDropdown}>
+            <div className="profile-preview">
+                <img src="https://via.placeholder.com/40?text=U" alt="Profile" />
+            </div>
+            {showDropdown && (
+                <div className="profile-dropdown">
+                <div className="dropdown-item" onClick={onProfileClick}>
+                    <FaUser className="dropdown-icon" /> Profile
+                </div>
+                <div className="dropdown-separator"></div>
+                <div className="dropdown-item" onClick={handleLogout}>
+                    <FaSignOutAlt className="dropdown-icon" /> Logout
+                </div>
+                </div>
+            )}
+            </div>
         </div>
-      </nav>
+        </nav>
 
       <main>
         <section className="hero-section" id="home">
@@ -142,7 +68,7 @@ function Homepage() {
         </section>
 
         <section className="mascot-section" id="mascots">
-          <h2>Meet Our Playful Mascots!</h2>
+          <h1>Meet Our Playful Mascots!</h1>
           <div className="mascot-grid">
             <div className="mascot-card">
               <img src="https://via.placeholder.com/100?text=Bunny" alt="Bouncy Bunny" />
@@ -176,7 +102,7 @@ function Homepage() {
             <p>Discover amazing science facts!</p>
           </div>
         </section>
-
+        
         <section className="fun-zone" id="fun">
           <h2>Fun Zone!</h2>
           <p>Click on the bouncing ball to see magic!</p>

@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { auth } from "./firebaseConfig";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Home from "./components/Homepage";
-import Login from "./components/Login";
-import Profile from "./components/Profile";
+import React, { useState, useEffect } from 'react';
+import { auth } from './firebaseConfig';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Homepage from './components/Homepage';
+import Login from './components/Login';
+import Profile from './components/Profile';
+import Game from './components/Game/Game'; // Imported from Balloon Game app
+import Constants from './utils/constants'; // Imported from Balloon Game app
+import GamesPage from './components/GamesPage';
+import ReactDOM from "react-dom";
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -24,17 +29,29 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          {/* Show Login only if user is NOT logged in */}
           <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
-
-          {/* Show Homepage only if user is logged in */}
-          <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
-
-          {/* Profile route (Optional) */}
+          <Route
+            path="/"
+            element={
+              user ? <Homepage onLogout={handleLogout} /> : <Navigate to="/login" />
+            }
+          />
           <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />} />
+          <Route
+                    path="/games"
+                    element={user ? <GamesPage /> : <Navigate to="/login" />}
+                />
+            <Route
+                    path="/Ballongame"
+                    element={
+                    user ? (
+                        <Game numberOfBalloons={Constants.gameCells} gameDuration={Constants.gameDuration} />
+                    ) : (
+                        <Navigate to="/login" />
+                    )
+                    }
+                />
         </Routes>
-
-        {user && <button onClick={handleLogout}>Logout</button>}
       </div>
     </Router>
   );

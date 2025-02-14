@@ -1,9 +1,14 @@
 {
   "dependencies": {
+    "classnames": "^2.5.1",
     "firebase": "^11.3.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-scripts": "^5.0.1"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-icons": "^5.4.0",
+    "react-router-dom": "^7.1.5",
+    "react-scripts": "^5.0.1",
+    "react-transition-group": "^4.4.5",
+    "three": "^0.173.0"
   },
   "name": "kidsi",
   "version": "1.0.0",
