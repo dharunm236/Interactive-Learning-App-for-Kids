@@ -77,9 +77,11 @@ const BalloonGrid = ({ numberOfBalloons, onBalloonClick, selectedWord, currentLe
   }
 
   return (
-    <div className="balloon-grid-wrapper">
-      <p className="balloon-grid-caption">Click a balloon to score</p>
-      <div className="balloon-grid">{balloons}</div>
+    <div className="balloon-game-wrapper">
+      <div className="balloon-grid-wrapper">
+        <p className="balloon-grid-caption">Click a balloon to score</p>
+        <div className="balloon-grid">{balloons}</div>
+      </div>
     </div>
   );
 };
