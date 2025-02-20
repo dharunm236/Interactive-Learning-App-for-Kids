@@ -1,61 +1,91 @@
 import { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
-import './homepageCSS/Homepage.css'; // Assuming you place your CSS in this file
+import './homepageCSS/Homepage.css';
 import './homepageCSS/dropdown.css';
-import { FaUser, FaSignOutAlt, FaBook, FaGamepad, FaChartLine, FaHome } from 'react-icons/fa';
-import { GiBouncingSword, GiChemicalDrop, GiAlphabet } from 'react-icons/gi';
+import { FaHome, FaBook, FaGamepad, FaChartLine, FaUser, FaSignOutAlt, FaUserFriends } from "react-icons/fa";
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { db } from '../firebaseConfig';
+import { collection, addDoc } from 'firebase/firestore';
 
+function Homepage({ onLogout, onProfileClick, currentUserId }) {
+  const [showDropdown, setShowDropdown] = useState(false);
+  const canvasRef = useRef(null);
+  const navigate = useNavigate();
 
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
 
-function Homepage({ onLogout, onProfileClick }) {
-    const [showDropdown, setShowDropdown] = useState(false);
-    const canvasRef = useRef(null); 
-    const toggleDropdown = () => {
-      setShowDropdown(!showDropdown);
-    };
+  const handleLogout = () => {
+    setShowDropdown(false);
+    onLogout();
+  };
 
-    const handleLogout = () => {
-        setShowDropdown(false); // Close the dropdown
-        onLogout(); // Actually log the user out
-    };
-      
+  const sendChallenge = async () => {
+    const opponentId = prompt("Enter opponent's user ID:");
+    if (!opponentId) return;
+
+    try {
+      await addDoc(collection(db, 'challenges'), {
+        challengerId: currentUserId,
+        opponentId,
+        status: 'pending',
+        createdAt: new Date(),
+      });
+      alert('Challenge sent successfully!');
+    } catch (error) {
+      console.error('Error sending challenge:', error);
+      alert('Failed to send challenge.');
+    }
+  };
 
   return (
     <div>
       <nav className="navbar">
-        <div className="logo">FunLearn 🎓</div>
-        <div className="nav-links">
-            <a href="#home" className="nav-item">
-                <FaHome className="nav-icon" /> Home
-            </a>
-            <a href="#lessons" className="nav-item">
-                <FaBook className="nav-icon" /> Lessons
-            </a>
-            <Link to="/games" className="nav-item">
-                <FaGamepad className="nav-icon" /> Games
-            </Link>
-            <a href="#progress" className="nav-item">
-                <FaChartLine className="nav-icon" /> Progress
-            </a>
-            <div className="profile-menu" onClick={toggleDropdown}>
-            <div className="profile-preview">
-                <img src="https://via.placeholder.com/40?text=U" alt="Profile" />
-            </div>
-            {showDropdown && (
-                <div className="profile-dropdown">
-                <div className="dropdown-item" onClick={onProfileClick}>
-                    <FaUser className="dropdown-icon" /> Profile
-                </div>
-                <div className="dropdown-separator"></div>
-                <div className="dropdown-item" onClick={handleLogout}>
-                    <FaSignOutAlt className="dropdown-icon" /> Logout
-                </div>
-                </div>
-            )}
-            </div>
+  <div className="logo">FunLearn 🎓</div>
+  <div className="nav-links">
+    <a href="#home" className="nav-item">
+      <FaHome className="nav-icon" /> Home
+    </a>
+    <a href="#lessons" className="nav-item">
+      <FaBook className="nav-icon" /> Lessons
+    </a>
+    <Link to="/games" className="nav-item">
+      <FaGamepad className="nav-icon" /> Games
+    </Link>
+    <a href="#progress" className="nav-item">
+      <FaChartLine className="nav-icon" /> Progress
+    </a>
+
+    {/* Profile Menu */}
+    <div className="profile-menu" onClick={toggleDropdown}>
+      <div className="profile-preview">
+        <img src="https://via.placeholder.com/40?text=U" alt="Profile" />
+      </div>
+      {showDropdown && (
+        <div className="profile-dropdown">
+          <div className="dropdown-item" onClick={onProfileClick}>
+            <FaUser className="dropdown-icon" /> Profile
+          </div>
+
+          {/* ✅ Corrected Friend Request Options */}
+          <Link to="/send-friend-request" className="dropdown-item dropdown-link">
+            <FaUserFriends className="dropdown-icon" /> Add Friend
+          </Link>
+          <Link to="/friend-requests" className="dropdown-item dropdown-link">
+            <FaUserFriends className="dropdown-icon" /> Pending Requests
+          </Link>
+
+          <div className="dropdown-separator"></div>
+          <div className="dropdown-item" onClick={handleLogout}>
+            <FaSignOutAlt className="dropdown-icon" /> Logout
+          </div>
         </div>
-        </nav>
+      )}
+    </div>
+  </div>
+</nav>
+
 
       <main>
         <section className="hero-section" id="home">
@@ -102,11 +132,16 @@ function Homepage({ onLogout, onProfileClick }) {
             <p>Discover amazing science facts!</p>
           </div>
         </section>
-        
+
         <section className="fun-zone" id="fun">
           <h2>Fun Zone!</h2>
           <p>Click on the bouncing ball to see magic!</p>
           <div className="bouncing-ball" id="bouncing-ball"></div>
+
+          {/* Challenge Button */}
+          
+          <button onClick={() => navigate('/challenge-friend')} className="cta-button">Challenge a Friend 🏆</button>
+  
         </section>
       </main>
     </div>
