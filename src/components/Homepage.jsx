@@ -139,9 +139,7 @@ function Homepage({ onLogout, onProfileClick, currentUserId }) {
           <div className="bouncing-ball" id="bouncing-ball"></div>
 
           {/* Challenge Button */}
-          
-          <button onClick={() => navigate('/challenge-friend')} className="cta-button">Challenge a Friend 🏆</button>
-  
+            
         </section>
       </main>
     </div>

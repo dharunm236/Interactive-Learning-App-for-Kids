@@ -10,6 +10,9 @@ const GamesPage = () => {
         </li>
         {/* You can add more games here in the future */}
       </ul>
+      <button onClick={() => navigate('/challenge-friend')} className="cta-button">
+        Challenge a Friend 🏆
+      </button>
     </div>
   );
 };

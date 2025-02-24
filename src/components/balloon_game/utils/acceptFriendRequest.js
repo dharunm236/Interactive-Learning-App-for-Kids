@@ -1,5 +1,5 @@
 import { doc, updateDoc, arrayUnion, deleteDoc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
+import { db } from '../../firebaseConfig';
 
 async function acceptFriendRequest(requestId, senderId, receiverId) {
   try {
