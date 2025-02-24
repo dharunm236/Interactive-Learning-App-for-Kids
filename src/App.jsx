@@ -8,6 +8,8 @@ import Constants from './components/balloon_game/utils/constants';
 import GamesPage from './components/GamesPage';
 import SendFriendRequest from "./components/friend_options/SendFriendRequest";
 import FriendRequestNotifications from "./components/friend_options/FriendRequestNotifications";
+import ProfilePage from './components/ProfilePage.jsx';
+
 
 
 function App() {
@@ -43,6 +45,7 @@ function App() {
               user ? <Homepage onLogout={handleLogout} /> : <Navigate to="/login" />
             }
           />
+          <Route path="/profile-page" element={user ? <ProfilePage /> : <Navigate to="/login" />} />
           <Route
             path="/games"
             element={user ? <GamesPage /> : <Navigate to="/login" />}
