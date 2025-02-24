@@ -3,13 +3,11 @@ import { auth } from './firebaseConfig';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Homepage from './components/Homepage';
 import Login from './components/Login';
-import Game from './components/Game/Game';
-import Constants from './utils/constants';
+import Game from './components/balloon_game/Game/Game';
+import Constants from './components/balloon_game/utils/constants';
 import GamesPage from './components/GamesPage';
-import ChallengeSystem from './components/ChallengeSystem'; // Added this
-import ChallengeFriend from './components/ChallengeFriend'; // Import this
-import SendFriendRequest from "./components/SendFriendRequest";
-import FriendRequestNotifications from "./components/FriendRequestNotifications";
+import SendFriendRequest from "./components/friend_options/SendFriendRequest";
+import FriendRequestNotifications from "./components/friend_options/FriendRequestNotifications";
 
 
 function App() {
@@ -58,16 +56,6 @@ function App() {
                 <Navigate to="/login" />
               )
             }
-          />
-          <Route
-            path="/challenge"
-            element={
-              user ? <ChallengeSystem currentUserId={user.uid} /> : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/challenge-friend"
-            element={user ? <ChallengeFriend /> : <Navigate to="/login" />}
           />
           <Route path="/send-friend-request" element={user ? <SendFriendRequest /> : <Navigate to="/login" />} />
           <Route path="/friend-requests" element={user ? <FriendRequestNotifications /> : <Navigate to="/login" />} />
