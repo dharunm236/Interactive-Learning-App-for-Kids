@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Balloon from "../Balloon/Balloon";
-import Constants from "../../utils/constants";
-import getRandomNumber from "../../utils/randomNumber";
+import Constants from "../utils/constants";
+import getRandomNumber from "../utils/randomNumber";
 import "./BalloonGrid.css";
 
 const BalloonGrid = ({ numberOfBalloons, onBalloonClick, selectedWord, currentLetterIndex }) => {

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import constants from "../../utils/constants";
+import constants from "../utils/constants";
 import classnames from "classnames";
 import popSound from "../../assets/sounds/pop.mp3"; // Add your pop sound file
 import "./Balloon.css";
