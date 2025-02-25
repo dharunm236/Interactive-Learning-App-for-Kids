@@ -162,9 +162,9 @@ const Login = () => {
             </span>
           ) : (
             <span>
-              New friend?{" "}
+              New User?{" "}
               <button onClick={() => setIsSignup(true)}>
-                Join our learning adventure!
+                Sign Up
               </button>
             </span>
           )}
