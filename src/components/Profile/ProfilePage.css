@@ -1,13 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&display=swap");
 
-:root {
+/* Scope all styles under .profile-wrapper */
+.profile-wrapper {
   --background-color: #f0f0f5;
   --primary-color: #6200ea;
   --secondary-color: #ff9800;
   --text-color: #333;
 }
 
-.profilePage {
+.profile-wrapper .profilePage {
   font-family: "Balsamiq Sans", cursive;
   background-color: var(--background-color);
   display: flex;
@@ -18,7 +19,7 @@
   overflow-y: auto;
 }
 
-.profileContainer {
+.profile-wrapper .profileContainer {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,7 +27,7 @@
   padding: 20px;
 }
 
-.profileCard {
+.profile-wrapper .profileCard {
   width: 550px;
   min-height: 90vh;
   background: rgb(247, 236, 255);
@@ -49,7 +50,7 @@
   }
 }
 
-.profileHeader {
+.profile-wrapper .profileHeader {
   height: 25%;
   background: linear-gradient(270deg, var(--primary-color), var(--secondary-color), #ff4081);
   background-size: 400% 400%;
@@ -70,7 +71,7 @@
   100% { background-position: 0% 50%; }
 }
 
-.profilePicture {
+.profile-wrapper .profilePicture {
   width: 120px;
   height: 120px;
   border-radius: 50%;
@@ -88,7 +89,7 @@
   50% { transform: translate(-50%, -8px); }
 }
 
-.profileField {
+.profile-wrapper .profileField {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -102,22 +103,22 @@
   box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
 }
 
-.profileField:hover {
+.profile-wrapper .profileField:hover {
   background: rgba(255, 255, 255, 0.2);
 }
 
-.editIcon {
+.profile-wrapper .editIcon {
   cursor: pointer;
   color: var(--secondary-color);
   transition: 0.3s;
 }
 
-.editIcon:hover {
+.profile-wrapper .editIcon:hover {
   color: var(--primary-color);
   transform: scale(1.2);
 }
 
-.saveButton {
+.profile-wrapper .saveButton {
   background: var(--secondary-color);
   color: white;
   padding: 12px 20px;
@@ -129,7 +130,7 @@
   transition: 0.3s;
 }
 
-.saveButton:hover {
+.profile-wrapper .saveButton:hover {
   background: #e68900;
   transform: scale(1.1);
 }

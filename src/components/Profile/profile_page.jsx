@@ -74,40 +74,42 @@ const ProfilePage = () => {
   if (!user) return <p>User not logged in</p>;
 
   return (
-    <div className="profilePage">
-      <div className="profileContainer">
-        <div className="profileCard" ref={profileRef}>
-          <div className="profileHeader">
-            <img src={user.photoURL || lionImage} alt="Profile" className="profilePicture" />
-            <h2>{profileData.name || "N/A"}</h2>
-            <p className="email"><strong>Email:</strong> {user.email}</p>
-          </div>
-          {["username", "gender", "age", "grade"].map((field) => (
-            <div key={field} className="profileField">
-              <strong>{field.charAt(0).toUpperCase() + field.slice(1)}:</strong>
-              {editing === field ? (
-                field === "gender" ? (
-                  <select value={profileData[field]} onChange={(e) => handleChange(e, field)}>
-                    <option value="">Select</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                  </select>
-                ) : (
-                  <input
-                    type={field === "age" ? "number" : "text"}
-                    value={profileData[field]}
-                    onChange={(e) => handleChange(e, field)}
-                    autoFocus
-                  />
-                )
-              ) : (
-                <span>{profileData[field] || "N/A"}</span>
-              )}
-              <FaPencilAlt onClick={() => handleEdit(field)} className="editIcon" />
+    <div className="profile-wrapper">
+      <div className="profilePage">
+        <div className="profileContainer">
+          <div className="profileCard" ref={profileRef}>
+            <div className="profileHeader">
+              <img src={user.photoURL || lionImage} alt="Profile" className="profilePicture" />
+              <h2>{profileData.name || "N/A"}</h2>
+              <p className="email"><strong>Email:</strong> {user.email}</p>
             </div>
-          ))}
-          {changesMade && <button className="saveButton" onClick={handleSave}>Save</button>}
+            {["username", "gender", "age", "grade"].map((field) => (
+              <div key={field} className="profileField">
+                <strong>{field.charAt(0).toUpperCase() + field.slice(1)}:</strong>
+                {editing === field ? (
+                  field === "gender" ? (
+                    <select value={profileData[field]} onChange={(e) => handleChange(e, field)}>
+                      <option value="">Select</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  ) : (
+                    <input
+                      type={field === "age" ? "number" : "text"}
+                      value={profileData[field]}
+                      onChange={(e) => handleChange(e, field)}
+                      autoFocus
+                    />
+                  )
+                ) : (
+                  <span>{profileData[field] || "N/A"}</span>
+                )}
+                <FaPencilAlt onClick={() => handleEdit(field)} className="editIcon" />
+              </div>
+            ))}
+            {changesMade && <button className="saveButton" onClick={handleSave}>Save</button>}
+          </div>
         </div>
       </div>
     </div>
