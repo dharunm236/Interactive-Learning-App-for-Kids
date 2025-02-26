@@ -9,58 +9,15 @@ body {
 }
 
 /* Title */
-h1 {
+.memory-game-title {
     font-size: 36px;
     color: #fff;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
     margin-bottom: 10px;
 }
 
-/* Level Selection Screen */
-#levelScreen {
-    background: rgba(255, 255, 255, 0.2); /* Transparent effect */
-    padding: 20px;
-    border-radius: 20px; /* More rounded */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-    display: inline-block;
-    margin-top: 30px;
-    backdrop-filter: blur(10px); /* Blurred glass effect */
-    transition: 0.3s ease-in-out;
-}
-
-/* Hover effect to make it more interactive */
-#levelScreen:hover {
-    background: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-}
-
-
-h2 {
-    color: #333;
-    font-size: 24px;
-}
-
-/* Buttons */
-button {
-    padding: 12px 20px;
-    margin: 10px;
-    font-size: 18px;
-    cursor: pointer;
-    border: none;
-    background: #3498db;
-    color: white;
-    border-radius: 8px;
-    transition: 0.3s ease-in-out;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-button:hover {
-    background: #2980b9;
-    transform: scale(1.05);
-}
-
 /* Game Container */
-.game-container {
+.memory-game-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -72,8 +29,8 @@ button:hover {
     margin: 30px auto;
 }
 
-/* Info (Timer & Moves) */
-.info {
+/* Info (Moves) */
+.memory-game-info {
     font-size: 18px;
     font-weight: bold;
     background: #2ecc71;
@@ -85,10 +42,10 @@ button:hover {
 }
 
 /* Grid Layout */
-.grid {
+.memory-game-grid {
     display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
     gap: 15px;
-    justify-content: center;
     padding: 20px;
     background: white;
     border-radius: 12px;
@@ -96,7 +53,7 @@ button:hover {
 }
 
 /* Card Styles */
-.card {
+.memory-game-card {
     width: 110px;
     height: 110px;
     background: #3498db;
@@ -113,52 +70,40 @@ button:hover {
 }
 
 /* Flip Animation */
-.card.flipped {
+.memory-game-card.flipped {
     background: #2ecc71;
     transform: scale(1.1) rotateY(180deg);
     box-shadow: 0 0 15px rgba(0, 255, 0, 0.7);
 }
 
 /* Matched Cards */
-.card.matched {
+.memory-game-card.matched {
     background: #95a5a6;
     pointer-events: none;
 }
 
-/* Back Button */
-#backButton {
-    display: none;
-    background: #e74c3c;
-}
-
-#backButton:hover {
-    background: #c0392b;
-}
-
-/* Next Level Button */
-#nextLevel {
-    display: none;
-    background: #f1c40f;
-}
-
-#nextLevel:hover {
-    background: #d4ac0d;
+/* Game Over Message */
+.memory-game-over {
+    font-size: 24px;
+    color: #fff;
+    margin-top: 20px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .grid {
-        grid-template-columns: repeat(3, 1fr);
+    .memory-game-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns for smaller screens */
         gap: 10px;
     }
 
-    .card {
+    .memory-game-card {
         width: 90px;
         height: 90px;
         font-size: 30px;
     }
 
-    .game-container {
+    .memory-game-container {
         max-width: 90%;
     }
 }
