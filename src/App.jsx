@@ -16,9 +16,6 @@ import MemoryGame from "./components/Memory_Game/MemoryGame";
 import BasicArithGame from "./components/Basic_Arith/BasicArithGame";
 
 
-
-
-
 function App() {
   const [user, setUser] = useState(null);
   const [authInitialized, setAuthInitialized] = useState(false);
