@@ -64,7 +64,7 @@ function Homepage({ onLogout, onProfileClick, currentUserId }) {
       </div>
       {showDropdown && (
         <div className="profile-dropdown">
-          <div className="dropdown-item" onClick={onProfileClick}>
+          <div className="dropdown-item" onClick={() => navigate("/profile-page")}>
             <FaUser className="dropdown-icon" /> Profile
           </div>
 
