@@ -1,0 +1,87 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: linear-gradient(to right, #87CEEB, #A2C5EE);
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    margin-top: 20px;
+}
+
+.game-container {
+    background: rgba(26, 23, 171, 0.2);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.problem {
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.drop-zone {
+    width: 60px;
+    height: 60px;
+    border: 2px dashed white;
+    background: rgba(36, 69, 202, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+    border-radius: 12px;
+    transition: 0.3s;
+}
+
+.drop-zone.dropped {
+    color: black; /* Text turns black when an item is dropped */
+    font-weight: bold;
+}
+
+.options {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.option {
+    padding: 10px 20px;
+    background: white;
+    color: black;
+    font-size: 20px;
+    border-radius: 10px;
+    cursor: grab;
+    transition: transform 0.2s;
+}
+
+.option:active {
+    cursor: grabbing;
+    transform: scale(1.1);
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #2980b9;
+}

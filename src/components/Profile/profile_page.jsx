@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { auth, db } from "../../firebaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { FaPencilAlt } from "react-icons/fa";
-import "./ProfilePage.css";
+import styles from "./ProfilePage.module.css"; // Import CSS Module
 import lionImage from "../assets/lion.jpg";
 
 const ProfilePage = () => {
@@ -74,17 +74,17 @@ const ProfilePage = () => {
   if (!user) return <p>User not logged in</p>;
 
   return (
-    <div className="profile-page">
-      <div className="profile-container">
-        <div className="profile-card" ref={profileRef}>
-          <div className="profile-header">
-            <img src={user.photoURL || lionImage} alt="Profile" className="profile-picture" />
+    <div className={styles.profilePage}>
+      <div className={styles.profileContainer}>
+        <div className={styles.profileCard} ref={profileRef}>
+          <div className={styles.profileHeader}>
+            <img src={user.photoURL || lionImage} alt="Profile" className={styles.profilePicture} />
             <h2>{profileData.name || "N/A"}</h2>
-            <p className="email"><strong>Email:</strong> {user.email}</p>
+            <p className={styles.email}><strong>Email:</strong> {user.email}</p>
           </div>
 
           {["username", "gender", "age", "grade"].map((field) => (
-            <div key={field} className="profile-field">
+            <div key={field} className={styles.profileField}>
               <strong>{field.charAt(0).toUpperCase() + field.slice(1)}:</strong>
               {editing === field ? (
                 field === "gender" ? (
@@ -105,11 +105,11 @@ const ProfilePage = () => {
               ) : (
                 <span>{profileData[field] || "N/A"}</span>
               )}
-              <FaPencilAlt onClick={() => handleEdit(field)} className="edit-icon" />
+              <FaPencilAlt onClick={() => handleEdit(field)} className={styles.editIcon} />
             </div>
           ))}
 
-          {changesMade && <button className="save-button" onClick={handleSave}>Save</button>}
+          {changesMade && <button className={styles.saveButton} onClick={handleSave}>Save</button>}
         </div>
       </div>
     </div>
