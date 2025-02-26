@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Card Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Memory Card Game</h1>
+    
+    <div id="levelScreen">
+        <h2>Select Level</h2>
+        <button onclick="startGame(4, 4, 60)">Level 1 </button>
+        <button onclick="startGame(5, 4, 90)">Level 2 </button>
+        <button onclick="startGame(6, 4, 120)">Level 3 </button>
+    </div>
+
+    <div id="gameContainer" class="game-container" style="display: none;">
+        <div class="info">
+            <p>Time Left: <span id="timer">60</span>s | Moves: <span id="moves">0</span></p>
+        </div>
+        <div id="gameBoard" class="grid"></div>
+        <button id="backButton" onclick="goBack()" style="display: none;">Back to Levels</button>
+        <p id="message"></p>
+        <button id="nextLevel" onclick="nextLevel()" style="display: none;">Next Level</button>
+    </div>
+
+    
+
+    <script src="script.js"></script>
+</body>
+</html>
