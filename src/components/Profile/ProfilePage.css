@@ -1,0 +1,136 @@
+@import url("https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&display=swap");
+
+/* Scope all styles under .profile-wrapper */
+.profile-wrapper {
+  --background-color: #f0f0f5;
+  --primary-color: #6200ea;
+  --secondary-color: #ff9800;
+  --text-color: #333;
+}
+
+.profile-wrapper .profilePage {
+  font-family: "Balsamiq Sans", cursive;
+  background-color: var(--background-color);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.profile-wrapper .profileContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.profile-wrapper .profileCard {
+  width: 550px;
+  min-height: 90vh;
+  background: rgb(247, 236, 255);
+  border-radius: 25px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+  animation: popIn 0.5s ease-in-out;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.profile-wrapper .profileHeader {
+  height: 25%;
+  background: linear-gradient(270deg, var(--primary-color), var(--secondary-color), #ff4081);
+  background-size: 400% 400%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  border-bottom-left-radius: 50% 20%;
+  border-bottom-right-radius: 50% 20%;
+  animation: gradientMove 5s ease infinite;
+  padding-bottom: 60px;
+  position: relative;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.profile-wrapper .profilePicture {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 5px solid white;
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: floatp 3s ease-in-out infinite;
+  background-color: white;
+}
+
+@keyframes floatp {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, -8px); }
+}
+
+.profile-wrapper .profileField {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  font-size: 16px;
+  color: #555;
+  margin: 12px auto;
+  width: 80%;
+  background: rgba(232, 227, 227, 0.05);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+.profile-wrapper .profileField:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.profile-wrapper .editIcon {
+  cursor: pointer;
+  color: var(--secondary-color);
+  transition: 0.3s;
+}
+
+.profile-wrapper .editIcon:hover {
+  color: var(--primary-color);
+  transform: scale(1.2);
+}
+
+.profile-wrapper .saveButton {
+  background: var(--secondary-color);
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: 0.3s;
+}
+
+.profile-wrapper .saveButton:hover {
+  background: #e68900;
+  transform: scale(1.1);
+}
