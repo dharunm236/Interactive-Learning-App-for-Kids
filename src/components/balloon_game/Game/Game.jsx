@@ -8,6 +8,7 @@ import Toast from "../Toast/Toast";
 import Button from "../Button/Button";
 import words from "../utils/words";
 import "./Game.css";
+import SpButton from "./spButton";
 import { db, auth } from "../../../firebaseConfig";
 import { doc, updateDoc, arrayUnion, setDoc, getDoc } from "firebase/firestore";
 import Celebration from "../Celebration/Celebration";
@@ -183,11 +184,13 @@ const Game = ({ numberOfBalloons, gameDuration }) => {
           {(state) => (
             <div className={`balloons-screen balloons-screen--${state}`}>
               <div className="game-nav">
-                <h1 className="instructions">Press the 🔊 button to hear the word</h1>
-                <Button onClick={speakWord}>🔊</Button>
+                <div className="instructions-container">
+                  <h1 className="instructions">Press the 🔊 button to hear the word</h1>
+                  <SpButton onClick={speakWord} />
+                </div>
                 <div className="game-settings">
                   <ScoreCard score={score} time={timeRemaining} />
-                  <Button type={"alert"} onClick={stopGame}>Stop</Button>
+                  <Button type="alert" onClick={stopGame}>Stop</Button>
                 </div>
               </div>
               <div className="gaps">

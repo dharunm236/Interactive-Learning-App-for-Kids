@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { auth } from './firebaseConfig';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Homepage from './components/Homepage';
-import Login from './components/Login';
 import Game from './components/balloon_game/Game/Game';
 import Constants from './components/balloon_game/utils/constants';
 import GamesPage from './components/GamesPage';
+import Login from "./components/login/Login";
+import ForgotPassword from "./components/forgot_password/ForgotPassword";
+import ResetPassword from "./components/forgot_password/ResetPassword";
+import CheckEmail from "./components/forgot_password/CheckEmail";
 import SendFriendRequest from "./components/friend_options/SendFriendRequest";
 import FriendRequestNotifications from "./components/friend_options/FriendRequestNotifications";
 import ProfilePage from './components/ProfilePage.jsx';
-
+import ProfilePage from './components/Profile/profile_page.jsx';
 
 
 function App() {
@@ -50,6 +53,11 @@ function App() {
             path="/games"
             element={user ? <GamesPage /> : <Navigate to="/login" />}
           />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/check-email" element={<CheckEmail />} />
+          <Route path="/" element={user ? <Homepage onLogout={handleLogout} /> : <Navigate to="/login" />}/>
+          <Route path="/games" element={user ? <GamesPage /> : <Navigate to="/login" />}/>
           <Route
             path="/Ballongame"
             element={
@@ -60,6 +68,7 @@ function App() {
               )
             }
           />
+          <Route path="/profile-page" element={user ? <ProfilePage /> : <Navigate to="/login" />} />
           <Route path="/send-friend-request" element={user ? <SendFriendRequest /> : <Navigate to="/login" />} />
           <Route path="/friend-requests" element={user ? <FriendRequestNotifications /> : <Navigate to="/login" />} />
         </Routes>

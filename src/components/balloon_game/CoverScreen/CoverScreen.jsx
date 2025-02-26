@@ -19,6 +19,9 @@ const CoverScreen = ({ score, onStartGame, duration }) => (
       <Button onClick={onStartGame} width={"wide"}>
         {score > -1 ? "Play again" : "Start Game"}
       </Button>
+      <Button onClick={() => window.history.back()} width={"wide"}>
+        {"<- BACK"}
+      </Button>
     </div>
   </div>
 );

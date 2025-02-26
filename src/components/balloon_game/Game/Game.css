@@ -1,5 +1,5 @@
+/* Base styles (for all screen sizes) */
 .balloon-game-wrapper {
-  /* Reset specific styles that might be inherited from Homepage */
   --hue: 200;
   --pri-color: hsl(var(--hue) 88% 88%);
   --pri-color-dark: hsl(var(--hue) 75% 75%);
@@ -10,6 +10,8 @@
   --acc-color: hsl(var(--hue) 90% 45%);
   --acc-color-dark: hsl(var(--hue) 90% 35%);
   --acc-color-light: hsl(var(--hue) 90% 60%);
+  font-family: "Balsamiq Sans", sans-serif;
+  min-height: 100vh;
 }
 
 .balloon-game-wrapper * {
@@ -18,11 +20,21 @@
 
 .game-container {
   min-height: 100vh;
+  background-color: var(--pri-color);
 }
 
 .instructions {
-  padding-left: 35%;
-  text-align: center;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  margin-left: 25%;
+}
+
+.instructions-container {
+  display: flex;
+  align-items: center;
+  gap: 4em;
+  flex: 1;
 }
 
 .game-nav {
@@ -30,6 +42,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1em;
 }
 
 .game-settings {
@@ -61,55 +74,75 @@
   text-align: center;
 }
 
-.balloon-game-wrapper {
-  /* Reset styles for the game page */
-  background: none;
-  min-height: 100vh;
-  font-family: "Balsamiq Sans", sans-serif;
-}
-
-.balloon-game-wrapper .game-container {
-  min-height: 100vh;
-  background-color: var(--pri-color);
-}
-
-.balloon-game-wrapper .instructions {
-  padding-left: 35%;
-  text-align: center;
-}
-
-.balloon-game-wrapper .game-nav {
-  padding: 1.5em 2em;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.balloon-game-wrapper .game-settings {
-  display: flex;
-  gap: 1em;
-  align-items: center;
-}
-
-.balloon-game-wrapper .game-title {
-  margin: 0;
+.speak-button {
+  padding: 0.5em 0.8em;
   font-size: 1em;
+  transition: transform 0.1s ease-in-out, background-color 0.2s ease;
+  border-radius: 8px;
+  line-height: 1;
 }
 
-.balloon-game-wrapper .game-intro-title {
-  margin: 0;
+.speak-button:active {
+  transform: scale(0.9);
+  background-color: var(--sec-color-light);
 }
 
-.balloon-game-wrapper .gaps {
-  display: flex;
-  justify-content: center;
-  gap: 0.5em;
-  margin: 1em 0;
+/* Media Queries for Responsive Design */
+
+/* For tablets and smaller screens */
+@media (max-width: 768px) {
+  .instructions {
+    margin-left: 10%; /* Reduce margin for smaller screens */
+  }
+
+  .instructions-container {
+    gap: 2em; /* Reduce gap between items */
+  }
+
+  .game-nav {
+    padding: 1em; /* Reduce padding */
+  }
+
+  .gap {
+    font-size: 1.5em; /* Reduce font size for gaps */
+  }
+
+  .speak-button {
+    font-size: 0.9em; /* Reduce button font size */
+  }
 }
 
-.balloon-game-wrapper .gap {
-  font-size: 2em;
-  border-bottom: 2px solid #000;
-  width: 1em;
-  text-align: center;
+/* For mobile phones */
+@media (max-width: 480px) {
+  .instructions {
+    margin-left: 5%; /* Further reduce margin */
+    text-align: center; /* Center-align text */
+  }
+
+  .instructions-container {
+    flex-direction: column; /* Stack items vertically */
+    gap: 1em;
+  }
+
+  .game-nav {
+    flex-direction: column; /* Stack nav items vertically */
+    padding: 0.5em;
+  }
+
+  .game-settings {
+    flex-direction: column; /* Stack settings items vertically */
+    gap: 0.5em;
+  }
+
+  .gaps {
+    gap: 0.3em; /* Reduce gap between gaps */
+  }
+
+  .gap {
+    font-size: 1.2em; /* Further reduce font size for gaps */
+  }
+
+  .speak-button {
+    font-size: 0.8em; /* Further reduce button font size */
+  }
 }
