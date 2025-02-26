@@ -58,7 +58,7 @@ function Homepage({ onLogout, onProfileClick, currentUserId }) {
           <Link to="/games" className="nav-item">
             <FaGamepad className="nav-icon" /> Games
           </Link>
-          <a href="#progress" className="nav-item">
+          <a href="/progress" className="nav-item">
             <FaChartLine className="nav-icon" /> Progress
           </a>
           <div className="profile-menu" onClick={toggleDropdown} aria-label="Profile Menu">
