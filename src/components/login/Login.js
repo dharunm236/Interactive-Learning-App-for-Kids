@@ -80,101 +80,103 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="quote-box">
-        {quotes[currentQuoteIndex]}
-      </div>
+    <div className="login-wrapper">
+      <div className="login-container">
+        <div className="quote-box">
+          {quotes[currentQuoteIndex]}
+        </div>
 
-      <div className={`login-box ${isAnimating ? 'error-shake' : ''}`}>
-        <h1>
-          {isSignup ? "Join the KidsLearn Family!" : "Welcome to KidsLearn!"}
-          {isSignup ? (
-            <span className="sub-heading">Sign-Up</span>
-          ) : (
-            <span className="sub-heading">Login</span>
-          )}
-        </h1>
-        {error && <p className="error-message">{error}</p>}
+        <div className={`login-box ${isAnimating ? 'error-shake' : ''}`}>
+          <h1>
+            {isSignup ? "Join the KidsLearn Family!" : "Welcome to KidsLearn!"}
+            {isSignup ? (
+              <span className="sub-heading">Sign-Up</span>
+            ) : (
+              <span className="sub-heading">Login</span>
+            )}
+          </h1>
+          {error && <p className="error-message">{error}</p>}
 
-        <form onSubmit={handleSubmit}>
-          {isSignup && (
+          <form onSubmit={handleSubmit}>
+            {isSignup && (
+              <div className="input-group">
+                <input
+                  type="text"
+                  className="input-fieldi"
+                  placeholder="Username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
+                <i className="fas fa-user"></i>
+              </div>
+            )}
+
             <div className="input-group">
               <input
-                type="text"
+                type="email"
                 className="input-fieldi"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
-              <i className="fas fa-user"></i>
+              <i className="fas fa-envelope"></i>
             </div>
-          )}
 
-          <div className="input-group">
-            <input
-              type="email"
-              className="input-fieldi"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <i className="fas fa-envelope"></i>
+            <div className="input-group">
+              <input
+                type="password"
+                className="input-fieldi"
+                placeholder={isSignup ? "Create Password" : "Password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <i className="fas fa-lock"></i>
+            </div>
+
+            <button type="submit" className="login-button">
+              {isSignup ? "Let's Get Started! 🚀" : "Let's Learn!"}
+            </button>
+          </form>
+
+          <div className="or-divider">
+            <span className="or-line"></span>
+            <span className="or-text">OR</span>
+            <span className="or-line"></span>
           </div>
 
-          <div className="input-group">
-            <input
-              type="password"
-              className="input-fieldi"
-              placeholder={isSignup ? "Create Password" : "Password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <i className="fas fa-lock"></i>
-          </div>
-
-          <button type="submit" className="login-button">
-            {isSignup ? "Let's Get Started! 🚀" : "Let's Learn!"}
+          <button
+            className="google-round-button"
+            onClick={handleGoogleLogin}
+            title="Sign in with Google"
+          >
+            <i className="fab fa-google"></i>
           </button>
-        </form>
 
-        <div className="or-divider">
-          <span className="or-line"></span>
-          <span className="or-text">OR</span>
-          <span className="or-line"></span>
-        </div>
+          <div className="signup-toggle">
+            {isSignup ? (
+              <span>
+                Already have an account?{" "}
+                <button onClick={() => setIsSignup(false)}>Login here</button>
+              </span>
+            ) : (
+              <span>
+                New friend?{" "}
+                <button onClick={() => setIsSignup(true)}>
+                  Join our learning adventure!
+                </button>
+              </span>
+            )}
+          </div>
 
-        <button
-          className="google-round-button"
-          onClick={handleGoogleLogin}
-          title="Sign in with Google"
-        >
-          <i className="fab fa-google"></i>
-        </button>
-
-        <div className="signup-toggle">
-          {isSignup ? (
-            <span>
-              Already have an account?{" "}
-              <button onClick={() => setIsSignup(false)}>Login here</button>
-            </span>
-          ) : (
-            <span>
-              New User?{" "}
-              <button onClick={() => setIsSignup(true)}>
-                Sign Up
-              </button>
-            </span>
+          {!isSignup && (
+            <a href="/forgot-password" className="forgot-password">
+              Forgot Password?
+            </a>
           )}
         </div>
-
-        {!isSignup && (
-          <a href="/forgot-password" className="forgot-password">
-            Forgot Password?
-          </a>
-        )}
       </div>
     </div>
   );

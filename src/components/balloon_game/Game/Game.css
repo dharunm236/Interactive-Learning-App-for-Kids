@@ -21,8 +21,17 @@
 }
 
 .instructions {
-  padding-left: 35%;
-  text-align: center;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  margin-left:25%;
+}
+
+.instructions-container {
+  display: flex;
+  align-items: center;
+  gap: 4em;
+  flex: 1;
 }
 
 .game-nav {
@@ -30,6 +39,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1em;
 }
 
 .game-settings {
@@ -74,8 +84,8 @@
 }
 
 .balloon-game-wrapper .instructions {
-  padding-left: 35%;
-  text-align: center;
+  padding-left: 0;
+  text-align: left;
 }
 
 .balloon-game-wrapper .game-nav {
@@ -112,4 +122,17 @@
   border-bottom: 2px solid #000;
   width: 1em;
   text-align: center;
+}
+
+.speak-button {
+  padding: 0.5em 0.8em;
+  font-size: 1em;
+  transition: transform 0.1s ease-in-out, background-color 0.2s ease;
+  border-radius: 8px;
+  line-height: 1;
+}
+
+.speak-button:active {
+  transform: scale(0.9);
+  background-color: var(--sec-color-light);
 }
