@@ -79,7 +79,6 @@ const ProfilePage = () => {
         <div className="profileContainer">
           <div className="profileCard" ref={profileRef}>
             <div className="profileHeader">
-              <img src={user.photoURL || lionImage} alt="Profile" className="profilePicture" />
               <h2>{profileData.name || "N/A"}</h2>
               <p className="email"><strong>Email:</strong> {user.email}</p>
             </div>

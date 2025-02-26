@@ -40,25 +40,27 @@ const MemoryGame = () => {
     };
 
     return (
-        <div className="memory-game-container">
-            <h2 className="memory-game-title">Memory Game</h2>
-            <p className="memory-game-info">Moves: {moves}</p>
-            <div className="memory-game-grid">
-                {cards.map((card, index) => (
-                    <div
-                        key={card.id}
-                        className={`memory-game-card ${
-                            flipped.includes(index) || matched.includes(index) ? "flipped" : ""
-                        }`}
-                        onClick={() => handleCardClick(index)}
-                    >
-                        {flipped.includes(index) || matched.includes(index) ? card.icon : "❓"}
-                    </div>
-                ))}
+        <div className="memory-game-wrapper">
+            <div className="memory-game-container">
+                <h2 className="memory-game-title">Memory Game</h2>
+                <p className="memory-game-info">Moves: {moves}</p>
+                <div className="memory-game-grid">
+                    {cards.map((card, index) => (
+                        <div
+                            key={card.id}
+                            className={`memory-game-card ${
+                                flipped.includes(index) || matched.includes(index) ? "flipped" : ""
+                            }`}
+                            onClick={() => handleCardClick(index)}
+                        >
+                            {flipped.includes(index) || matched.includes(index) ? card.icon : "❓"}
+                        </div>
+                    ))}
+                </div>
+                {gameOver && (
+                    <p className="memory-game-over">🎉 Congratulations! You won in {moves} moves! �</p>
+                )}
             </div>
-            {gameOver && (
-                <p className="memory-game-over">🎉 Congratulations! You won in {moves} moves! �</p>
-            )}
         </div>
     );
 };

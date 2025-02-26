@@ -87,51 +87,53 @@ const BasicArithGame = () => {
   };
 
   return (
-    <div className="arith-game">
-      <h1>Math Drag & Drop Game</h1>
-      <div className="game-container">
-        <div className="problem">
-          <span>{num1}</span>
-          <div
-            id="operatorZone"
-            className="drop-zone"
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => handleDrop(e, "operator")}
-          >
-            ?
-          </div>
-          <span>{num2}</span>
-          <span>=</span>
-          <div
-            id="answerZone"
-            className="drop-zone"
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => handleDrop(e, "answer")}
-          >
-            ?
-          </div>
-        </div>
-
-        <div id="optionsContainer" className="options">
-          {options.map((option, index) => (
+    <div className="arith-game-wrapper">
+      <div className="arith-game">
+        <h1>Math Drag & Drop Game</h1>
+        <div className="game-container">
+          <div className="problem">
+            <span>{num1}</span>
             <div
-              key={index}
-              className="option"
-              draggable
-              onDragStart={(e) => handleDragStart(e, option)}
+              id="operatorZone"
+              className="drop-zone"
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => handleDrop(e, "operator")}
             >
-              {option}
+              ?
             </div>
-          ))}
+            <span>{num2}</span>
+            <span>=</span>
+            <div
+              id="answerZone"
+              className="drop-zone"
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => handleDrop(e, "answer")}
+            >
+              ?
+            </div>
+          </div>
+
+          <div id="optionsContainer" className="options">
+            {options.map((option, index) => (
+              <div
+                key={index}
+                className="option"
+                draggable
+                onDragStart={(e) => handleDragStart(e, option)}
+              >
+                {option}
+              </div>
+            ))}
+          </div>
+          <button onClick={generateProblem}>New Problem</button>
         </div>
-        <button onClick={generateProblem}>New Problem</button>
+
+        <p>{message}</p>
+
+        {/* Audio elements for sounds */}
+        <audio id="dragSound" src="/sounds/match.wav" preload="auto"></audio>
+        <audio id="winSound" src="/sounds/win.wav" preload="auto"></audio>
       </div>
-
-      <p>{message}</p>
-
-      {/* Audio elements for sounds */}
-      <audio id="dragSound" src="/sounds/match.wav" preload="auto"></audio>
-      <audio id="winSound" src="/sounds/win.wav" preload="auto"></audio>
     </div>
   );
 };
