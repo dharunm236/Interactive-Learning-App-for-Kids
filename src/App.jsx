@@ -11,7 +11,9 @@ import ResetPassword from "./components/forgot_password/ResetPassword";
 import CheckEmail from "./components/forgot_password/CheckEmail";
 import SendFriendRequest from "./components/friend_options/SendFriendRequest";
 import FriendRequestNotifications from "./components/friend_options/FriendRequestNotifications";
-import ProfilePage from './components/Profile/profile_page.jsx';
+import ProfilePage from './components/ProfilePage.jsx';
+// import ProfilePage from './components/Profile/profile_page.jsx';
+import MoneyGame from './components/moneygame/money'; 
 import StoryPrompt from './components/Story/StoryPrompt';
 
 
@@ -42,11 +44,23 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
+          <Route
+            path="/"
+            element={
+              user ? <Homepage onLogout={handleLogout} /> : <Navigate to="/login" />
+            }
+          />
+          <Route path="/profile-page" element={user ? <ProfilePage /> : <Navigate to="/login" />} />
+          <Route
+            path="/games"
+            element={user ? <GamesPage /> : <Navigate to="/login" />}
+          />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/check-email" element={<CheckEmail />} />
           <Route path="/" element={user ? <Homepage onLogout={handleLogout} /> : <Navigate to="/login" />}/>
           <Route path="/games" element={user ? <GamesPage /> : <Navigate to="/login" />}/>
+          <Route path="/moneygame" element={<MoneyGame />} /> 
           <Route
             path="/games/Ballongame"
             element={

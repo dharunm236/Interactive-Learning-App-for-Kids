@@ -9,7 +9,7 @@
   --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 15px 25px rgba(0, 0, 0, 0.2);
   --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  --rainbow-gradient: linear-gradient(45deg, #FF9A9E, #FAD0C4, #FBC2EB, #A6C1EE, #84FAB0);
+  --rainbow-gradient: linear-gradient(45deg, #faf1f2, #FAD0C4, #f0e9ee, #A6C1EE, #d7f0e0);
 }
 
 * {
@@ -28,7 +28,7 @@ body {
 
 /* Navbar */
 .navbar {
-  background: var(--glass-bg);
+  background: rgba(2, 77, 151, 0.8); /* Darker blue with transparency */
   backdrop-filter: blur(12px);
   padding: 1rem 5%;
   display: flex;
@@ -41,6 +41,7 @@ body {
   box-shadow: var(--shadow-sm);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
+
 
 .logo {
   font-family: 'Nunito', sans-serif;
@@ -183,7 +184,17 @@ body {
   position: relative;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
+  
 }
+
+.mascot-card h3 {
+  color: #000ba3; /* Example: Orange */
+}
+
+.mascot-card p {
+  color: #2f3bdb; /* Example: Dark Gray */
+}
+
 
 .mascot-card img {
   width: 180px;
@@ -250,18 +261,7 @@ body {
   }
 }
 
-/* Bouncing Ball */
-.bouncing-ball {
-  width: 80px;
-  height: 80px;
-  background: radial-gradient(circle at 30% 30%, var(--accent-light), var(--accent-pale));
-  border-radius: 50%;
-  margin: 2rem auto;
-  cursor: pointer;
-  animation: bounce 2s ease infinite, glow 1.5s ease-in-out infinite alternate;
-  position: relative;
-  box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
-}
+  
 
 @keyframes bounce {
   0%, 100% { transform: translateY(0); }
