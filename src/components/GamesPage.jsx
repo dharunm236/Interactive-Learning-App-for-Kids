@@ -5,6 +5,18 @@ import styles from './GamesPage.module.css'; // Import the CSS module
 const GamesPage = () => {
   const navigate = useNavigate();
 
+  const handlePlayClick_MathsSolving = () => {
+    window.location.href = "/games/Basic-Arith/index_B.html";
+  };
+
+  const handlePlayClick_CarSimulator = () => {
+    window.location.href = "/games/Car-Game/T3/index_C.html";
+  };
+
+  const handlePlayClick_Memorymatch = () => {
+    window.location.href = "/games/Memory-Game/index_M.html";
+  };
+
   return (
     <div className={styles.gamesPage}>
       {/* Header */}
@@ -41,9 +53,9 @@ const GamesPage = () => {
             />
             <h2 className={styles.gameTitle}>🚗 Car Simulator</h2>
             <p className={styles.gameDescription}>Drive and learn about road safety!</p>
-            <Link to="/games/car-simulator" className={styles.playButton}>
+            <button onClick={handlePlayClick_CarSimulator} className={styles.playButton}>
               Play Now
-            </Link>
+            </button>
           </div>
         </div>
 
@@ -57,9 +69,9 @@ const GamesPage = () => {
             />
             <h2 className={styles.gameTitle}>🧠 Memory Match</h2>
             <p className={styles.gameDescription}>Test your memory with this exciting matching game!</p>
-            <Link to="/games/memory" className={styles.playButton}>
+            <button onClick={handlePlayClick_Memorymatch} className={styles.playButton}>
               Play Now
-            </Link>
+            </button>
           </div>
         </div>
 
@@ -73,9 +85,9 @@ const GamesPage = () => {
             />
             <h2 className={styles.gameTitle}>➕ Maths Solving</h2>
             <p className={styles.gameDescription}>Solve math problems and improve your skills!</p>
-            <Link to="/games/basic-arith" className={styles.playButton}>
+            <button onClick={handlePlayClick_MathsSolving} className={styles.playButton}>
               Play Now
-            </Link>
+            </button>
           </div>
         </div>
 

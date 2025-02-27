@@ -4,6 +4,13 @@ import Constants from "../utils/constants";
 import getRandomNumber from "../utils/randomNumber";
 import "./BalloonGrid.css";
 
+// Remove the crypto import and add secure random number generator
+const getSecureRandom = (max) => {
+  const array = new Uint32Array(1);
+  window.crypto.getRandomValues(array);
+  return array[0] % max;
+};
+
 const BalloonGrid = ({ numberOfBalloons, onBalloonClick, selectedWord, currentLetterIndex }) => {
   const [activeBalloons, setActiveBalloons] = useState([]);
   const [balloonLetters, setBalloonLetters] = useState([]);
@@ -15,7 +22,7 @@ const BalloonGrid = ({ numberOfBalloons, onBalloonClick, selectedWord, currentLe
     balloonCountRef.current = 0;
 
     const generateRandomBalloon = () => {
-      const randomBalloonId = Math.floor(Math.random() * numberOfBalloons);
+      const randomBalloonId = getSecureRandom(numberOfBalloons);
       balloonCountRef.current++;
 
       setActiveBalloons((prevActiveBalloons) => {
@@ -59,7 +66,7 @@ const BalloonGrid = ({ numberOfBalloons, onBalloonClick, selectedWord, currentLe
   const getRandomLetter = (excludeLetter) => {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('')
       .filter(letter => letter !== excludeLetter);
-    return letters[Math.floor(Math.random() * letters.length)];
+    return letters[getSecureRandom(letters.length)];
   };
 
   const balloons = [];

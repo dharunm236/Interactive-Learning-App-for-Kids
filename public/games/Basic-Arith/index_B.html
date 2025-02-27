@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Drag & Drop Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Math Drag & Drop Game</h1>
+
+    <div class="game-container">
+        <div class="problem">
+            <span id="num1"></span>
+            <div id="operatorZone" class="drop-zone">?</div>
+            <span id="num2"></span>
+            <span>=</span>
+            <div id="answerZone" class="drop-zone">?</div>
+        </div>
+
+        <div class="options" id="optionsContainer"></div>
+        <button onclick="generateProblem()">New Problem</button>
+    </div>
+
+    <p id="message"></p>
+
+    <audio id="dragSound" src="sounds/match.wav"></audio>
+    <audio id="winSound" src="sounds/win.wav"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
