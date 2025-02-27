@@ -181,8 +181,8 @@ const Game = ({ numberOfBalloons, gameDuration }) => {
   };
 
   return (
-    <div className="balloon-game-wrapper">
-      <div className="game-container">
+    <div className="balloon-game">
+      <div className="balloon-game-container">
         {(!gameStarted || gameStopped) && (
           <CoverScreen score={score} onStartGame={startGame} duration={Constants.gameDuration} />
         )}
