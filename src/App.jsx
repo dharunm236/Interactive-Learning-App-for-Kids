@@ -12,7 +12,8 @@ import CheckEmail from "./components/forgot_password/CheckEmail";
 import SendFriendRequest from "./components/friend_options/SendFriendRequest";
 import FriendRequestNotifications from "./components/friend_options/FriendRequestNotifications";
 import ProfilePage from './components/ProfilePage.jsx';
-import ProfilePage from './components/Profile/profile_page.jsx';
+// import ProfilePage from './components/Profile/profile_page.jsx';
+import MoneyGame from './components/moneygame/money'; 
 import StoryPrompt from './components/Story/StoryPrompt';
 
 
@@ -59,6 +60,7 @@ function App() {
           <Route path="/check-email" element={<CheckEmail />} />
           <Route path="/" element={user ? <Homepage onLogout={handleLogout} /> : <Navigate to="/login" />}/>
           <Route path="/games" element={user ? <GamesPage /> : <Navigate to="/login" />}/>
+          <Route path="/moneygame" element={<MoneyGame />} /> 
           <Route
             path="/games/Ballongame"
             element={

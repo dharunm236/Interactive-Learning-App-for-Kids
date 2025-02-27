@@ -17,6 +17,7 @@ const GamesPage = () => {
     window.location.href = "/games/Memory-Game/index_M.html";
   };
 
+
   return (
     <div className={styles.gamesPage}>
       {/* Header */}
@@ -86,6 +87,22 @@ const GamesPage = () => {
             <h2 className={styles.gameTitle}>➕ Maths Solving</h2>
             <p className={styles.gameDescription}>Solve math problems and improve your skills!</p>
             <button onClick={handlePlayClick_MathsSolving} className={styles.playButton}>
+              Play Now
+            </button>
+          </div>
+        </div>
+        
+        {/* Money Game */}
+        <div className={styles.gameCard}>
+          <div className={styles.gameCardContent}>
+            <img
+              src="https://png.pngtree.com/png-clipart/20220128/original/pngtree-money-game-icon-png-image_7263806.png"
+              alt="Money Game"
+              className={styles.gameImage}
+            />
+            <h2 className={styles.gameTitle}>💰 Money Game</h2>
+            <p className={styles.gameDescription}>Learn to count and manage money in this game!</p>
+            <button onClick={() => navigate('/moneygame')} className={styles.playButton}>
               Play Now
             </button>
           </div>

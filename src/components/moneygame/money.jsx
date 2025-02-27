@@ -13,6 +13,7 @@ const itemsList = [
   { name: "Pencil", price: 1 },
   { name: "Backpack", price: 7 },
 ];
+/*add shuffle*/
 
 const correctSound = new Howl({ src: [correctSoundFile] });
 
