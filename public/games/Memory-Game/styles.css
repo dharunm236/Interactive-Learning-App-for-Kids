@@ -1,0 +1,164 @@
+/* General Styles */
+body {
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+  background: linear-gradient(to right, #74ebd5, #acb6e5);
+  margin: 0;
+  padding: 20px;
+  color: #333;
+}
+
+/* Title */
+h1 {
+  font-size: 36px;
+  color: #fff;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  margin-bottom: 10px;
+}
+
+/* Level Selection Screen */
+#levelScreen {
+  background: rgba(255, 255, 255, 0.2); /* Transparent effect */
+  padding: 20px;
+  border-radius: 20px; /* More rounded */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  display: inline-block;
+  margin-top: 30px;
+  backdrop-filter: blur(10px); /* Blurred glass effect */
+  transition: 0.3s ease-in-out;
+}
+
+/* Hover effect to make it more interactive */
+#levelScreen:hover {
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+h2 {
+  color: #333;
+  font-size: 24px;
+}
+
+/* Buttons */
+button {
+  padding: 12px 20px;
+  margin: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  border: none;
+  background: #3498db;
+  color: white;
+  border-radius: 8px;
+  transition: 0.3s ease-in-out;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+  background: #2980b9;
+  transform: scale(1.05);
+}
+
+/* Game Container */
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  max-width: 700px;
+  margin: 30px auto;
+}
+
+/* Info (Timer & Moves) */
+.info {
+  font-size: 18px;
+  font-weight: bold;
+  background: #2ecc71;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Grid Layout */
+.grid {
+  display: grid;
+  gap: 15px;
+  justify-content: center;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Card Styles */
+.card {
+  width: 110px;
+  height: 110px;
+  background: #3498db;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  color: white;
+  border-radius: 12px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.3s, background-color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Flip Animation */
+.card.flipped {
+  background: #2ecc71;
+  transform: scale(1.1) rotateY(180deg);
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.7);
+}
+
+/* Matched Cards */
+.card.matched {
+  background: #95a5a6;
+  pointer-events: none;
+}
+
+/* Back Button */
+#backButton {
+  display: none;
+  background: #e74c3c;
+}
+
+#backButton:hover {
+  background: #c0392b;
+}
+
+/* Next Level Button */
+#nextLevel {
+  display: none;
+  background: #f1c40f;
+}
+
+#nextLevel:hover {
+  background: #d4ac0d;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+  }
+
+  .card {
+      width: 90px;
+      height: 90px;
+      font-size: 30px;
+  }
+
+  .game-container {
+      max-width: 90%;
+  }
+}

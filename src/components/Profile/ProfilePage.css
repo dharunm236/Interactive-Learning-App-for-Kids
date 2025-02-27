@@ -1,35 +1,35 @@
 @import url("https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&display=swap");
 
-:root {
-  --primary-color: #612599;
+/* Scope all styles under .profile-wrapper */
+.profile-wrapper {
+  --background-color: #f0f0f5;
+  --primary-color: #6200ea;
   --secondary-color: #ff9800;
   --text-color: #333;
 }
 
-
-
-.profile-page {
+.profile-wrapper .profilePage {
   font-family: "Balsamiq Sans", cursive;
   background-color: var(--background-color);
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Changed from center to flex-start */
-  min-height: 100vh; /* Changed from height to min-height */
-  padding: 20px; /* Added padding for better spacing */
-  overflow-y: auto; /* Enable vertical scrolling */
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 20px;
+  overflow-y: auto;
 }
 
-.profile-page .profile-container {
+.profile-wrapper .profileContainer {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; /* Changed from height to min-height */
-  padding: 20px; /* Added padding for better spacing */
+  min-height: 100vh;
+  padding: 20px;
 }
 
-.profile-page .profile-card {
+.profile-wrapper .profileCard {
   width: 550px;
-  min-height: 90vh; /* Changed from height to min-height */
+  min-height: 90vh;
   background: rgb(247, 236, 255);
   border-radius: 25px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -50,31 +50,28 @@
   }
 }
 
-.profile-page .profile-header {
-    height: 25%;
-    background: linear-gradient(270deg, var(--primary-color), var(--secondary-color), #ff4081);
-    background-size: 400% 400%;
-    display: flex;
-    flex-direction: column; /* Stack items vertically */
-    justify-content: flex-end; /* Align items to the bottom */
-    align-items: center;
-    border-bottom-left-radius: 50% 20%;
-    border-bottom-right-radius: 50% 20%;
-    animation: gradientMove 5s ease infinite;
-    padding-bottom: 60px; /* Add padding to make space for the profile picture */
-    position: relative; /* Ensure the header is a positioning context */
-  }
-  .key-icon, .fa-key {
-    display: none !important;
-  }
-  
+.profile-wrapper .profileHeader {
+  height: 25%;
+  background: linear-gradient(270deg, var(--primary-color), var(--secondary-color), #ff4081);
+  background-size: 400% 400%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  border-bottom-left-radius: 50% 20%;
+  border-bottom-right-radius: 50% 20%;
+  animation: gradientMove 5s ease infinite;
+  padding-bottom: 60px;
+  position: relative;
+}
+
 @keyframes gradientMove {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-.profile-page .profile-picture {
+.profile-wrapper .profilePicture {
   width: 120px;
   height: 120px;
   border-radius: 50%;
@@ -92,21 +89,13 @@
   50% { transform: translate(-50%, -8px); }
 }
 
-.profile-page h2 {
-  margin-top: 70px;
-  font-size: 24px;
-  font-weight: bold;
-  color: var(--text-color);
-}
-
-.profile-page .profile-field {
+.profile-wrapper .profileField {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 15px;
   font-size: 16px;
   color: #555;
-  transition: 0.3s;
   margin: 12px auto;
   width: 80%;
   background: rgba(232, 227, 227, 0.05);
@@ -114,39 +103,22 @@
   box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
 }
 
-.profile-page .profile-field:hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
-  
-.profile-page .profile-field input,
-.profile-page .profile-field select {
-  width: 60%;
-  padding: 8px;
-  border-radius: 8px;
-  border: 2px solid #ccc;
-  transition: 0.3s;
-   color: #333; /* Ensure text remains visible */
-  background: #fff; /* Keep background consistent */
+.profile-wrapper .profileField:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
-.profile-page .profile-field input:focus,
-.profile-page .profile-field select:focus {
-  border-color: var(--secondary-color);
-  outline: none;
-}
-
-.profile-page .edit-icon {
+.profile-wrapper .editIcon {
   cursor: pointer;
   color: var(--secondary-color);
   transition: 0.3s;
 }
 
-.profile-page .edit-icon:hover {
+.profile-wrapper .editIcon:hover {
   color: var(--primary-color);
   transform: scale(1.2);
 }
 
-.profile-page .save-button {
+.profile-wrapper .saveButton {
   background: var(--secondary-color);
   color: white;
   padding: 12px 20px;
@@ -156,14 +128,9 @@
   cursor: pointer;
   margin-top: 15px;
   transition: 0.3s;
-  display: inline-block;
 }
 
-.profile-page .save-button.visible {
-  display: inline-block;
-}
-
-.profile-page .save-button:hover {
+.profile-wrapper .saveButton:hover {
   background: #e68900;
   transform: scale(1.1);
 }

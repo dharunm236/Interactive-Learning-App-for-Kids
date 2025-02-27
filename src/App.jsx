@@ -15,6 +15,7 @@ import ProfilePage from './components/ProfilePage.jsx';
 import ProfilePage from './components/Profile/profile_page.jsx';
 
 
+
 function App() {
   const [user, setUser] = useState(null);
   const [authInitialized, setAuthInitialized] = useState(false);
@@ -59,7 +60,7 @@ function App() {
           <Route path="/" element={user ? <Homepage onLogout={handleLogout} /> : <Navigate to="/login" />}/>
           <Route path="/games" element={user ? <GamesPage /> : <Navigate to="/login" />}/>
           <Route
-            path="/Ballongame"
+            path="/games/Ballongame"
             element={
               user ? (
                 <Game numberOfBalloons={Constants.gameCells} gameDuration={Constants.gameDuration} />
@@ -71,6 +72,7 @@ function App() {
           <Route path="/profile-page" element={user ? <ProfilePage /> : <Navigate to="/login" />} />
           <Route path="/send-friend-request" element={user ? <SendFriendRequest /> : <Navigate to="/login" />} />
           <Route path="/friend-requests" element={user ? <FriendRequestNotifications /> : <Navigate to="/login" />} />
+
         </Routes>
       </div>
     </Router>

@@ -1,15 +1,25 @@
 {
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/material": "^6.4.6",
     "classnames": "^2.5.1",
+    "date-fns": "^4.1.0",
     "firebase": "^11.3.0",
+    "install": "^0.13.0",
+    "npm": "^11.1.0",
     "react": "^18.0.0",
+    "react-big-calendar": "^1.18.0",
     "react-dom": "^18.0.0",
     "react-icons": "^5.4.0",
-    "react-router-dom": "^7.1.5",
+    "react-router-dom": "^7.2.0",
     "react-scripts": "^5.0.1",
+    "react-scroll": "^1.9.3",
+    "react-toastify": "^11.0.5",
     "react-transition-group": "^4.4.5",
-    "three": "^0.173.0",
-    "styled-components": "^5.3.9"
+    "recharts": "^2.15.1",
+    "styled-components": "^5.3.9",
+    "three": "^0.173.0"
   },
   "name": "kidsi",
   "version": "1.0.0",
