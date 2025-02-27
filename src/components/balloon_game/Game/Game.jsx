@@ -14,6 +14,12 @@ import { doc, updateDoc, arrayUnion, setDoc, getDoc } from "firebase/firestore";
 import Celebration from "../Celebration/Celebration";
 import { onAuthStateChanged } from "firebase/auth";
 
+const getSecureRandom = (max) => {
+  const array = new Uint32Array(1);
+  window.crypto.getRandomValues(array);
+  return array[0] % max;
+};
+
 const Game = ({ numberOfBalloons, gameDuration }) => {
   const [gameStarted, setGameStarted] = useState(false);
   const [activeBalloons, setActiveBalloons] = useState([]);
@@ -133,7 +139,7 @@ const Game = ({ numberOfBalloons, gameDuration }) => {
 
   const handleCelebrationComplete = () => {
     setShowCelebration(false);
-    const randomWord = words[Math.floor(Math.random() * words.length)];
+    const randomWord = words[getSecureRandom(words.length)];
     setSelectedWord(randomWord);
     setCurrentLetterIndex(0);
     setFilledGaps([]);
@@ -141,7 +147,7 @@ const Game = ({ numberOfBalloons, gameDuration }) => {
 
   //Start the game
   const startGame = () => {
-    const randomWord = words[Math.floor(Math.random() * words.length)];
+    const randomWord = words[getSecureRandom(words.length)];
     setSelectedWord(randomWord);
     setGameStarted(true);
     setScore(0);

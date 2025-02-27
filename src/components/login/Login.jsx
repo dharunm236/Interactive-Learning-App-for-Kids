@@ -3,6 +3,12 @@ import { logIn, logInWithGoogle, signUp } from "../../authService";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
+const getSecureRandom = (min, max) => {
+  const array = new Uint32Array(1);
+  window.crypto.getRandomValues(array);
+  return min + (array[0] % (max - min + 1));
+};
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,11 +33,11 @@ const Login = () => {
       const particle = document.createElement('div');
       particle.className = 'particle';
       particle.style.cssText = `
-        left: ${Math.random() * 100}%;
-        top: ${Math.random() * 100}%;
-        width: ${Math.random() * 10 + 5}px;
-        height: ${Math.random() * 10 + 5}px;
-        animation-duration: ${Math.random() * 3 + 2}s;
+        left: ${getSecureRandom(0, 100)}%;
+        top: ${getSecureRandom(0, 100)}%;
+        width: ${getSecureRandom(5, 15)}px;
+        height: ${getSecureRandom(5, 15)}px;
+        animation-duration: ${getSecureRandom(2, 5)}s;
       `;
       document.querySelector('.login-container').appendChild(particle);
     };
