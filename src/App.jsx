@@ -12,7 +12,7 @@ import CheckEmail from "./components/forgot_password/CheckEmail";
 import SendFriendRequest from "./components/friend_options/SendFriendRequest";
 import FriendRequestNotifications from "./components/friend_options/FriendRequestNotifications";
 import ProfilePage from './components/Profile/profile_page.jsx';
-
+import StoryPrompt from './components/Story/StoryPrompt';
 
 
 function App() {
@@ -60,7 +60,7 @@ function App() {
           <Route path="/profile-page" element={user ? <ProfilePage /> : <Navigate to="/login" />} />
           <Route path="/send-friend-request" element={user ? <SendFriendRequest /> : <Navigate to="/login" />} />
           <Route path="/friend-requests" element={user ? <FriendRequestNotifications /> : <Navigate to="/login" />} />
-
+          <Route path="/create-story" element={user ? <StoryPrompt /> : <Navigate to="/login" />} />
         </Routes>
       </div>
     </Router>
