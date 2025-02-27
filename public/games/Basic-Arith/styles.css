@@ -1,14 +1,13 @@
-.arith-game-wrapper {
+body {
     font-family: Arial, sans-serif;
     text-align: center;
     background: linear-gradient(to right, #87CEEB, #A2C5EE);
     color: white;
     margin: 0;
     padding: 0;
-    min-height: 100vh;
 }
 
-.arith-game-wrapper h1 {
+h1 {
     margin-top: 20px;
 }
 
@@ -21,7 +20,7 @@
     margin-top: 20px;
 }
 
-.arith-game-wrapper .problem {
+.problem {
     font-size: 24px;
     display: flex;
     justify-content: center;
@@ -30,7 +29,7 @@
     margin-bottom: 20px;
 }
 
-.arith-game-wrapper .drop-zone {
+.drop-zone {
     width: 60px;
     height: 60px;
     border: 2px dashed white;
@@ -44,19 +43,19 @@
     transition: 0.3s;
 }
 
-.arith-game-wrapper .drop-zone.dropped {
-    color: black;
+.drop-zone.dropped {
+    color: black; /* Text turns black when an item is dropped */
     font-weight: bold;
 }
 
-.arith-game-wrapper .options {
+.options {
     display: flex;
     justify-content: center;
     gap: 10px;
     margin-top: 20px;
 }
 
-.arith-game-wrapper .option {
+.option {
     padding: 10px 20px;
     background: white;
     color: black;
@@ -66,12 +65,12 @@
     transition: transform 0.2s;
 }
 
-.arith-game-wrapper .option:active {
+.option:active {
     cursor: grabbing;
     transform: scale(1.1);
 }
 
-.arith-game-wrapper button {
+button {
     margin-top: 20px;
     padding: 10px 20px;
     background: #3498db;
@@ -83,6 +82,6 @@
     transition: 0.3s;
 }
 
-.arith-game-wrapper button:hover {
+button:hover {
     background: #2980b9;
 }
