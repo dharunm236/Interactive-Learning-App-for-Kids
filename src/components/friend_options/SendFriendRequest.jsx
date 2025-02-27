@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db, auth } from '../../firebaseConfig';
+import './SendFriendRequest.css';
 import {
   collection,
   query,
@@ -8,13 +9,13 @@ import {
   addDoc,
   doc,
   getDoc,
+  updateDoc,
 } from 'firebase/firestore';
 
 function SendFriendRequest() {
   const [username, setUsername] = useState('');
   const [status, setStatus] = useState('');
   const [currentUserData, setCurrentUserData] = useState({ username: '', name: '' });
-
   const [friends, setFriends] = useState([]);
   const [loadingFriends, setLoadingFriends] = useState(true);
 
@@ -85,28 +86,24 @@ function SendFriendRequest() {
       }
 
       // Check if the request already exists
-      const requestRef = collection(db, 'friendRequests');
-      const existingQuery = query(
-        requestRef,
-        where('senderId', '==', auth.currentUser.uid),
-        where('receiverId', '==', receiverId)
-      );
-      const existingSnapshot = await getDocs(existingQuery);
+      const requestRef = doc(db, 'friendRequests', receiverId);
+      const existingRequest = await getDoc(requestRef);
 
-      if (!existingSnapshot.empty) {
-        setStatus('Friend request already sent.');
-        return;
+      if (existingRequest.exists()) {
+        const requests = existingRequest.data().requests || [];
+        if (requests.includes(auth.currentUser.uid)) {
+          setStatus('Friend request already sent.');
+          return;
+        }
+        await updateDoc(requestRef, {
+          requests: [...requests, auth.currentUser.uid],
+        });
+      } else {
+        await addDoc(collection(db, 'friendRequests'), {
+          receiverId,
+          requests: [auth.currentUser.uid],
+        });
       }
-
-      // Send friend request with additional user details
-      await addDoc(collection(db, 'friendRequests'), {
-        senderId: auth.currentUser.uid,
-        senderUsername: currentUserData.username,
-        senderName: currentUserData.name || 'N/A',
-        receiverId: receiverId,
-        status: 'pending',
-        timestamp: new Date(),
-      });
 
       setStatus('Friend request sent!');
     } catch (error) {
@@ -116,7 +113,7 @@ function SendFriendRequest() {
   };
 
   return (
-    <div>
+    <div className="request-container">
       <h3>Send Friend Request</h3>
       <input
         type="text"
@@ -125,7 +122,7 @@ function SendFriendRequest() {
         onChange={(e) => setUsername(e.target.value)}
       />
       <button onClick={handleSendRequest}>Send Request</button>
-      {status && <p>{status}</p>}
+      {status && <p className="status">{status}</p>}
 
       <hr />
 

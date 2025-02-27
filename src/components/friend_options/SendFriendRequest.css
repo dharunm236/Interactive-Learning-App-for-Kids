@@ -1,0 +1,148 @@
+/* Friend Request Page - Aquatic Theme for Kids */
+
+/* Background - Underwater Effect */
+body {
+  background: linear-gradient(to bottom, #0099CC, #006699);
+  background-attachment: fixed;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Floating Bubble Effect */
+/* Floating Bubble Effect */
+body::before {
+  content: "";
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: url('https://images.pond5.com/beautiful-looped-animation-air-bubbles-footage-049339166_iconl.jpeg') no-repeat center center;
+  background-size: cover; /* Ensures full coverage */
+  opacity: 0.2;
+  z-index: -1;
+}
+
+
+/* Centering the container */
+.request-container {
+  width: 420px;
+  padding: 25px;
+  border-radius: 15px;
+  background-color: rgba(173, 216, 230, 0.9);
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Heading - Ocean Blue */
+h3 {
+  color: #034F84;
+  font-size: 2em;
+  margin-bottom: 15px;
+}
+
+/* Input Field */
+input {
+  width: 90%;
+  padding: 12px;
+  border: 2px solid #036FAB;
+  border-radius: 8px;
+  font-size: 1em;
+  margin-bottom: 15px;
+  outline: none;
+  background-color: #E0FFFF;
+  color: #034F84;
+  transition: all 0.3s ease-in-out;
+}
+
+input::placeholder {
+  color: #036FAB;
+}
+
+input:focus {
+  border-color: #034F84;
+  box-shadow: 0 0 10px rgba(3, 79, 132, 0.5);
+}
+
+/* Buttons */
+button {
+  width: 100%;
+  background-color: #036FAB;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #034F84;
+  transform: scale(1.05);
+}
+
+button:active {
+  background-color: #023B63;
+  transform: scale(0.98);
+}
+
+/* Friend List */
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 15px;
+}
+
+li {
+  background-color: #48D1CC;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 8px;
+  font-weight: bold;
+  color: #034F84;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+li:hover {
+  background-color: #036FAB;
+  color: white;
+  cursor: pointer;
+}
+
+/* Separator Line */
+hr {
+  border: 1px solid #48D1CC;
+  margin: 20px 0;
+}
+
+/* Decorative Fish Animation */
+.fish {
+  position: absolute;
+  width: 50px;
+  height: auto;
+  animation: swim 10s infinite linear;
+}
+
+.fish:nth-child(1) {
+  top: 10%;
+  left: -10%;
+  animation-duration: 15s;
+}
+
+.fish:nth-child(2) {
+  top: 60%;
+  left: -20%;
+  animation-duration: 12s;
+}
+
+@keyframes swim {
+  0% { transform: translateX(0) scaleX(1); }
+  50% { transform: translateX(100vw) scaleX(1); }
+  100% { transform: translateX(200vw) scaleX(1); }
+}

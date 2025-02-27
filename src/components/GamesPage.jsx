@@ -28,20 +28,20 @@ const GamesPage = () => {
       {/* Games Grid */}
       <div className={styles.gamesGrid}>
         {/* Balloon Game */}
-        <div className={styles.gameCard}>
-          <div className={styles.gameCardContent}>
-            <img
-              src="https://parspng.com/wp-content/uploads/2022/01/balloonpng.parspng.com-2.png"
-              alt="Balloon Game"
-              className={styles.gameImage}
-            />
-            <h2 className={styles.gameTitle}>🎈 Balloon Game</h2>
-            <p className={styles.gameDescription}>Pop balloons and learn math in this fun game!</p>
-            <Link to="/games/Ballongame" className={styles.playButton}>
-              Play Now
-            </Link>
-          </div>
-        </div>
+<div className={styles.gameCard}>
+  <div className={styles.gameCardContent}>
+    <img
+      src="https://parspng.com/wp-content/uploads/2022/01/balloonpng.parspng.com-2.png"
+      alt="Balloon Game"
+      className={styles.gameImage}
+    />
+    <h2 className={styles.gameTitle}>🎈 Balloon Game</h2>
+    <p className={styles.gameDescription}>Pop balloons and learn math in this fun game!</p>
+    <button onClick={() => navigate('/games/Ballongame')} className={styles.playButton}>
+      Play Now
+    </button>
+  </div>
+</div>
 
         {/* Car Simulator */}
         <div className={styles.gameCard}>
@@ -52,7 +52,7 @@ const GamesPage = () => {
               className={styles.gameImage}
             />
             <h2 className={styles.gameTitle}>🚗 Car Simulator</h2>
-            <p className={styles.gameDescription}>Drive and learn about road safety!</p>
+            <p className={styles.gameDescription}>Drive and learn about road safety! and improve your driving skills in a fun way!</p>
             <button onClick={handlePlayClick_CarSimulator} className={styles.playButton}>
               Play Now
             </button>
