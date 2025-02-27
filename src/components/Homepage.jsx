@@ -25,6 +25,7 @@ function Homepage({ onLogout, currentUserId }) {
   const goToStory = () => {
     navigate('/create-story'); 
   };
+
   const sendChallenge = async () => {
     const opponentId = prompt("Enter opponent's user ID:");
     if (!opponentId) return;
