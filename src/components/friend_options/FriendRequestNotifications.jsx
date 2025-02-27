@@ -1,7 +1,16 @@
 import { useEffect, useState } from 'react';
 import { db, auth } from '../../firebaseConfig';
-import { collection, query, where, getDocs, doc, deleteDoc } from 'firebase/firestore';
-import { setDoc, getDoc } from 'firebase/firestore';
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  deleteDoc,
+  setDoc,
+  getDoc,
+} from 'firebase/firestore';
+import './FriendRequestNotifications.css';
 
 function FriendRequestNotifications() {
   const [requests, setRequests] = useState([]);
@@ -85,20 +94,24 @@ function FriendRequestNotifications() {
   };
 
   return (
-    <div>
+    <div className="notifications-container">
       <h3>Friend Requests</h3>
       {requests.length > 0 ? (
         requests.map((req) => (
-          <div key={req.id}>
+          <div key={req.id} className="request-card">
             <p>
               Friend request from: <strong>{req.senderUsername || req.senderId}</strong>
             </p>
-            <button onClick={() => handleAccept(req.id, req.senderId, req.receiverId)}>Accept</button>
-            <button onClick={() => handleReject(req.id)}>Reject</button>
+            <button className="accept-btn" onClick={() => handleAccept(req.id, req.senderId, req.receiverId)}>
+              Accept
+            </button>
+            <button className="reject-btn" onClick={() => handleReject(req.id)}>
+              Reject
+            </button>
           </div>
         ))
       ) : (
-        <p>No pending requests</p>
+        <p className="no-requests">No pending requests</p>
       )}
     </div>
   );

@@ -37,7 +37,7 @@
     left: 50%;
     transform: translateX(-50%);
     background: linear-gradient(45deg, #4ecdc4, #52c0ef);
-    padding: 15px 25px;
+    padding: 5px 25px;
     border-radius: 15px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     font-size: 1.2rem;
@@ -64,17 +64,17 @@
 
   .login-box {
     background: rgba(255, 255, 255, 0.95);
-    padding: 30px 40px;
+    padding: 10px 20px;
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    width: 380px;
+    width: 390px;
     position: relative;
     z-index: 1;
     transform-style: preserve-3d;
     animation: slideUp 1s ease-out;
     backdrop-filter: blur(8px);
     border: 3px solid #4ecdc4;
-    margin-top: 80px;
+    margin-top: 50px;
   }
 
   @keyframes slideUp {
@@ -85,7 +85,7 @@
   h1 {
     color: #2d3436;
     font-family: 'Fredoka One', cursive;
-    font-size: 2.5rem;
+    font-size: 2rem;
     margin-bottom: 20px;
     text-align: center;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
@@ -99,10 +99,10 @@
   }
 
   h1::after {
-    content: '🎒📚✏️';
+    content: '🎒📚';
     position: absolute;
-    right: -40px;
-    top: -15px;
+    right: -20px;
+    top: -5px;
     font-size: 1.8rem;
     animation: emojiSwitch 8s infinite;
   }
@@ -110,15 +110,14 @@
   @keyframes emojiSwitch {
     0% { content: '🎒'; }
     33% { content: '📚'; }
-    66% { content: '✏️'; }
-    100% { content: '🎒'; }
+
   }
 
   .sub-heading {
     display: block;
-    font-size: 1.5rem;
+    font-size: 1rem;
     color: #4ecdc4;
-    margin-top: 10px;
+    margin-top: 5px;
     text-align: center;
     font-family: 'Fredoka One', cursive;
     animation: fadeIn 0.5s ease-in-out;
@@ -173,7 +172,6 @@
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    margin-bottom: 15px;
     font-family: 'Fredoka One', cursive;
   }
 
@@ -254,7 +252,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    margin: 25px 0;
+    margin: 15px 0;
     color: #666;
   }
 

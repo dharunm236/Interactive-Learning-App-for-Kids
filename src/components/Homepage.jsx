@@ -8,7 +8,7 @@ import { collection, addDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function Homepage({ onLogout, onProfileClick, currentUserId }) {
+function Homepage({ onLogout, currentUserId }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const canvasRef = useRef(null);
@@ -22,7 +22,9 @@ function Homepage({ onLogout, onProfileClick, currentUserId }) {
     setShowDropdown(false);
     onLogout();
   };
-
+  const goToStory = () => {
+    navigate('/create-story'); 
+  };
 
   const sendChallenge = async () => {
     const opponentId = prompt("Enter opponent's user ID:");
@@ -107,11 +109,11 @@ function Homepage({ onLogout, onProfileClick, currentUserId }) {
         <section className="mascot-section" id="mascots">
           <h1>Meet Our Playful Mascots!</h1>
           <div className="mascot-grid">
-            <div className="mascot-card">
-              <img src="https://png.pngtree.com/png-vector/20231108/ourmid/pngtree-cute-rabbit-happy-face-character-png-image_10441479.png" alt="Bouncy Bunny" />
-              <h3>Bouncy Bunny</h3>
-              <p>Always hopping around to bring smiles!</p>
-            </div>
+          <div className="mascot-card" onClick={goToStory} style={{ cursor: 'pointer' }}>
+            <img src="https://png.pngtree.com/png-vector/20231108/ourmid/pngtree-cute-rabbit-happy-face-character-png-image_10441479.png" alt="Bouncy Bunny" />
+            <h2>Story time!</h2>
+            <p>Generate your ow story!!</p>
+          </div>
             <div className="mascot-card">
               <img src="https://png.pngtree.com/png-vector/20231107/ourmid/pngtree-cute-baby-cat-full-body-png-image_10506933.png" alt="Curious Cat" />
               <h3>Curious Cat</h3>
