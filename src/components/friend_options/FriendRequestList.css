@@ -1,0 +1,76 @@
+/* FriendRequestList.css */
+
+.container {
+    font-family: Arial, sans-serif;
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #D1F8EF;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  h3 {
+    color: #3674B5;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+  }
+  
+  p {
+    color: #578FCA;
+    font-size: 1.1em;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    background-color: #A1E3F9;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    font-weight: bold;
+    color: #3674B5;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  li:hover {
+    background-color: #578FCA;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .accept-btn, .decline-btn {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .accept-btn {
+    background-color: #3674B5;
+    color: #fff;
+  }
+  
+  .accept-btn:hover {
+    background-color: #265A8D;
+  }
+  
+  .decline-btn {
+    background-color: #A1E3F9;
+    color: #3674B5;
+  }
+  
+  .decline-btn:hover {
+    background-color: #578FCA;
+    color: #fff;
+  }
+  

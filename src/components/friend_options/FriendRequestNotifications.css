@@ -1,0 +1,71 @@
+/* FriendRequestNotifications.css */
+
+.notifications-container {
+    font-family: Arial, sans-serif;
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #D1F8EF;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  h3 {
+    color: #3674B5;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+  }
+  
+  .request-card {
+    background-color: #A1E3F9;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    text-align: left;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .request-card strong {
+    color: #3674B5;
+  }
+  
+  button {
+    margin: 5px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .accept-btn {
+    background-color: #3674B5;
+    color: white;
+  }
+  
+  .accept-btn:hover {
+    background-color: #265A8D;
+  }
+  
+  .reject-btn {
+    background-color: #578FCA;
+    color: white;
+  }
+  
+  .reject-btn:hover {
+    background-color: #4B7BAC;
+  }
+  
+  p {
+    color: #265A8D;
+    font-size: 1.1em;
+  }
+  
+  .no-requests {
+    color: #578FCA;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  
