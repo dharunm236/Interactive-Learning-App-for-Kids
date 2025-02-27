@@ -1,0 +1,227 @@
+/* StoryPrompt.module.css */
+
+.container {
+    padding: 20px;
+    background: linear-gradient(135deg, #f0f9ff, #e6f4ff);
+    min-height: 100vh;
+    font-family: 'Bubblegum Sans', cursive;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .toysWrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    padding: 20px;
+  }
+  
+  .contentBox {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  
+  .title {
+    font-size: 36px;
+    color: #e76f51;
+    text-align: center;
+    margin: 0 0 25px 0;
+    text-shadow: 2px 2px 0 #ffd700;
+    animation: fadeInDown 1s ease-in-out;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 15px;
+    border-radius: 10px;
+    border: 3px solid #2a9d8f;
+    font-size: 18px;
+    margin-bottom: 25px;
+    background-color: rgba(248, 249, 250, 0.8);
+    color: #264653;
+    transition: all 0.3s ease;
+  }
+  
+  .input:focus {
+    border-color: #e76f51;
+    box-shadow: 0 0 10px rgba(231, 111, 81, 0.5);
+  }
+  
+  .button {
+    background-color: #e9c46a;
+    color: #264653;
+    padding: 15px 30px;
+    border-radius: 50px;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(233, 196, 106, 0.4);
+    animation: fadeInUp 1s ease-in-out;
+  }
+  
+  .button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(233, 196, 106, 0.6);
+    background-color: #f4a261;
+  }
+  
+  .storyContainer {
+    margin-top: 30px;
+    padding: 25px;
+    background-color: rgba(255, 249, 236, 0.9);
+    border-radius: 15px;
+    border: 4px dashed #2a9d8f;
+    position: relative;
+    transform: rotate(-1deg);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  .storyTitle {
+    font-size: 28px;
+    color: #e76f51;
+    margin-bottom: 15px;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  .storyText {
+    font-size: 20px;
+    line-height: 1.8;
+    margin: 15px 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+    color: #264653;
+  }
+  
+  .visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .image {
+    margin-top: 25px;
+    border: 4px solid #e9c46a;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  .toy1 {
+    position: absolute;
+    width: 120px;
+    top: 10px;
+    left: 10px;
+    animation: float 3s ease-in-out infinite;
+    z-index: 1;
+  }
+  
+  .toy2 {
+    position: absolute;
+    width: 100px;
+    top: 50%;
+    right: 10px;
+    animation: float 3s ease-in-out infinite 0.5s;
+    z-index: 1;
+  }
+  
+  .toy3 {
+    position: absolute;
+    width: 80px;
+    bottom: 10px;
+    left: 50%;
+    margin-left: -40px;
+    animation: float 3s ease-in-out infinite 1s;
+    z-index: 1;
+  }
+  
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+  }
+  
+  .bounce1,
+  .bounce2,
+  .bounce3 {
+    width: 12px;
+    height: 12px;
+    background-color: #264653;
+    border-radius: 50%;
+    margin: 0 4px;
+    animation: bounce 1.4s infinite ease-in-out;
+  }
+  
+  .bounce2 {
+    animation-delay: -0.16s;
+  }
+  
+  .bounce3 {
+    animation-delay: -0.32s;
+  }
+  
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+  
+  @keyframes bounce {
+    0%,
+    80%,
+    100% {
+      transform: scale(0);
+    }
+    40% {
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
