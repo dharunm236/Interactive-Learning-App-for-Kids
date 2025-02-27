@@ -96,7 +96,7 @@ const GamesPage = () => {
         <div className={styles.gameCard}>
           <div className={styles.gameCardContent}>
             <img
-              src="https://png.pngtree.com/png-clipart/20220128/original/pngtree-money-game-icon-png-image_7263806.png"
+              src=""
               alt="Money Game"
               className={styles.gameImage}
             />
