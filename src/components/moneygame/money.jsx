@@ -57,7 +57,8 @@ const Game = () => {
   
 
   return (
-    <div className="game-container">
+    <div className="money-game">
+      <div className="game-container">
       <h1 className="question-title">What Can You Buy with $10?</h1>
 
       <motion.div
@@ -92,6 +93,7 @@ const Game = () => {
         </motion.div>
         <button onClick={shuffleItems}>Play Again</button>
       </motion.div>
+    </div>
     </div>
   );
 };
