@@ -1,5 +1,8 @@
 const getRandomNumber = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  const array = new Uint32Array(1);
+  window.crypto.getRandomValues(array);
+  // Scale to desired range
+  return Math.floor((array[0] / (0xFFFFFFFF + 1)) * (max - min + 1)) + min;
 };
 
 export default getRandomNumber;
