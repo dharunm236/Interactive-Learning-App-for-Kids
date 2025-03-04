@@ -9,6 +9,9 @@ const GamesPage = () => {
     window.location.href = "/games/Basic-Arith/index_B.html";
   };
 
+  const handleBackClick = () => {
+    navigate('/'); 
+  };
   const handlePlayClick_CarSimulator = () => {
     window.location.href = "/games/Car-Game/T3/index_C.html";
   };
@@ -25,7 +28,14 @@ const GamesPage = () => {
         <h1 className={styles.gamesTitle}>FunLearn Games Hub</h1>
         <p className={styles.gamesSubtitle}>Explore exciting games to learn and have fun!</p>
       </header>
-
+      <div className={styles.backButtonContainer}>
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/93/93634.png"
+          alt="Back"
+          className={styles.backButtonImage}
+          onClick={handleBackClick}
+        />
+      </div>
       {/* Games Grid */}
       <div className={styles.gamesGrid}>
         {/* Balloon Game */}
