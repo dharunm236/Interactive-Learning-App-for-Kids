@@ -13,7 +13,39 @@
 .gamesHeader {
   margin-bottom: 40px;
 }
+.backButtonContainer {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+}
 
+.backButtonImage {
+  width: 50px;
+  height: 50px;
+  transition: transform 0.3s ease;
+}
+
+.backButtonImage:hover {
+  transform: rotate(-20deg) scale(1.1);
+}
+
+.challengeSection {
+  margin-top: 40px;
+}
+
+.ctaButton {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 30px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.ctaButton:hover {
+  background-color: #45a049;
+}
 .gamesTitle {
   font-family: 'Poppins', sans-serif;
   font-size: 3.5rem;

@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import axios from "axios";
 import styles from "./StoryPrompt.module.css"; // Import CSS Module
+import { Link, useNavigate } from 'react-router-dom';
 
 const StoryPrompt = () => {
   const [prompt, setPrompt] = useState("");
   const [story, setStory] = useState("");
   const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const apiKey = "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"; // Use your actual API key here
-
+  const handleBackClick = () => {
+    navigate('/'); 
+  };
   const handleGenerate = async () => {
     if (!prompt.trim()) return;
 
@@ -48,6 +52,14 @@ const StoryPrompt = () => {
 
   return (
     <div className={styles.container}>
+      <div className={styles.backButtonContainer}>
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/93/93634.png"
+          alt="Back"
+          className={styles.backButtonImage}
+          onClick={handleBackClick}
+        />
+      </div>
       <div className={styles.toysWrapper}>
         <img
           src="https://cdn-icons-png.flaticon.com/512/5238/5238389.png"
