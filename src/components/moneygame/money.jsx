@@ -57,7 +57,7 @@ const Game = () => {
   
 
   return (
-    <div className="game-container">
+      <div className="game-container">
       <h1 className="question-title">What Can You Buy with $10?</h1>
 
       <motion.div
