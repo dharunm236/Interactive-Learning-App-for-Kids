@@ -1,259 +1,497 @@
 /* StoryPrompt.module.css */
 
+/* Main container */
 .container {
-    padding: 20px;
-    background: linear-gradient(135deg, #f0f9ff, #e6f4ff);
-    min-height: 100vh;
-    font-family: 'Bubblegum Sans', cursive;
-    position: relative;
-    overflow: hidden;
+  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f9f7fe 0%, #eaf3fc 100%);
+  padding: 20px;
+  overflow-x: hidden;
+  font-family: 'Comic Sans MS', 'Bubblegum Sans', cursive;
+}
+
+/* Back button */
+.backButtonContainer {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+}
+
+.backButtonImage {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  filter: invert(50%);
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 8px;
+  border-radius: 50%;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.backButtonImage:hover {
+  filter: invert(30%);
+  transform: scale(1.1);
+}
+
+.challengeSection {
+  margin-top: 40px;
+}
+
+.ctaButton {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 30px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.ctaButton:hover {
+  background-color: #45a049;
+}
+
+/* Toys animation */
+.toysWrapper {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 60px;
+}
+
+.toy1, .toy2, .toy3 {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.2));
+}
+
+.toy1 {
+  top: 100px;
+  left: 5%;
+  animation: float 4s ease-in-out infinite;
+}
+
+.toy2 {
+  top: 50px;
+  right: 10%;
+  animation: float 5s ease-in-out infinite 1s;
+}
+
+.toy3 {
+  bottom: 50px;
+  left: 7%;
+  animation: float 4.5s ease-in-out infinite 0.5s;
+}
+
+.dropdown {
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 16px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  background-color: #fffdf6;
+  border: 1px solid #ccc;
+}
+
+/* Content box */
+.contentBox {
+  background-color: white;
+  border-radius: 20px;
+  padding: 30px;
+  margin: 0 auto;
+  max-width: 850px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 3px solid #f8c537;
+  position: relative;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #ff6b6b;
+  font-size: 2.2rem;
+  text-shadow: 1px 1px 0 #ffbe0b;
+  letter-spacing: 1px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
   }
-  .backButtonContainer {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    cursor: pointer;
+  50% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Input styling */
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.input {
+  padding: 15px 20px;
+  border: 3px solid #a8dadc;
+  border-radius: 50px;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  background-color: #f1faee;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  font-family: inherit;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #457b9d;
+  box-shadow: 0 4px 15px rgba(69, 123, 157, 0.2);
+}
+
+/* Language selector */
+.languageSelector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  color: #333;
+  margin-top: 5px;
+}
+
+.languageSelector label {
+  font-weight: bold;
+  color: #457b9d;
+}
+
+.customSelect {
+  position: relative;
+  min-width: 200px;
+}
+
+.languageDropdown {
+  width: 100%;
+  padding: 12px 40px 12px 16px;
+  border-radius: 50px;
+  border: 3px solid #a8dadc;
+  font-size: 16px;
+  background-color: #f1faee;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  appearance: none;
+  font-family: inherit;
+}
+
+.languageDropdown:hover, .languageDropdown:focus {
+  border-color: #457b9d;
+  box-shadow: 0 4px 10px rgba(69, 123, 157, 0.15);
+  outline: none;
+}
+
+.selectArrow {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #457b9d;
+  font-size: 12px;
+}
+
+/* Generate button */
+.button {
+  background: linear-gradient(135deg, #ff9a8b 0%, #ff6b6b 100%);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  margin: 0 auto 20px;
+  box-shadow: 0 6px 15px rgba(255, 107, 107, 0.3);
+  letter-spacing: 1px;
+  font-family: inherit;
+}
+
+.button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+}
+
+.button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Loading animation */
+.loading {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.loading div {
+  width: 12px;
+  height: 12px;
+  background-color: white;
+  border-radius: 100%;
+  display: inline-block;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.loading .bounce1 {
+  animation-delay: -0.32s;
+}
+
+.loading .bounce2 {
+  animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+  0%, 80%, 100% { 
+    transform: scale(0);
+  } 40% { 
+    transform: scale(1);
+  }
+}
+
+/* Story container */
+.storyContainer {
+  background-color: #f8f9fa;
+  border-radius: 15px;
+  padding: 25px;
+  margin-top: 30px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  border: 2px dashed #ffbe0b;
+  transition: all 0.3s ease;
+}
+
+.storyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.storyTitle {
+  font-size: 1.8rem;
+  margin: 0;
+  color: #ff6b6b;
+  text-shadow: 1px 1px 0 #ffbe0b;
+}
+
+.narrationControls {
+  display: flex;
+  gap: 10px;
+}
+
+.narrationButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: inherit;
+}
+
+.playButton {
+  background-color: #4cc9f0;
+  color: white;
+  box-shadow: 0 4px 8px rgba(76, 201, 240, 0.3);
+}
+
+.playButton:hover {
+  background-color: #3ba9d0;
+  transform: translateY(-2px);
+}
+
+.stopButton {
+  background-color: #f77f00;
+  color: white;
+  box-shadow: 0 4px 8px rgba(247, 127, 0, 0.3);
+}
+
+.stopButton:hover {
+  background-color: #e67300;
+  transform: translateY(-2px);
+}
+
+.storyContent {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.storyContent::-webkit-scrollbar {
+  width: 8px;
+}
+
+.storyContent::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.storyContent::-webkit-scrollbar-thumb {
+  background: #a8dadc;
+  border-radius: 10px;
+}
+
+.storyContent::-webkit-scrollbar-thumb:hover {
+  background: #457b9d;
+}
+
+.storyText {
+  font-size: 18px;
+  line-height: 1.8;
+  margin-bottom: 15px;
+  position: relative;
+  padding-left: 20px;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.storyText.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.storyText:before {
+  content: "📝";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 16px;
+}
+
+.storyText:nth-child(odd):before {
+  content: "🎭";
+}
+
+.image {
+  display: block;
+  max-width: 100%;
+  margin: 20px auto;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Confetti animation */
+.confettiContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 16px;
+  background-color: #f0c808;
+  top: -20px;
+  opacity: 0;
+  animation: confetti-fall 3s ease-in-out forwards, confetti-shake 3s ease-in-out forwards;
+}
+
+@keyframes confetti-fall {
+  0% {
+    top: -20px;
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes confetti-shake {
+  0% {
+    transform: translateX(0) rotate(0deg);
+  }
+  25% {
+    transform: translateX(100px) rotate(45deg);
+  }
+  50% {
+    transform: translateX(-100px) rotate(90deg);
+  }
+  75% {
+    transform: translateX(50px) rotate(135deg);
+  }
+  100% {
+    transform: translateX(-50px) rotate(180deg);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.8rem;
   }
   
-  .backButtonImage {
-    width: 50px;
-    height: 50px;
-    transition: transform 0.3s ease;
+  .storyHeader {
+    flex-direction: column;
+    align-items: flex-start;
   }
   
-  .backButtonImage:hover {
-    transform: rotate(-20deg) scale(1.1);
+  .toy1, .toy2, .toy3 {
+    width: 60px;
+    height: 60px;
   }
   
-  .challengeSection {
-    margin-top: 40px;
+  .input, .languageDropdown, .button {
+    font-size: 16px;
+    padding: 12px 20px;
   }
-  
-  .ctaButton {
-    background-color: #4caf50;
-    color: white;
-    padding: 10px 30px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .ctaButton:hover {
-    background-color: #45a049;
-  }
-  .toysWrapper {
-    max-width: 800px;
-    margin: 0 auto;
-    position: relative;
-    padding: 20px;
-  }
-  
+}
+
+@media (max-width: 480px) {
   .contentBox {
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    position: relative;
-    z-index: 2;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 20px;
   }
   
   .title {
-    font-size: 36px;
-    color: #e76f51;
-    text-align: center;
-    margin: 0 0 25px 0;
-    text-shadow: 2px 2px 0 #ffd700;
-    animation: fadeInDown 1s ease-in-out;
+    font-size: 1.5rem;
   }
   
-  .input {
-    width: 100%;
-    padding: 15px;
-    border-radius: 10px;
-    border: 3px solid #2a9d8f;
-    font-size: 18px;
-    margin-bottom: 25px;
-    background-color: rgba(248, 249, 250, 0.8);
-    color: #264653;
-    transition: all 0.3s ease;
-  }
-  
-  .input:focus {
-    border-color: #e76f51;
-    box-shadow: 0 0 10px rgba(231, 111, 81, 0.5);
-  }
-  
-  .button {
-    background-color: #e9c46a;
-    color: #264653;
-    padding: 15px 30px;
-    border-radius: 50px;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    width: 100%;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(233, 196, 106, 0.4);
-    animation: fadeInUp 1s ease-in-out;
-  }
-  
-  .button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(233, 196, 106, 0.6);
-    background-color: #f4a261;
-  }
-  
-  .storyContainer {
-    margin-top: 30px;
-    padding: 25px;
-    background-color: rgba(255, 249, 236, 0.9);
-    border-radius: 15px;
-    border: 4px dashed #2a9d8f;
-    position: relative;
-    transform: rotate(-1deg);
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(5px);
-    animation: fadeIn 1s ease-in-out;
-  }
-  
-  .storyTitle {
-    font-size: 28px;
-    color: #e76f51;
-    margin-bottom: 15px;
-    text-align: center;
-    animation: fadeIn 1s ease-in-out;
+  .toy1, .toy2, .toy3 {
+    width: 40px;
+    height: 40px;
   }
   
   .storyText {
-    font-size: 20px;
-    line-height: 1.8;
-    margin: 15px 0;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.5s ease;
-    color: #264653;
+    font-size: 16px;
   }
-  
-  .visible {
-    opacity: 1;
-    transform: translateY(0);
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px) rotate(0deg);
   }
-  
-  .image {
-    margin-top: 25px;
-    border: 4px solid #e9c46a;
-    border-radius: 15px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    width: 100%;
-    animation: fadeIn 1s ease-in-out;
+  50% {
+    transform: translateY(-20px) rotate(5deg);
   }
-  
-  .toy1 {
-    position: absolute;
-    width: 120px;
-    top: 10px;
-    left: 10px;
-    animation: float 3s ease-in-out infinite;
-    z-index: 1;
+  100% {
+    transform: translateY(0px) rotate(0deg);
   }
-  
-  .toy2 {
-    position: absolute;
-    width: 100px;
-    top: 50%;
-    right: 10px;
-    animation: float 3s ease-in-out infinite 0.5s;
-    z-index: 1;
-  }
-  
-  .toy3 {
-    position: absolute;
-    width: 80px;
-    bottom: 10px;
-    left: 50%;
-    margin-left: -40px;
-    animation: float 3s ease-in-out infinite 1s;
-    z-index: 1;
-  }
-  
-  .loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 30px;
-  }
-  
-  .bounce1,
-  .bounce2,
-  .bounce3 {
-    width: 12px;
-    height: 12px;
-    background-color: #264653;
-    border-radius: 50%;
-    margin: 0 4px;
-    animation: bounce 1.4s infinite ease-in-out;
-  }
-  
-  .bounce2 {
-    animation-delay: -0.16s;
-  }
-  
-  .bounce3 {
-    animation-delay: -0.32s;
-  }
-  
-  @keyframes float {
-    0% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
-    100% {
-      transform: translateY(0px);
-    }
-  }
-  
-  @keyframes bounce {
-    0%,
-    80%,
-    100% {
-      transform: scale(0);
-    }
-    40% {
-      transform: scale(1);
-    }
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  
-  @keyframes fadeInDown {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+}

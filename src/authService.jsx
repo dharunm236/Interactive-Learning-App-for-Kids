@@ -67,3 +67,5 @@ export const logOut = async () => {
     throw error;
   }
 };
+
+//console.log("Exports:", { logIn, logOut, signUp, logInWithGoogle });

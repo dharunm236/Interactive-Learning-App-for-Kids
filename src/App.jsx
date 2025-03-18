@@ -15,7 +15,7 @@ import ProfilePage from './components/ProfilePage.jsx';
 // import ProfilePage from './components/Profile/profile_page.jsx';
 import MoneyGame from './components/moneygame/money'; 
 import StoryPrompt from './components/Story/StoryPrompt';
-
+import SpeechChecker from './components/SpeechChecker/SpeechChecker';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -75,6 +75,7 @@ function App() {
           <Route path="/send-friend-request" element={user ? <SendFriendRequest /> : <Navigate to="/login" />} />
           <Route path="/friend-requests" element={user ? <FriendRequestNotifications /> : <Navigate to="/login" />} />
           <Route path="/create-story" element={user ? <StoryPrompt /> : <Navigate to="/login" />} />
+          <Route path="/speech-checker" element={user ? <SpeechChecker /> : <Navigate to="/login" />} />
         </Routes>
       </div>
     </Router>

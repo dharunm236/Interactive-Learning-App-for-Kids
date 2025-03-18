@@ -1,6 +1,6 @@
 .balloon {
   max-width: 100px;
-  transition: translate 0.3s, scale 0.1s, opacity 0.1s ease-in-out;
+  transition: translate 0.5s, scale 0.1s, opacity 0.1s ease-in-out;
   margin: auto;
   translate: 0% 100%;
   transform-origin: center;
