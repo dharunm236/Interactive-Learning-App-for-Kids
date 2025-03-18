@@ -2,18 +2,21 @@
 
 /* Scope all styles under .profile-wrapper */
 .profile-wrapper {
-  --background-color: #f0f0f5;
+  --background-color: #f5f7ff;
   --primary-color: #6200ea;
   --secondary-color: #ff9800;
+  --tertiary-color: #ff4081;
   --text-color: #333;
+  --light-gray: #f0f0f5;
+  --card-background: #ffffff;
 }
 
 .profile-wrapper .profilePage {
   font-family: "Balsamiq Sans", cursive;
-  background-color: var(--background-color);
+  background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   min-height: 100vh;
   padding: 20px;
   overflow-y: auto;
@@ -29,10 +32,12 @@
 
 .profile-wrapper .profileCard {
   width: 550px;
-  min-height: 90vh;
-  background: rgb(247, 236, 255);
+  max-width: 90%;
+  min-height: 700px;
+  background: var(--card-background);
   border-radius: 25px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1), 
+              0 5px 15px rgba(0, 0, 0, 0.07);
   text-align: center;
   overflow: hidden;
   position: relative;
@@ -51,18 +56,19 @@
 }
 
 .profile-wrapper .profileHeader {
-  height: 25%;
-  background: linear-gradient(270deg, var(--primary-color), var(--secondary-color), #ff4081);
+  height: 220px;
+  background: linear-gradient(270deg, var(--primary-color), var(--secondary-color), var(--tertiary-color));
   background-size: 400% 400%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   border-bottom-left-radius: 50% 20%;
   border-bottom-right-radius: 50% 20%;
-  animation: gradientMove 5s ease infinite;
-  padding-bottom: 60px;
+  animation: gradientMove 10s ease infinite;
+  padding-bottom: 20px;
   position: relative;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 @keyframes gradientMove {
@@ -71,46 +77,121 @@
   100% { background-position: 0% 50%; }
 }
 
-.profile-wrapper .profilePicture {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 5px solid white;
-  position: absolute;
-  top: 18%;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: floatp 3s ease-in-out infinite;
-  background-color: white;
+.profile-wrapper .profileHeader h1 {
+  color: white;
+  font-size: 2rem;
+  margin-top: 10px;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 2;
 }
 
-@keyframes floatp {
-  0%, 100% { transform: translate(-50%, 0); }
-  50% { transform: translate(-50%, -8px); }
+.profile-wrapper .avatarContainer {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin: -80px auto 20px;
+  cursor: pointer;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.profile-wrapper .profilePicture {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 6px solid white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  transition: all 0.3s ease;
+  object-fit: cover;
+}
+
+.profile-wrapper .changeAvatarOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.profile-wrapper .avatarContainer:hover .changeAvatarOverlay {
+  opacity: 1;
+}
+
+.profile-wrapper .profileContent {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 90%;
+  margin: 0 auto;
 }
 
 .profile-wrapper .profileField {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px;
-  font-size: 16px;
-  color: #555;
-  margin: 12px auto;
-  width: 80%;
-  background: rgba(232, 227, 227, 0.05);
+  padding: 16px;
+  font-size: 1rem;
+  color: var(--text-color);
+  background: #f8f9fa;
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
 }
 
 .profile-wrapper .profileField:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #f0f2f5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.profile-wrapper .fieldLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-wrapper .fieldIcon {
+  color: var(--primary-color);
+  font-size: 1.2rem;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-wrapper .fieldName {
+  font-weight: 600;
+  color: #555;
+}
+
+.profile-wrapper .fieldValue {
+  font-weight: 500;
+  color: #333;
 }
 
 .profile-wrapper .editIcon {
   cursor: pointer;
   color: var(--secondary-color);
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  border-radius: 50%;
 }
 
 .profile-wrapper .editIcon:hover {
@@ -118,19 +199,144 @@
   transform: scale(1.2);
 }
 
-.profile-wrapper .saveButton {
-  background: var(--secondary-color);
+.profile-wrapper .editField {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.profile-wrapper .editInput {
+  padding: 8px 12px;
+  border: 2px solid var(--secondary-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  width: 150px;
+}
+
+.profile-wrapper .editInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(98, 0, 234, 0.2);
+}
+
+.profile-wrapper .saveFieldButton {
+  background: var(--primary-color);
   color: white;
-  padding: 12px 20px;
   border: none;
-  border-radius: 10px;
-  font-size: 16px;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.profile-wrapper .saveFieldButton:hover {
+  background: #5000c9;
+}
+
+.profile-wrapper .saveButton {
+  background: linear-gradient(135deg, var(--secondary-color), #fd7e14);
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
   margin-top: 15px;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(255, 152, 0, 0.3);
+  align-self: center;
 }
 
 .profile-wrapper .saveButton:hover {
-  background: #e68900;
+  background: var(--secondary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(255, 152, 0, 0.4);
+}
+
+.profile-wrapper .backButton {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 20px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.profile-wrapper .backButton:hover {
+  background: rgba(255, 255, 255, 0.3);
   transform: scale(1.1);
+}
+
+/* Sparkles animation */
+.profile-wrapper .sparkle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: white;
+  border-radius: 50%;
+  opacity: 0;
+  animation: sparkleAnimation 3s infinite;
+}
+
+@keyframes sparkleAnimation {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  20% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  40% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+  .profile-wrapper .profileCard {
+    width: 100%;
+    padding-bottom: 20px;
+  }
+  
+  .profile-wrapper .profileField {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+  
+  .profile-wrapper .fieldLabel {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .profile-wrapper .editField {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .profile-wrapper .editInput {
+    width: 100%;
+  }
 }
