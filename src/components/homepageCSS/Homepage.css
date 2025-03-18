@@ -202,7 +202,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1400px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 0 5%;
   position: relative;
@@ -213,7 +213,7 @@ body {
 /* Welcome Message */
 .welcome-message {
   flex: 1;
-  max-width: 600px;
+  max-width: 800px;
   background: var(--glass-bg);
   backdrop-filter: blur(15px);
   padding: 3.5rem;
