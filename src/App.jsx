@@ -16,6 +16,7 @@ import ProfilePage from './components/ProfilePage.jsx';
 import MoneyGame from './components/moneygame/money'; 
 import StoryPrompt from './components/Story/StoryPrompt';
 import SpeechChecker from './components/SpeechChecker/SpeechChecker';
+import QuizPage from './components/QuizPage';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -76,6 +77,7 @@ function App() {
           <Route path="/friend-requests" element={user ? <FriendRequestNotifications /> : <Navigate to="/login" />} />
           <Route path="/create-story" element={user ? <StoryPrompt /> : <Navigate to="/login" />} />
           <Route path="/speech-checker" element={user ? <SpeechChecker /> : <Navigate to="/login" />} />
+          <Route path="/quizzes" element={user ? <QuizPage /> : <Navigate to="/login" />}/>
         </Routes>
       </div>
     </Router>

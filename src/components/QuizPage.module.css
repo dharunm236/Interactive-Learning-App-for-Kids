@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
+
+/* Quiz Page Container */
+.quizPage {
+  padding: 20px;
+  text-align: center;
+  background: linear-gradient(135deg, #7b2cbf, #9d4edd);
+  min-height: 100vh;
+  color: #f5f6fa;
+}
+
+/* Header */
+.quizHeader {
+  margin-bottom: 40px;
+}
+.backButtonContainer {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+}
+
+.backButtonImage {
+  width: 50px;
+  height: 50px;
+  transition: transform 0.3s ease;
+}
+
+.backButtonImage:hover {
+  transform: rotate(-20deg) scale(1.1);
+}
+
+.challengeSection {
+  margin-top: 40px;
+}
+
+.ctaButton {
+  background-color: #fb8500;
+  color: white;
+  padding: 10px 30px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 25px;
+  font-size: 1.2rem;
+}
+
+.ctaButton:hover {
+  background-color: #fd9e02;
+}
+
+.quizTitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 3.5rem;
+  background: linear-gradient(135deg, #ffbe0b, #fb8500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.quizSubtitle {
+  font-size: 1.5rem;
+  color: #f5f6fa;
+  font-weight: 300;
+}
+
+/* Quiz Grid */
+.quizGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Quiz Card */
+.quizCard {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+  backdrop-filter: blur(10px);
+}
+
+.quizCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.quizCardContent {
+  padding: 20px;
+  text-align: center;
+}
+
+.quizImage {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+}
+
+.quizTitle {
+  font-size: 1.5rem;
+  margin: 10px 0;
+  color: #ffbe0b;
+}
+
+.quizDescription {
+  font-size: 1rem;
+  color: #f5f6fa;
+}
+
+/* Play Button */
+.playButton {
+  padding: 10px 20px;
+  background: #fb5607;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 10px;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.playButton:hover {
+  background: #e85d04;
+}
+
+.playButton:disabled {
+  background: #9d4edd;
+  cursor: not-allowed;
+}
