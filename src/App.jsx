@@ -15,6 +15,11 @@ import ProfilePage from './components/ProfilePage.jsx';
 // import ProfilePage from './components/Profile/profile_page.jsx';
 import MoneyGame from './components/moneygame/money'; 
 import StoryPrompt from './components/Story/StoryPrompt';
+import SpeechChecker from './components/SpeechChecker/SpeechChecker';
+import CoursePage from "./components/lecture/CoursePage";
+import CourseContentPage from "./components/lecture/CourseContentPage";
+import QuizPage from "./components/lecture/QuizPage";
+
 
 
 function App() {
@@ -71,10 +76,14 @@ function App() {
               )
             }
           />
+          <Route path="/lecture" element={<CoursePage />} />
+          <Route path="/lecture/course-content" element={<CourseContentPage />} />
+          <Route path="/lecture/quiz" element={<QuizPage />} />
           <Route path="/profile-page" element={user ? <ProfilePage /> : <Navigate to="/login" />} />
           <Route path="/send-friend-request" element={user ? <SendFriendRequest /> : <Navigate to="/login" />} />
           <Route path="/friend-requests" element={user ? <FriendRequestNotifications /> : <Navigate to="/login" />} />
           <Route path="/create-story" element={user ? <StoryPrompt /> : <Navigate to="/login" />} />
+          <Route path="/speech-checker" element={user ? <SpeechChecker /> : <Navigate to="/login" />} />
         </Routes>
       </div>
     </Router>

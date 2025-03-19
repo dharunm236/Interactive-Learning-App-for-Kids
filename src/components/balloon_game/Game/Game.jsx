@@ -10,7 +10,7 @@ import words from "../utils/words";
 import "./Game.css";
 import SpButton from "./spButton";
 import { db, auth } from "../../../firebaseConfig";
-import { doc, updateDoc, arrayUnion, setDoc, getDoc } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import Celebration from "../Celebration/Celebration";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -74,40 +74,76 @@ const Game = ({ numberOfBalloons, gameDuration }) => {
     console.log("Saving game result...");
     console.log("UserID:", userId, "Username:", username, "Score:", finalScore);
   
+    if (!userId) {
+      console.error("Cannot save game result: userId is null or undefined");
+      return;
+    }
+  
     const gameId = "balloonGame";
     const gameRef = doc(db, "games", gameId);
     const playedGamesRef = doc(db, "played_games", userId);
   
     try {
+      // Use a regular JavaScript Date for arrayUnion operations
+      // This will be converted to a Firestore timestamp when stored
+      const jsTimestamp = new Date();
+      
       const gameSnap = await getDoc(gameRef);
       if (gameSnap.exists()) {
         console.log("Game document exists. Updating...");
         await updateDoc(gameRef, {
-          players: arrayUnion({ userId, username, points: finalScore }),
+          players: arrayUnion({ 
+            userId, 
+            username, 
+            points: finalScore, 
+            createdAt: jsTimestamp  // Use JavaScript Date instead of serverTimestamp()
+          }),
         });
+        console.log("Game document updated successfully");
       } else {
         console.log("Game document does not exist. Creating new...");
+        // For set operations, we can use serverTimestamp()
         await setDoc(gameRef, {
-          players: [{ userId, username, points: finalScore }],
+          players: [{ 
+            userId, 
+            username, 
+            points: finalScore, 
+            createdAt: jsTimestamp  // Use JavaScript Date instead of serverTimestamp()
+          }],
+          lastUpdated: serverTimestamp()  // We can use serverTimestamp() directly here
         });
+        console.log("Game document created successfully");
       }
   
       const playedGamesSnap = await getDoc(playedGamesRef);
       if (playedGamesSnap.exists()) {
         console.log("Played games document exists. Updating...");
         await updateDoc(playedGamesRef, {
-          gamesPlayed: arrayUnion({ gameId, points: finalScore }),
+          gamesPlayed: arrayUnion({ 
+            gameId, 
+            points: finalScore, 
+            createdAt: jsTimestamp  // Use JavaScript Date instead of serverTimestamp()
+          }),
+          lastUpdated: serverTimestamp()  // We can use serverTimestamp() directly here
         });
+        console.log("User played games document updated successfully");
       } else {
         console.log("Played games document does not exist. Creating new...");
         await setDoc(playedGamesRef, {
-          gamesPlayed: [{ gameId, points: finalScore }],
+          gamesPlayed: [{ 
+            gameId, 
+            points: finalScore, 
+            createdAt: jsTimestamp  // Use JavaScript Date instead of serverTimestamp()
+          }],
+          lastUpdated: serverTimestamp()  // We can use serverTimestamp() directly here
         });
+        console.log("User played games document created successfully");
       }
   
       console.log("Game result saved successfully!");
     } catch (error) {
       console.error("Error saving game result:", error);
+      console.error("Error details:", error.code, error.message);
     }
   };
   
@@ -159,26 +195,54 @@ const Game = ({ numberOfBalloons, gameDuration }) => {
 
   //Stop the game and save score
   const stopGame = () => {
-    console.log("Stopping game...");
-    console.log("User:", user);
-  
+    // Add more obvious console logs
+    console.log("%c STOPPING GAME", "background: red; color: white; font-size: 20px");
+    console.log("%c User object:", "background: yellow; color: black", user);
+    
     setGameStarted(false);
     setGameStopped(true);
   
-    if (user) {
-      console.log("Saving score for user:", user.uid, "Score:", score);
-      saveGameResult(user.uid, user.displayName || "Unknown", score);
-    } else {
-      console.log("User is not logged in!");
-    }
+    // Force the function to run after state updates
+    setTimeout(() => {
+      if (user && user.uid) {
+        console.log("%c Attempting to save score", "background: green; color: white", {
+          uid: user.uid,
+          displayName: user.displayName,
+          score: score
+        });
+        
+        try {
+          saveGameResult(user.uid, user.displayName || "Unknown", score);
+        } catch (error) {
+          console.error("Error in stopGame function:", error);
+        }
+      } else {
+        console.error("%c User is not logged in or missing uid", "background: red; color: white", user);
+      }
+    }, 100);
   };
-  
 
   //S peak the word
   const speakWord = () => {
     const utterance = new SpeechSynthesisUtterance(selectedWord);
     speechSynthesis.speak(utterance);
   };
+
+  // Add an effect to log when the game ends due to timer
+  useEffect(() => {
+    if (timeRemaining === 0 && !gameStarted && gameStopped) {
+      console.log("%c Game ended due to timer", "background: orange; color: black");
+      
+      if (user && user.uid) {
+        console.log("%c Auto-saving score after timer end", "background: green; color: white");
+        try {
+          saveGameResult(user.uid, user.displayName || "Unknown", score);
+        } catch (error) {
+          console.error("Error auto-saving score:", error);
+        }
+      }
+    }
+  }, [timeRemaining, gameStarted, gameStopped]);
 
   return (
     <div className="balloon-game">
