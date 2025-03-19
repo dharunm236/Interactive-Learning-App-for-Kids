@@ -4,76 +4,112 @@ import {
   collection,
   query,
   where,
-  getDocs,
   doc,
   deleteDoc,
   setDoc,
   getDoc,
+  updateDoc,
+  onSnapshot,
+  orderBy
 } from 'firebase/firestore';
 import './FriendRequestNotifications.css';
 
 function FriendRequestNotifications() {
   const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchRequests = async () => {
-      try {
-        const currentUser = auth.currentUser;
-        if (!currentUser) return;
+    let unsubscribe = () => {}; // Default no-op function
+    
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      console.log("No authenticated user");
+      setLoading(false);
+      return;
+    }
 
-        const requestRef = collection(db, 'friendRequests');
-        const q = query(
-          requestRef,
-          where('receiverId', '==', currentUser.uid),
-          where('status', '==', 'pending')
-        );
+    console.log("Setting up listener for user:", currentUser.uid);
+    
+    try {
+      // Set up real-time listener for friend requests
+      const requestRef = collection(db, 'friendRequests');
+      
+      // Use a simpler query first without orderBy to avoid index issues
+      const q = query(
+        requestRef,
+        where('receiverId', '==', currentUser.uid),
+        where('status', '==', 'pending')
+      );
 
-        const querySnapshot = await getDocs(q);
-        const requestsData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        setRequests(requestsData);
-      } catch (error) {
-        console.error('Error fetching friend requests:', error);
-      }
+      unsubscribe = onSnapshot(q, 
+        (querySnapshot) => {
+          console.log(`Got ${querySnapshot.size} friend requests`);
+          const requestsData = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setRequests(requestsData);
+          setLoading(false);
+        },
+        (error) => {
+          console.error("Error in friend request listener:", error);
+          setError("Failed to load friend requests: " + error.message);
+          setLoading(false);
+        }
+      );
+    } catch (error) {
+      console.error("Error in friend request setup:", error);
+      setError(error.message);
+      setLoading(false);
+    }
+    
+    // Cleanup function
+    return () => {
+      unsubscribe();
     };
-
-    fetchRequests();
   }, []);
 
   const handleAccept = async (requestId, senderId, receiverId) => {
     try {
+      // Add to sender's friend list
       const senderFriendsRef = doc(db, 'friends', senderId);
+      const senderFriendsSnap = await getDoc(senderFriendsRef);
+      const senderFriends = senderFriendsSnap.exists() 
+        ? senderFriendsSnap.data().friends || []
+        : [];
+      
+      // Add to receiver's friend list
       const receiverFriendsRef = doc(db, 'friends', receiverId);
-      const requestDocRef = doc(db, 'friendRequests', requestId);
-
-      // Fetch sender's friends list
-      const senderDoc = await getDoc(senderFriendsRef);
-      const senderFriends = senderDoc.exists() ? senderDoc.data().friends || [] : [];
-
-      // Fetch receiver's friends list
-      const receiverDoc = await getDoc(receiverFriendsRef);
-      const receiverFriends = receiverDoc.exists() ? receiverDoc.data().friends || [] : [];
-
-      // Update sender's friends list
-      await setDoc(
-        senderFriendsRef,
-        { friends: Array.from(new Set([...senderFriends, receiverId])) },
-        { merge: true }
-      );
-
-      // Update receiver's friends list
-      await setDoc(
-        receiverFriendsRef,
-        { friends: Array.from(new Set([...receiverFriends, senderId])) },
-        { merge: true }
-      );
-
+      const receiverFriendsSnap = await getDoc(receiverFriendsRef);
+      const receiverFriends = receiverFriendsSnap.exists()
+        ? receiverFriendsSnap.data().friends || []
+        : [];
+      
+      // Update both friends lists
+      if (senderFriendsSnap.exists()) {
+        await updateDoc(senderFriendsRef, { 
+          friends: [...senderFriends, receiverId] 
+        });
+      } else {
+        await setDoc(senderFriendsRef, { 
+          friends: [receiverId] 
+        });
+      }
+      
+      if (receiverFriendsSnap.exists()) {
+        await updateDoc(receiverFriendsRef, { 
+          friends: [...receiverFriends, senderId] 
+        });
+      } else {
+        await setDoc(receiverFriendsRef, { 
+          friends: [senderId] 
+        });
+      }
+      
       // Delete the friend request document
-      await deleteDoc(requestDocRef);
-
+      await deleteDoc(doc(db, 'friendRequests', requestId));
+      
       // Remove from state
       setRequests((prevRequests) => prevRequests.filter((req) => req.id !== requestId));
 
@@ -96,11 +132,19 @@ function FriendRequestNotifications() {
   return (
     <div className="notifications-container">
       <h3>Friend Requests</h3>
-      {requests.length > 0 ? (
+      {error && <p className="error-message">Error loading requests: {error}</p>}
+      {loading ? (
+        <p>Loading requests...</p>
+      ) : requests.length > 0 ? (
         requests.map((req) => (
           <div key={req.id} className="request-card">
             <p>
               Friend request from: <strong>{req.senderUsername || req.senderId}</strong>
+              {req.createdAt && (
+                <span className="request-time">
+                  {new Date(req.createdAt.toDate()).toLocaleString()}
+                </span>
+              )}
             </p>
             <button className="accept-btn" onClick={() => handleAccept(req.id, req.senderId, req.receiverId)}>
               Accept

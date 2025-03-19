@@ -10,6 +10,7 @@ import {
   doc,
   getDoc,
   updateDoc,
+  serverTimestamp,
 } from 'firebase/firestore';
 
 function SendFriendRequest() {
@@ -68,6 +69,7 @@ function SendFriendRequest() {
     }
 
     try {
+      // Find the receiver user
       const usersRef = collection(db, 'users');
       const q = query(usersRef, where('username', '==', username));
       const querySnapshot = await getDocs(q);
@@ -85,25 +87,55 @@ function SendFriendRequest() {
         return;
       }
 
-      // Check if the request already exists
-      const requestRef = doc(db, 'friendRequests', receiverId);
-      const existingRequest = await getDoc(requestRef);
-
-      if (existingRequest.exists()) {
-        const requests = existingRequest.data().requests || [];
-        if (requests.includes(auth.currentUser.uid)) {
-          setStatus('Friend request already sent.');
+      // Check if they're already friends
+      const friendsDocRef = doc(db, 'friends', auth.currentUser.uid);
+      const friendsDoc = await getDoc(friendsDocRef);
+      if (friendsDoc.exists()) {
+        const friendsList = friendsDoc.data().friends || [];
+        if (friendsList.includes(receiverId)) {
+          setStatus('You are already friends with this user.');
           return;
         }
-        await updateDoc(requestRef, {
-          requests: [...requests, auth.currentUser.uid],
-        });
-      } else {
-        await addDoc(collection(db, 'friendRequests'), {
-          receiverId,
-          requests: [auth.currentUser.uid],
-        });
       }
+
+      // Check if a request already exists
+      const friendRequestsRef = collection(db, 'friendRequests');
+      const existingRequestQuery = query(
+        friendRequestsRef, 
+        where('senderId', '==', auth.currentUser.uid),
+        where('receiverId', '==', receiverId)
+      );
+      
+      const existingRequests = await getDocs(existingRequestQuery);
+      
+      if (!existingRequests.empty) {
+        setStatus('You have already sent a request to this user.');
+        return;
+      }
+
+      // Check if the other user sent you a request already
+      const reverseRequestQuery = query(
+        friendRequestsRef, 
+        where('senderId', '==', receiverId),
+        where('receiverId', '==', auth.currentUser.uid)
+      );
+      
+      const reverseRequests = await getDocs(reverseRequestQuery);
+      
+      if (!reverseRequests.empty) {
+        setStatus('This user has already sent you a request. Check your pending requests.');
+        return;
+      }
+
+      // Create a new document in friendRequests collection
+      await addDoc(collection(db, 'friendRequests'), {
+        senderId: auth.currentUser.uid,
+        senderUsername: currentUserData.username,
+        receiverId: receiverId,
+        receiverUsername: receiverDoc.data().username,
+        status: 'pending',
+        createdAt: serverTimestamp()
+      });
 
       setStatus('Friend request sent!');
     } catch (error) {
