@@ -5,12 +5,12 @@ import {
   query,
   where,
   doc,
-  deleteDoc,
-  setDoc,
   getDoc,
+  setDoc,
   updateDoc,
   onSnapshot,
-  orderBy
+  orderBy,
+  Timestamp
 } from 'firebase/firestore';
 import './FriendRequestNotifications.css';
 
@@ -35,7 +35,7 @@ function FriendRequestNotifications() {
       // Set up real-time listener for friend requests
       const requestRef = collection(db, 'friendRequests');
       
-      // Use a simpler query first without orderBy to avoid index issues
+      // Only query for pending requests
       const q = query(
         requestRef,
         where('receiverId', '==', currentUser.uid),
@@ -107,10 +107,14 @@ function FriendRequestNotifications() {
         });
       }
       
-      // Delete the friend request document
-      await deleteDoc(doc(db, 'friendRequests', requestId));
+      // Update the friend request status instead of deleting
+      const requestRef = doc(db, 'friendRequests', requestId);
+      await updateDoc(requestRef, {
+        status: 'accepted',
+        actionDate: Timestamp.now()
+      });
       
-      // Remove from state
+      // Remove from local state so it doesn't display anymore
       setRequests((prevRequests) => prevRequests.filter((req) => req.id !== requestId));
 
       console.log('Friend request accepted and friends list updated!');
@@ -121,8 +125,16 @@ function FriendRequestNotifications() {
 
   const handleReject = async (requestId) => {
     try {
-      await deleteDoc(doc(db, 'friendRequests', requestId));
+      // Update the friend request status instead of deleting
+      const requestRef = doc(db, 'friendRequests', requestId);
+      await updateDoc(requestRef, {
+        status: 'rejected',
+        actionDate: Timestamp.now()
+      });
+      
+      // Remove from local state so it doesn't display anymore
       setRequests((prevRequests) => prevRequests.filter((req) => req.id !== requestId));
+      
       console.log('Friend request rejected!');
     } catch (error) {
       console.error('Error rejecting request:', error);
