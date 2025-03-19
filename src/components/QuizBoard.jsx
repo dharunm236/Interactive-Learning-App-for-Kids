@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './QuizPage.module.css'; // We'll create this CSS module next
+import styles from './QuizBoard.module.css'; // We'll create this CSS module next
 
-const QuizPage = () => {
+const QuizBoard = () => {
   const navigate = useNavigate();
 
   const handleBackClick = () => {
@@ -101,4 +101,4 @@ const QuizPage = () => {
   );
 };
 
-export default QuizPage;
+export default QuizBoard;

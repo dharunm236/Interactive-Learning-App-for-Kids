@@ -12,13 +12,13 @@ import CheckEmail from "./components/forgot_password/CheckEmail";
 import SendFriendRequest from "./components/friend_options/SendFriendRequest";
 import FriendRequestNotifications from "./components/friend_options/FriendRequestNotifications";
 import ProfilePage from './components/ProfilePage.jsx';
-// import ProfilePage from './components/Profile/profile_page.jsx';
 import MoneyGame from './components/moneygame/money'; 
 import StoryPrompt from './components/Story/StoryPrompt';
 import SpeechChecker from './components/SpeechChecker/SpeechChecker';
 import CoursePage from "./components/lecture/CoursePage";
 import CourseContentPage from "./components/lecture/CourseContentPage";
 import QuizPage from "./components/lecture/QuizPage";
+import QuizBoard from './components/QuizBoard.jsx';
 
 
 
@@ -84,7 +84,7 @@ function App() {
           <Route path="/friend-requests" element={user ? <FriendRequestNotifications /> : <Navigate to="/login" />} />
           <Route path="/create-story" element={user ? <StoryPrompt /> : <Navigate to="/login" />} />
           <Route path="/speech-checker" element={user ? <SpeechChecker /> : <Navigate to="/login" />} />
-          <Route path="/quizzes" element={user ? <QuizPage /> : <Navigate to="/login" />}/>
+          <Route path="/quizzes" element={user ? <QuizBoard /> : <Navigate to="/login" />}/>
         </Routes>
       </div>
     </Router>
