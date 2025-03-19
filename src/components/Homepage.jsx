@@ -63,9 +63,9 @@ function Homepage({ onLogout, currentUserId }) {
           <a href="#home" className="nav-item">
             <FaHome className="nav-icon" /> <span>Home</span>
           </a>
-          <a href="#lessons" className="nav-item">
-            <FaBook className="nav-icon" /> <span>Lessons</span>
-          </a>
+          <Link to="/lecture" className="nav-item">
+            <FaGamepad className="nav-icon" /> <span>Lessons</span>
+          </Link>
           <Link to="/games" className="nav-item">
             <FaGamepad className="nav-icon" /> <span>Games</span>
           </Link>
@@ -120,10 +120,6 @@ function Homepage({ onLogout, currentUserId }) {
                   <FaMagic className="feature-icon" />
                   <span>Personalized Learning</span>
                 </div>
-                <div className="feature">
-                  <FaBook className="feature-icon" />
-                  <span>Engaging Stories</span>
-                </div>
               </div>
               <button className="cta-button" disabled={isLoading}>
                 {isLoading ? 'Loading...' : 'Start Your Adventure! 🎉'}
@@ -174,18 +170,20 @@ function Homepage({ onLogout, currentUserId }) {
             </motion.div>
             
             <motion.div 
-              className="mascot-card"
-              whileHover={{ y: -10, boxShadow: "0 15px 30px rgba(0, 0, 0, 0.2)" }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <div className="mascot-image-container">
-                <img src="https://png.pngtree.com/png-vector/20231107/ourmid/pngtree-cute-baby-cat-full-body-png-image_10506933.png" alt="Curious Cat" />
-              </div>
-              <div className="mascot-content">
-                <h2>Curious Cat</h2>
-                <p>Join Cat on exciting adventures through knowledge!</p>
-                <span className="mascot-action">Explore! →</span>
-              </div>
+                className="mascot-card"
+                whileHover={{ y: -10, boxShadow: "0 15px 30px rgba(0, 0, 0, 0.2)" }}
+                transition={{ type: "spring", stiffness: 300 }}
+                onClick={() => window.location.href = 'http://127.0.0.1:5000/'}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className="mascot-image-container">
+                 <img src="/images/guru.png" alt="Spiritual Guide" />                
+                 </div>
+                <div className="mascot-content">
+                  <h2>Try thiss!!</h2>
+                  <p>Join us to learn the values from sacred texts!</p>
+                  <span className="mascot-action">Explore! →</span>
+                </div>
             </motion.div>
             
             <motion.div 
@@ -264,12 +262,12 @@ function Homepage({ onLogout, currentUserId }) {
             >
               <Link to="/speech-checker" className="activity-link">
                 <div className="activity-icon">
-                  <img src="https://png.pngtree.com/png-clipart/20230425/original/pngtree-cute-cartoon-kid-speaking-png-image_9092868.png" alt="Speech Practice" />
+                  <img src="images/speech.png" alt="Speech Practice" />
                 </div>
                 <div className="activity-content">
                   <h2>Speech Practice <span className="emoji">🗣️</span></h2>
                   <p>Practice speaking and pronunciation with friendly feedback!</p>
-                  <button className="activity-button">Start Learning</button>
+                  <button className="activity-button">Start Practice</button>
                 </div>
               </Link>
             </motion.div>

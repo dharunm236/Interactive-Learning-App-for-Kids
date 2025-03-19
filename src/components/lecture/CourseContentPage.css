@@ -1,0 +1,323 @@
+/* Space Background */
+.space-content-page {
+  min-height: 100vh;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  background-color: #000033;
+  padding: 10px; /* Reduced padding to save space */
+}
+  
+  /* Stars Animation */
+  .stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000 url('https://i.imgur.com/YKY28eT.png') repeat top center;
+    z-index: -3;
+  }
+  
+  .twinkling {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent url('https://i.imgur.com/XYMF4ca.png') repeat top center;
+    z-index: -2;
+    animation: move-twink-back 200s linear infinite;
+  }
+  
+  @keyframes move-twink-back {
+    from {background-position: 0 0;}
+    to {background-position: -10000px 5000px;}
+  }
+  
+  /* Header Styles */
+  .space-content-header {
+    background-color: rgba(25, 25, 100, 0.7);
+    border-radius: 20px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 20px #6b76ff;
+    text-align: center;
+    border: 3px solid #8a2be2;
+  }
+  
+  .space-content-header h1 {
+    color: #ffff00;
+    font-size: 2.5rem;
+    margin: 0;
+    text-shadow: 0 0 10px #ff00ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .rocket-icon, .planet-icon {
+    font-size: 2rem;
+  }
+  
+  /* Progress Bar */
+  .space-progress-container {
+    margin-top: 15px;
+  }
+  
+  .space-progress-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+    font-size: 1.2rem;
+    gap: 10px;
+    color: #00ffff;
+  }
+  
+  .astronaut-icon {
+    font-size: 1.5rem;
+  }
+  
+  .space-progress-bar {
+    height: 20px;
+    background-color: #111166;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid #5d7bf3;
+  }
+  
+  .space-progress-fill {
+    height: 100%;
+    background: linear-gradient(to right, #ff00ff, #00ffff);
+    border-radius: 8px;
+    transition: width 0.5s ease;
+  }
+  
+  /* Course Layout */
+  .space-course-layout {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  /* Sidebar */
+  .space-sidebar {
+    width: 280px;
+    background-color: rgba(25, 25, 100, 0.7);
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 0 0 15px #6b76ff;
+    border: 3px solid #8a2be2;
+  }
+  
+  .space-sidebar h3 {
+    color: #ffff00;
+    font-size: 1.5rem;
+    margin-top: 0;
+    text-align: center;
+    text-shadow: 0 0 8px #ff00ff;
+  }
+  
+  .space-section-list {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+  }
+  
+  .space-section-item {
+    margin-bottom: 12px;
+    background-color: rgba(50, 50, 150, 0.7);
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 2px solid #5d7bf3;
+    overflow: hidden;
+  }
+  
+  .space-section-content {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+  }
+  
+  .space-section-icon {
+    font-size: 1.5rem;
+    margin-right: 10px;
+  }
+  
+  .space-section-title {
+    flex-grow: 1;
+    font-size: 1.1rem;
+  }
+  
+  .space-tick {
+    color: #00ff00;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+  
+  .space-section-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 15px #00ffff;
+  }
+  
+  .space-section-item.active {
+    background-color: rgba(80, 80, 200, 0.8);
+    box-shadow: 0 0 15px #ffff00;
+    transform: scale(1.05);
+    border: 2px solid #ffff00;
+  }
+  
+  .space-section-item.completed {
+    border-color: #00ff00;
+  }
+  
+  .space-quiz-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #ff00ff, #00ffff);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    box-shadow: 0 0 10px #ff00ff;
+    transition: all 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .space-quiz-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #ffff00;
+  }
+  
+  .star-icon {
+    font-size: 1.3rem;
+  }
+  
+  /* Main Content */
+  .space-main-content {
+    flex-grow: 1;
+    background-color: rgba(25, 25, 100, 0.7);
+    border-radius: 20px;
+    padding: 15px; /* Reduced padding to save space */
+    box-shadow: 0 0 15px #6b76ff;
+    border: 3px solid #8a2be2;
+    margin-bottom: 10px; /* Added margin to prevent overflow */
+}
+  
+  .space-video-section h2 {
+    color: #ffff00;
+    font-size: 1.8rem;
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-shadow: 0 0 8px #ff00ff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .space-video-container {
+    position: relative;
+    padding-bottom: 45%; /* Adjust this value to reduce the height of the video */
+    height: 0;
+    overflow: hidden;
+    border-radius: 15px;
+    border: 3px solid #5d7bf3;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    margin-bottom: 20px;
+    max-width: 90%; /* Ensure the video doesn't overflow the screen */
+    margin-left: auto;
+    margin-right: auto;
+}
+  
+  .space-video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  
+  /* Section Controls */
+  .space-section-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .space-complete-btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 15px;
+    background-color: #5d7bf3;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .space-complete-btn:hover {
+    background-color: #4169E1;
+    transform: scale(1.03);
+  }
+  
+  .space-complete-btn.completed {
+    background-color: #00cc00;
+  }
+  
+  .space-section-navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .space-nav-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 15px;
+    background-color: #8a2be2;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    min-width: 150px;
+  }
+  
+  .space-nav-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px #00ffff;
+  }
+  
+  .space-prev {
+    background: linear-gradient(90deg, #ff00ff, #9932cc);
+  }
+  
+  .space-next {
+    background: linear-gradient(90deg, #9932cc, #00ffff);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .space-course-layout {
+      flex-direction: column;
+    }
+    
+    .space-sidebar {
+      width: 100%;
+    }
+    
+    .space-content-header h1 {
+      font-size: 2rem;
+    }
+  }
