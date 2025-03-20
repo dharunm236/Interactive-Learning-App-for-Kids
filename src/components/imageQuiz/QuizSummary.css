@@ -1,0 +1,83 @@
+.quiz-summary-list {
+  list-style: none;
+  padding: 1rem;
+  font-family: 'Comic Neue', cursive;
+}
+
+.quiz-summary-list li {
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  background: #fff9ec;
+  border-radius: 15px;
+  border: 3px dashed #7c5cff;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.quiz-summary-list p {
+  font-size: 1.4rem;
+  color: #333;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.answer-container {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.red-mark {
+  color: #ffffff;
+  font-weight: bold;
+  text-decoration: line-through;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  background: #ff5757;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 5px rgba(231, 76, 60, 0.3);
+  border: 2px solid #c0392b;
+}
+
+.green-mark {
+  color: #ffffff;
+  font-weight: bold;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  background: #4cd4ca;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 5px rgba(58, 175, 169, 0.3);
+  border: 2px solid #2d8b84;
+}
+
+/* Add labels for clarity */
+.answer-container::before {
+  content: "Your answer:";
+  font-weight: bold;
+  color: #ff5757;
+  margin-right: -1rem;
+  font-size: 1.1rem;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.green-mark::before {
+  content: "Correct: ";
+  font-weight: normal;
+  margin-right: 0.3rem;
+}
+
+@media (max-width: 768px) {
+  .quiz-summary-list p {
+    font-size: 1.2rem;
+  }
+  
+  .red-mark, .green-mark {
+    font-size: 1rem;
+    padding: 0.5rem 0.8rem;
+  }
+}

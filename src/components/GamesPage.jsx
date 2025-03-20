@@ -54,22 +54,6 @@ const GamesPage = () => {
   </div>
 </div>
 
-        {/* Car Simulator */}
-        <div className={styles.gameCard}>
-          <div className={styles.gameCardContent}>
-            <img
-              src="https://png.pngtree.com/png-clipart/20230821/original/pngtree-african-american-man-playing-video-game-with-gaming-wheel-picture-image_8127244.png"
-              alt="Car Simulator"
-              className={styles.gameImage}
-            />
-            <h2 className={styles.gameTitle}>🚗 Car Simulator</h2>
-            <p className={styles.gameDescription}>Drive and learn about road safety! and improve your driving skills in a fun way!</p>
-            <button onClick={handlePlayClick_CarSimulator} className={styles.playButton}>
-              Play Now
-            </button>
-          </div>
-        </div>
-
         {/* Memory Match */}
         <div className={styles.gameCard}>
           <div className={styles.gameCardContent}>
