@@ -72,9 +72,9 @@ function Homepage({ onLogout, currentUserId }) {
           <Link to="/quizzes" className="nav-item">
             <FaMagic className="nav-icon" /> <span>Quiz</span>
           </Link>
-          <a href="#progress" className="nav-item">
-            <FaChartLine className="nav-icon" /> <span>Progress</span>
-          </a>
+          <Link to="/progress" className="nav-item">
+            <FaMagic className="nav-icon" /> <span>progress</span>
+          </Link>
           <div className="profile-menu" onClick={toggleDropdown} aria-label="Profile Menu">
             <div className="profile-preview">
               <img src="https://cdn-icons-png.flaticon.com/512/5294/5294712.png" alt="User Profile" />
