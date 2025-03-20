@@ -8,12 +8,21 @@ from langchain_core.messages import HumanMessage, AIMessage
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_google_genai import ChatGoogleGenerativeAI
 from flask import Flask, request, jsonify, render_template
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
-# Directly set the Google API key
-os.environ["GOOGLE_API_KEY"] = "AIzaSyCveAI97HwarrgLwGuGw6Eao1d7qDHOIEE"  # Replace with your actual API key
+# Get API key from environment variable
+api_key = os.environ.get("GOOGLE_API_KEY")
+if not api_key:
+    raise ValueError("No Google API Key found. Please set the GOOGLE_API_KEY environment variable.")
+
+# Set the environment variable for the Google API
+os.environ["GOOGLE_API_KEY"] = api_key
 
 # Initialize Gemini AI client
 genai_client = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0.7)

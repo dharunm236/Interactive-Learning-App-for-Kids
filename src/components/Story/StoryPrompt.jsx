@@ -16,7 +16,7 @@ const StoryPrompt = () => {
   const storyContainerRef = useRef(null);
   const navigate = useNavigate();
 
-  const apiKey = "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";
+  const apiKey = process.env.REACT_APP_OPENROUTER_API_KEY;
   
   const languages = [
     { code: "english", name: "English", voice: "en-US", flag: "🇺🇸" },
@@ -59,7 +59,7 @@ const StoryPrompt = () => {
     stopSpeech();
 
     try {
-      // Text Generation using OpenRouter GPT
+      // Text Generation using OpenRouter GPT with environment variable
       const textResponse = await axios.post(
         "https://openrouter.ai/api/v1/chat/completions",
         {
