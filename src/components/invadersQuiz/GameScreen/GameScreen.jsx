@@ -3,10 +3,19 @@ import Ship from '../Ship/Ship';
 import Alien from '../Alien/Alien';
 import Laser from '../Laser/Laser';
 import QuestionPanel from '../QuestionPanel/QuestionPanel';
+import soundService from '../services/soundService';
+import { useEffect } from 'react';
 import './GameScreen.css';
 
 function GameScreen() {
   const { shipPos, aliens, lasers } = useGame();
+
+  // This will run when component unmounts (user navigates away)
+  useEffect(() => {
+    return () => {
+      soundService.stopBackgroundMusic();
+    };
+  }, []);
 
   return (
     <div className="invgame-container">

@@ -13,7 +13,6 @@
   line-height: 1.5;
   color: #0f0;
   text-shadow: 0 0 1px #0f0, 0 0 5px #0f0;
-  animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
