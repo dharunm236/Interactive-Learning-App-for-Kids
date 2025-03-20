@@ -34,9 +34,9 @@ const QuizBoard = () => {
               alt="Math Quiz"
               className={styles.quizImage}
             />
-            <h2 className={styles.quizTitle}>🔢 Math Quiz</h2>
-            <p className={styles.quizDescription}>Test your math skills with fun questions!</p>
-            <button onClick={() => navigate('/quizzes/math')} className={styles.playButton}>
+            <h2 className={styles.quizTitle}>🔢Invaders Quiz</h2>
+            <p className={styles.quizDescription}>Test your General knowledge skills with fun questions!</p>
+            <button onClick={() => navigate('/quizzes/invaders')} className={styles.playButton}>
               Start Quiz
             </button>
           </div>

@@ -1,0 +1,12 @@
+.laser {
+  width: 3px;
+  height: 15px;
+  background: #ff0;
+  position: absolute;
+  animation: laser 0.5s linear;
+}
+
+@keyframes laser {
+  from { bottom: 20px; }
+  to { bottom: 100%; }
+}

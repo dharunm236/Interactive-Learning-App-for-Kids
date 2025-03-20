@@ -19,8 +19,7 @@ import CoursePage from "./components/lecture/CoursePage";
 import CourseContentPage from "./components/lecture/CourseContentPage";
 import QuizPage from "./components/lecture/QuizPage";
 import QuizBoard from './components/QuizBoard.jsx';
-
-
+import InvadersQuiz from './components/invadersQuiz/InvadersQuiz';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -85,6 +84,7 @@ function App() {
           <Route path="/create-story" element={user ? <StoryPrompt /> : <Navigate to="/login" />} />
           <Route path="/speech-checker" element={user ? <SpeechChecker /> : <Navigate to="/login" />} />
           <Route path="/quizzes" element={user ? <QuizBoard /> : <Navigate to="/login" />}/>
+          <Route path="/quizzes/invaders" element={user ? <InvadersQuiz /> : <Navigate to="/login" />}/>
         </Routes>
       </div>
     </Router>

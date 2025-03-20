@@ -1,0 +1,61 @@
+.start-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20vh;
+  width: 90%;
+  max-width: 900px;
+  max-height: 100vh; /* Ensure it doesn't exceed the viewport height */
+  overflow: hidden; /* Hide any overflow content */
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  animation: glow 2s ease-in-out infinite;
+}
+
+@media (max-width: 768px) {
+  .start-screen {
+    padding-top: 15vh;
+    width: 95%;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .start-screen {
+    padding-top: 10vh;
+    width: 98%;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+}
+
+@keyframes glow {
+  0%, 100% { text-shadow: 0 0 10px #0f0; }
+  50% { text-shadow: 0 0 20px #0f0; }
+}
+
+.start-button {
+  background: #000;
+  border: 3px solid #0f0;
+  color: #0f0;
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 2rem;
+}
+
+.start-button:hover {
+  background: #0f0;
+  color: #000;
+  box-shadow: 0 0 20px #0f0;
+}
