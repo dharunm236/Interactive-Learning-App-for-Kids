@@ -3,92 +3,71 @@ import QuizSummary from './QuizSummary';
 import goodJobImage from './images/good-job.png';
 import './Quiz.css';
 import { db, auth } from '../../firebaseConfig';
-import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, serverTimestamp, collection, getDocs } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
 const Quiz = () => {
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [imageLoading, setImageLoading] = useState(true);
   
-  // Quiz questions data
-  const questions = [
-    {
-      question: "what is the largest animal in the world?",
-      options: ["giraffe", "brown bear", "elephant", "blue whale"],
-      answer: "blue whale",
-      userAnswer: null
-    },
-    {
-      question: "what is the name of the world´s highest mountain?",
-      options: ["alps", "zugspitze", "mount everest", "annapurna"],
-      answer: "mount everest",
-      userAnswer: null
-    },
-    {
-      question: "how many wings does a butterfly have?",
-      options: ["4", "2", "8", "6"],
-      answer: "4",
-      userAnswer: null
-    },
-    {
-      question: "at what age do you become a teenager?",
-      options: ["10", "12", "15", "13"],
-      answer: "13",
-      userAnswer: null
-    },
-    {
-      question: "what is the capital city of scotland?",
-      options: ["edinburgh", "glasgow", "toronto", "london"],
-      answer: "edinburgh",
-      userAnswer: null
-    },
-    {
-      question: "how many players are there in a fotball team?",
-      options: ["8", "10", "11", "12"],
-      answer: "11",
-      userAnswer: null
-    },
-    {
-      question: "a lobster has how many legs?",
-      options: ["8", "20", "12", "10"],
-      answer: "10",
-      userAnswer: null
-    },
-    {
-      question: "how long is one hour in minutes?",
-      options: ["60", "100", "80", "90"],
-      answer: "60",
-      userAnswer: null
-    },
-    {
-      question: "what date is christmas eve?",
-      options: ["21th december", "22th december", "23th december", "24th december"],
-      answer: "24th december",
-      userAnswer: null
-    },
-    {
-      question: "which country has the largest population in the world",
-      options: ["usa", "china", "japan", "india"],
-      answer: "china",
-      userAnswer: null
-    }
-  ];
-
   // State variables
+  const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [isAnswered, setIsAnswered] = useState(false);
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
   const [isQuizComplete, setIsQuizComplete] = useState(false);
-  const [quizData, setQuizData] = useState([...questions]);
+  const [quizData, setQuizData] = useState([]);
+
+  // Fetch questions from Firestore
+  const fetchQuestions = async () => {
+    try {
+      const questionsRef = collection(db, "imagequiz");
+      const querySnapshot = await getDocs(questionsRef);
+      
+      if (!querySnapshot.empty) {
+        const fetchedQuestions = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          fetchedQuestions.push({
+            id: doc.id,
+            question: data.question,
+            options: data.options,
+            answer: data.answer,
+            imageLink: data.imageLink,
+            userAnswer: null
+          });
+        });
+        
+        // Shuffle questions and pick 10 random ones
+        const shuffled = fetchedQuestions.sort(() => 0.5 - Math.random());
+        const selected = shuffled.slice(0, 10);
+        
+        setQuestions(selected);
+        setQuizData(selected);
+      }
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+    }
+  };
+
+  // Reset image loading state when current question changes
+  useEffect(() => {
+    setImageLoading(true);
+  }, [currentQuestionIndex]);
 
   // Check authentication and load previous attempt data
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         setUserId(user.uid);
-        // Check if user has previously attempted the quiz
+        
+        // First fetch questions from Firestore
+        await fetchQuestions();
+        
+        // Then check if user has previously attempted the quiz
         try {
           const quizRef = doc(db, "imageQuiz", user.uid);
           const quizDoc = await getDoc(quizRef);
@@ -105,11 +84,12 @@ const Quiz = () => {
         } catch (error) {
           console.error("Error fetching quiz data:", error);
         }
+        
+        setLoading(false);
       } else {
         // Redirect unauthenticated users to login
         navigate('/login');
       }
-      setLoading(false);
     });
     
     return () => unsubscribe();
@@ -126,7 +106,7 @@ const Quiz = () => {
     const updatedQuizData = [...quizData];
     updatedQuizData[currentQuestionIndex].userAnswer = currentQuestion.options[selectedIndex];
     
-    const isCorrect = selectedIndex === currentQuestion.options.indexOf(currentQuestion.answer);
+    const isCorrect = currentQuestion.options[selectedIndex] === currentQuestion.answer;
     
     if (isCorrect) {
       setScore(score + 1);
@@ -136,7 +116,7 @@ const Quiz = () => {
     
     // Move to next question after a short delay
     setTimeout(() => {
-      if (currentQuestionIndex < questions.length - 1) {
+      if (currentQuestionIndex < quizData.length - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
         setIsAnswered(false);
         setSelectedOptionIndex(null);
@@ -146,6 +126,11 @@ const Quiz = () => {
         saveQuizResults(updatedQuizData, score + (isCorrect ? 1 : 0));
       }
     }, 1500);
+  };
+
+  // Handle image loading
+  const handleImageLoad = () => {
+    setImageLoading(false);
   };
 
   // Save quiz results to Firestore
@@ -161,8 +146,8 @@ const Quiz = () => {
         completed: true,
         completedAt: serverTimestamp(),
         score: finalScore,
-        totalQuestions: questions.length,
-        percentage: (finalScore / questions.length) * 100,
+        totalQuestions: quizData.length,
+        percentage: (finalScore / quizData.length) * 100,
         quizData: quizData,
         lastUpdated: serverTimestamp()
       };
@@ -190,7 +175,9 @@ const Quiz = () => {
     setIsAnswered(false);
     setSelectedOptionIndex(null);
     setIsQuizComplete(false);
-    const resetQuizData = [...questions].map(q => ({ ...q, userAnswer: null }));
+    
+    // Reset all userAnswers to null
+    const resetQuizData = quizData.map(q => ({ ...q, userAnswer: null }));
     setQuizData(resetQuizData);
     
     if (userId) {
@@ -212,20 +199,18 @@ const Quiz = () => {
     }
   };
 
-  // Current question to display
-  const currentQuestion = quizData[currentQuestionIndex];
-
   // Determine button class based on selection and correctness
   const getButtonClass = (index) => {
     if (!isAnswered || selectedOptionIndex !== index) {
       return "option-button";
     }
     
-    const isCorrect = index === currentQuestion.options.indexOf(currentQuestion.answer);
+    const currentQuestion = quizData[currentQuestionIndex];
+    const isCorrect = currentQuestion.options[index] === currentQuestion.answer;
     return isCorrect ? "option-button option-correct" : "option-button option-incorrect";
   };
 
-  if (loading) {
+  if (loading || quizData.length === 0) {
     return (
       <div className="quiz-page">
         <div className="quiz-container">
@@ -234,6 +219,9 @@ const Quiz = () => {
       </div>
     );
   }
+
+  // Current question to display
+  const currentQuestion = quizData[currentQuestionIndex];
 
   return (
     <div className="quiz-page">
@@ -246,9 +234,9 @@ const Quiz = () => {
             <div id="quiz-completed-container">
               <img src={goodJobImage} alt="A star containing the text 'good job'" />
               <h2>Quiz Complete!</h2>
-              <h3>Your Score: <span id="score">{score} out of {questions.length}</span></h3>
+              <h3>Your Score: <span id="score">{score} out of {quizData.length}</span></h3>
               
-              {score === questions.length ? (
+              {score === quizData.length ? (
                 <h3 className="perfect-score">Perfect Score! Great job! 🎉</h3>
               ) : (
                 <>
@@ -264,8 +252,27 @@ const Quiz = () => {
           </>
         ) : (
           <>
-            <h2 id="progress">Question {currentQuestionIndex + 1} of {questions.length}</h2>
-            <p id="question">{currentQuestion.question}</p>
+            <h2 id="progress">Question {currentQuestionIndex + 1} of {quizData.length}</h2>
+            <div className="question-content">
+              <div className="image-container">
+                {imageLoading && (
+                  <div className="image-loading-placeholder">
+                    <div className="spinner"></div>
+                    <p>Loading image...</p>
+                  </div>
+                )}
+                {currentQuestion.imageLink && (
+                  <img 
+                    src={currentQuestion.imageLink} 
+                    alt={currentQuestion.question}
+                    className={`question-image ${imageLoading ? 'hidden' : ''}`}
+                    style={{ width: '200px', height: '200px', objectFit: 'cover' }}
+                    onLoad={handleImageLoad}
+                  />
+                )}
+              </div>
+              <p id="question">{currentQuestion.question}</p>
+            </div>
             
             <div id="options" className="options-container">
               {currentQuestion.options.map((option, index) => (

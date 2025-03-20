@@ -154,7 +154,7 @@ function SendFriendRequest() {
         onChange={(e) => setUsername(e.target.value)}
       />
       <button onClick={handleSendRequest}>Send Request</button>
-      {status && <p className="status">{status}</p>}
+      {status && <p>{status}</p>}
 
       <hr />
 
