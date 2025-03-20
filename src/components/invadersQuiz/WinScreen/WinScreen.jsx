@@ -12,9 +12,9 @@ function WinScreen() {
 
   return (
     <div className="end-screen">
-      <h1 className="title flash">CONGRATULATIONS</h1>
-      <div className="score">FINAL SCORE: {score}</div>
-      <button className="start-button" onClick={handlePlayAgain}>PLAY AGAIN</button>
+      <h1 className="invtitle flash">CONGRATULATIONS</h1>
+      <div className="invscore">FINAL SCORE: {score}</div>
+      <button className="invstart-button" onClick={handlePlayAgain}>PLAY AGAIN</button>
     </div>
   );
 }

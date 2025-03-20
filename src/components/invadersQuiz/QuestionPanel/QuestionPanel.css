@@ -52,19 +52,29 @@
 
 .status {
   position: absolute;
-  bottom: 2rem;
+  top: 26rem;
   right: 2rem;
   font-family: 'Press Start 2P', cursive;
+  width: 150px;
+  text-align: right;
 }
 
 .lives {
   display: flex;
   gap: 0.5rem;
   color: #f00;
+  /* Add this to prevent the row from wrapping */
+  flex-wrap: nowrap;
+  /* Ensure consistent alignment */
+  justify-content: flex-end;
 }
 
 .heart {
   font-size: 1.5rem;
+  /* Prevent the hearts from changing size or position */
+  display: inline-block;
+  width: 1.5rem;
+  text-align: center;
 }
 
 .score {
@@ -73,4 +83,6 @@
   font-family: 'Press Start 2P', cursive;
   color: #0f0;
   text-shadow: 0 0 5px #0f0;
+  /* Add to ensure consistent text alignment */
+  min-width: 100%;
 }

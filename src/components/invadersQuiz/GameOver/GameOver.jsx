@@ -13,7 +13,7 @@ function GameOver() {
   return (
     <div className="invend-screen">
       <h1 className="invtitle" style={{color : 'rgb(255 0 0)'}}>GAME OVER</h1>
-      <div className="score" style={{ color: '#4caf50' }}>SCORE: {score}</div>
+      <div className="invstatus">SCORE: {score}</div>
       <button className="invstart-button" onClick={handleTryAgain}>TRY AGAIN</button>
     </div>
   );
