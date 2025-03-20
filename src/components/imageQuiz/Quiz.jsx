@@ -10,6 +10,7 @@ const Quiz = () => {
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [imageLoading, setImageLoading] = useState(true);
   
   // State variables
   const [questions, setQuestions] = useState([]);
@@ -51,6 +52,11 @@ const Quiz = () => {
       console.error("Error fetching questions:", error);
     }
   };
+
+  // Reset image loading state when current question changes
+  useEffect(() => {
+    setImageLoading(true);
+  }, [currentQuestionIndex]);
 
   // Check authentication and load previous attempt data
   useEffect(() => {
@@ -120,6 +126,11 @@ const Quiz = () => {
         saveQuizResults(updatedQuizData, score + (isCorrect ? 1 : 0));
       }
     }, 1500);
+  };
+
+  // Handle image loading
+  const handleImageLoad = () => {
+    setImageLoading(false);
   };
 
   // Save quiz results to Firestore
@@ -243,14 +254,23 @@ const Quiz = () => {
           <>
             <h2 id="progress">Question {currentQuestionIndex + 1} of {quizData.length}</h2>
             <div className="question-content">
-              {currentQuestion.imageLink && (
-                <img 
-                  src={currentQuestion.imageLink} 
-                  alt={currentQuestion.question}
-                  className="question-image"
-                  style={{ width: '200px', height: '200px', objectFit: 'cover' }}
-                />
-              )}
+              <div className="image-container">
+                {imageLoading && (
+                  <div className="image-loading-placeholder">
+                    <div className="spinner"></div>
+                    <p>Loading image...</p>
+                  </div>
+                )}
+                {currentQuestion.imageLink && (
+                  <img 
+                    src={currentQuestion.imageLink} 
+                    alt={currentQuestion.question}
+                    className={`question-image ${imageLoading ? 'hidden' : ''}`}
+                    style={{ width: '200px', height: '200px', objectFit: 'cover' }}
+                    onLoad={handleImageLoad}
+                  />
+                )}
+              </div>
               <p id="question">{currentQuestion.question}</p>
             </div>
             
