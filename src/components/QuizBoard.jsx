@@ -47,12 +47,12 @@ const QuizBoard = () => {
           <div className={styles.quizCardContent}>
             <img
               src="https://png.pngtree.com/png-clipart/20230914/original/pngtree-abc-block-cartoon-alphabet-picture-image_8149965.png"
-              alt="Vocabulary Quiz"
+              alt="Image Quiz"
               className={styles.quizImage}
             />
-            <h2 className={styles.quizTitle}>📚 Vocabulary Quiz</h2>
-            <p className={styles.quizDescription}>Expand your word knowledge with this fun quiz!</p>
-            <button onClick={() => navigate('/quizzes/vocabulary')} className={styles.playButton}>
+            <h2 className={styles.quizTitle}>📚 Image Quiz</h2>
+            <p className={styles.quizDescription}>Expand your word knowledge with this fun Image quiz!</p>
+            <button onClick={() => navigate('/quizzes/imageQuiz')} className={styles.playButton}>
               Start Quiz
             </button>
           </div>

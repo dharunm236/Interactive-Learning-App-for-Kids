@@ -20,6 +20,7 @@ import CourseContentPage from "./components/lecture/CourseContentPage";
 import QuizPage from "./components/lecture/QuizPage";
 import QuizBoard from './components/QuizBoard.jsx';
 import InvadersQuiz from './components/invadersQuiz/InvadersQuiz';
+import ImageQuiz from  './components/imageQuiz/Quiz.jsx'
 
 function App() {
   const [user, setUser] = useState(null);
@@ -85,6 +86,7 @@ function App() {
           <Route path="/speech-checker" element={user ? <SpeechChecker /> : <Navigate to="/login" />} />
           <Route path="/quizzes" element={user ? <QuizBoard /> : <Navigate to="/login" />}/>
           <Route path="/quizzes/invaders" element={user ? <InvadersQuiz /> : <Navigate to="/login" />}/>
+          <Route path="/quizzes/imageQuiz" element={user ? <ImageQuiz /> : <Navigate to="/login" />}/>
         </Routes>
       </div>
     </Router>

@@ -1,8 +1,8 @@
 import { createContext, useState, useEffect, useCallback, useContext } from 'react';
 import { CONFIG } from '../config/gameConfig';
 import soundService from '../services/soundService';
-import { db } from '../../../firebaseConfig';
-import { collection, getDocs } from 'firebase/firestore';
+import { db, auth } from '../../../firebaseConfig';
+import { collection, getDocs, doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 
 const GameContext = createContext();
 
@@ -18,6 +18,20 @@ export function GameProvider({ children }) {
   const [debug, setDebug] = useState('');
   const [questions, setQuestions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [userId, setUserId] = useState(null);
+  const [answeredQuestions, setAnsweredQuestions] = useState([]);
+  
+  // Check authentication
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        setUserId(user.uid);
+        // You could load previous game data here if needed
+      }
+    });
+    
+    return () => unsubscribe();
+  }, []);
 
   // Fetch questions from Firestore
   const fetchQuestions = async () => {
@@ -182,13 +196,68 @@ export function GameProvider({ children }) {
       soundService.play('GAME_OVER');
       soundService.stopBackgroundMusic();
       setGameState('lost');
+      saveGameResults('failed');
     }
     if (aliens.length > 0 && aliens.every(a => !a.alive)) {
       soundService.play('LEVEL_COMPLETE');
       soundService.stopBackgroundMusic();
       setGameState('won');
+      saveGameResults('completed');
     }
   }, [lives, aliens]);
+
+  // Save game results to Firestore
+  const saveGameResults = async (status) => {
+    if (!userId) return;
+    
+    try {
+      const gameRef = doc(db, "invaderQuizResults", userId);
+      const gameDoc = await getDoc(gameRef);
+      
+      // Gather data about answered questions
+      const answeredQuestionsData = answeredQuestions.map(idx => {
+        const q = questions[idx % questions.length];
+        return {
+          question: q.question,
+          userAnswerIndex: q.userAnswerIndex,
+          correctAnswerIndex: q.correct,
+          isCorrect: q.userAnswerIndex === q.correct
+        };
+      });
+      
+      const gameResultData = {
+        userId: userId,
+        completed: status === 'completed',
+        completedAt: serverTimestamp(),
+        score: score,
+        lives: lives,
+        status: status,
+        questionsAnswered: answeredQuestions.length,
+        answeredQuestions: answeredQuestionsData,
+        lastUpdated: serverTimestamp()
+      };
+      
+      if (gameDoc.exists()) {
+        // Update existing document
+        const prevAttempts = gameDoc.data().attempts || 1;
+        await updateDoc(gameRef, {
+          ...gameResultData,
+          attempts: prevAttempts + 1,
+          highestScore: Math.max(gameDoc.data().highestScore || 0, score)
+        });
+      } else {
+        // Create new document
+        await setDoc(gameRef, {
+          ...gameResultData,
+          firstAttemptAt: serverTimestamp(),
+          attempts: 1,
+          highestScore: score
+        });
+      }
+    } catch (error) {
+      console.error("Error saving game results:", error);
+    }
+  };
 
   // Event listeners
   useEffect(() => {
@@ -209,6 +278,9 @@ export function GameProvider({ children }) {
     
     // Refresh questions for new game
     const gameQuestions = await refreshQuestions();
+    
+    // Reset answered questions tracking
+    setAnsweredQuestions([]);
     
     // Force state updates in a single callback to ensure they happen together
     setGameState('playing');
@@ -238,7 +310,15 @@ export function GameProvider({ children }) {
       return;
     }
     
-    if (questions[currentQuestion].correct === answerIndex) {
+    // Update the question with user's answer
+    const updatedQuestions = [...questions];
+    updatedQuestions[currentQuestion % questions.length].userAnswerIndex = answerIndex;
+    setQuestions(updatedQuestions);
+    
+    // Track which questions have been answered
+    setAnsweredQuestions(prev => [...prev, currentQuestion % questions.length]);
+    
+    if (questions[currentQuestion % questions.length].correct === answerIndex) {
       soundService.play('CORRECT_ANSWER');
       fireLaser();
     } else {

@@ -10,6 +10,7 @@ import { useGame } from './contexts/GameContext';
 import AudioControls from './AudioControls/AudioControls';
 import './InvadersQuiz.css';
 
+
 // Main game component that renders the appropriate screen based on game state
 function GameContent() {
   const { gameState, isLoading } = useGame();
@@ -54,4 +55,4 @@ function InvadersQuiz() {
   );
 }
 
-export default InvadersQuiz;
+export default InvadersQuiz;  
