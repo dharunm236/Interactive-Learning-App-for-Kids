@@ -1,0 +1,31 @@
+.game-container {
+  display: flex;
+  height: 100vh;
+  width: 54%; /* Reduced from 100% */
+  max-height: 80%; /* Reduced from 100% */
+  overflow: hidden;
+  margin: 0 auto; /* Centers the container horizontally */
+  position: relative; /* Helps with positioning */
+  top: 10%; /* Creates space at the top */
+  right: 3.5%;
+}
+
+.game-area {
+  flex: 2;
+  position: relative;
+  border-right: 3px solid #0f0;
+  overflow: hidden;
+  background-color: black;
+}
+
+@media (max-width: 768px) {
+  .game-container {
+    flex-direction: column;
+  }
+  
+  .game-area {
+    flex: 1;
+    border-right: none;
+    border-bottom: 3px solid #0f0;
+  }
+}

@@ -16,7 +16,8 @@ const StoryPrompt = () => {
   const storyContainerRef = useRef(null);
   const navigate = useNavigate();
 
-  const apiKey = "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";
+  const apiKey = process.env.REACT_APP_OPENROUTER_API_KEY;
+  console.log("API Key status:", apiKey ? "Loaded" : "Not loaded");
   
   const languages = [
     { code: "english", name: "English", voice: "en-US", flag: "🇺🇸" },
@@ -58,8 +59,16 @@ const StoryPrompt = () => {
     setImage("");
     stopSpeech();
 
+    // Check if API key is available
+    if (!apiKey) {
+      setStory("API key not found. Please check your environment configuration.");
+      setLoading(false);
+      return;
+    }
+
     try {
-      // Text Generation using OpenRouter GPT
+      console.log("Making API request to OpenRouter");
+      // Text Generation using OpenRouter GPT with environment variable
       const textResponse = await axios.post(
         "https://openrouter.ai/api/v1/chat/completions",
         {
@@ -79,11 +88,12 @@ const StoryPrompt = () => {
         }
       );
 
+      console.log("API response received");
       const generatedStory = textResponse.data.choices[0].message.content;
       setStory(generatedStory.trim());
 
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error details:", error.response ? error.response.data : error.message);
       setStory("Failed to generate the story. Please try again.");
     } finally {
       setLoading(false);

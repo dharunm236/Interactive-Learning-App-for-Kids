@@ -69,6 +69,9 @@ function Homepage({ onLogout, currentUserId }) {
           <Link to="/games" className="nav-item">
             <FaGamepad className="nav-icon" /> <span>Games</span>
           </Link>
+          <Link to="/quizzes" className="nav-item">
+            <FaMagic className="nav-icon" /> <span>Quiz</span>
+          </Link>
           <a href="#progress" className="nav-item">
             <FaChartLine className="nav-icon" /> <span>Progress</span>
           </a>
