@@ -17,6 +17,7 @@ const StoryPrompt = () => {
   const navigate = useNavigate();
 
   const apiKey = process.env.REACT_APP_OPENROUTER_API_KEY;
+  console.log("API Key status:", apiKey ? "Loaded" : "Not loaded");
   
   const languages = [
     { code: "english", name: "English", voice: "en-US", flag: "🇺🇸" },
@@ -58,7 +59,15 @@ const StoryPrompt = () => {
     setImage("");
     stopSpeech();
 
+    // Check if API key is available
+    if (!apiKey) {
+      setStory("API key not found. Please check your environment configuration.");
+      setLoading(false);
+      return;
+    }
+
     try {
+      console.log("Making API request to OpenRouter");
       // Text Generation using OpenRouter GPT with environment variable
       const textResponse = await axios.post(
         "https://openrouter.ai/api/v1/chat/completions",
@@ -79,11 +88,12 @@ const StoryPrompt = () => {
         }
       );
 
+      console.log("API response received");
       const generatedStory = textResponse.data.choices[0].message.content;
       setStory(generatedStory.trim());
 
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error details:", error.response ? error.response.data : error.message);
       setStory("Failed to generate the story. Please try again.");
     } finally {
       setLoading(false);
