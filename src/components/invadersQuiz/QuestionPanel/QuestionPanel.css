@@ -1,12 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 .question-panel {
   flex: 1;
   padding: 2rem;
   border-left: 3px solid #0f0;
+  font-family: 'Press Start 2P', cursive;
 }
 
 .question {
   font-size: 1.2rem;
   margin-bottom: 2rem;
+  line-height: 1.5;
+  color: #0f0;
+  text-shadow: 0 0 1px #0f0, 0 0 5px #0f0;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { text-shadow: 0 0 5px #0f0, 0 0 10px #0f0; }
+  50% { text-shadow: 0 0 10px #0f0, 0 0 20px #0f0; }
+  100% { text-shadow: 0 0 5px #0f0, 0 0 10px #0f0; }
 }
 
 .answers {
@@ -15,24 +28,34 @@
   gap: 1rem;
 }
 
-.answer-button {
-  background: transparent;
-  border: 2px solid #0f0;
-  color: #0f0;
-  padding: 1rem;
+/* More specific selector to override other button styles */
+.question-panel .answers .answer-button {
+  background: transparent !important;
+  border: 2px solid #0f0 !important;
+  color: #0f0 !important;
+  padding: 1rem !important;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-family: 'Press Start 2P', cursive !important;
+  font-size: 0.8rem !important;
+  text-align: left;
+  outline: none;
+  /* Reset potentially inherited styles */
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
-.answer-button:hover {
-  background: #0f03;
-  box-shadow: 0 0 10px #0f0;
+.question-panel .answers .answer-button:hover {
+  background: #0f03 !important;
+  box-shadow: 0 0 10px #0f0 !important;
 }
 
 .status {
   position: absolute;
   bottom: 2rem;
   right: 2rem;
+  font-family: 'Press Start 2P', cursive;
 }
 
 .lives {

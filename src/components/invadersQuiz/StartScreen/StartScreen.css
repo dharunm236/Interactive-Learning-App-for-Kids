@@ -1,4 +1,4 @@
-.start-screen {
+.invstart-screen {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,30 +10,30 @@
   margin: 0 auto;
 }
 
-.title {
+.invtitle {
   font-size: 3rem;
   margin-bottom: 2rem;
   animation: glow 2s ease-in-out infinite;
 }
 
 @media (max-width: 768px) {
-  .start-screen {
+  .invstart-screen {
     padding-top: 15vh;
     width: 95%;
   }
   
-  .title {
+  .invtitle {
     font-size: 2.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  .start-screen {
+  .invstart-screen {
     padding-top: 10vh;
     width: 98%;
   }
   
-  .title {
+  .invtitle {
     font-size: 2rem;
   }
 }
@@ -43,7 +43,7 @@
   50% { text-shadow: 0 0 20px #0f0; }
 }
 
-.start-button {
+.invstart-button {
   background: #000;
   border: 3px solid #0f0;
   color: #0f0;
@@ -54,7 +54,7 @@
   margin-bottom: 2rem;
 }
 
-.start-button:hover {
+.invstart-button:hover {
   background: #0f0;
   color: #000;
   box-shadow: 0 0 20px #0f0;

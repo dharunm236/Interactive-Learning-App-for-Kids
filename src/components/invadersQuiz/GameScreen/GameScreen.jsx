@@ -9,8 +9,8 @@ function GameScreen() {
   const { shipPos, aliens, lasers } = useGame();
 
   return (
-    <div className="game-container">
-      <div className="game-area">
+    <div className="invgame-container">
+      <div className="invgame-area">
         {/* Aliens */}
         {aliens.map(alien => alien.alive && (
           <Alien 
