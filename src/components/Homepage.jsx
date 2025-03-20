@@ -177,7 +177,7 @@ function Homepage({ onLogout, currentUserId }) {
                 style={{ cursor: 'pointer' }}
               >
                 <div className="mascot-image-container">
-                 <img src="/images/guru.png" alt="Spiritual Guide" />                
+                 <img src="https://png.pngtree.com/png-vector/20230206/ourmid/pngtree-thiruvalluvar-vector-design-png-image_6587371.png " alt="Spiritual Guide" />                
                  </div>
                 <div className="mascot-content">
                   <h2>Try thiss!!</h2>
