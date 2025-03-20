@@ -17,7 +17,7 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 
 # Get API key from environment variable
-api_key = os.environ.get("GOOGLE_API_KEY")
+api_key = "AIzaSyCveAI97HwarrgLwGuGw6Eao1d7qDHOIEE"
 if not api_key:
     raise ValueError("No Google API Key found. Please set the GOOGLE_API_KEY environment variable.")
 

@@ -422,7 +422,9 @@ section {
   background: linear-gradient(45deg, #3b82f6, #8b5cf6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.8),
+               0 0 30px rgba(255, 255, 255, 0.9),
+               0 0 40px rgba(255, 255, 255, 1);
   animation: glowText 2s infinite alternate;
 }
 
@@ -483,6 +485,7 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
+  
 }
 
 .mascot-card img {
@@ -836,11 +839,10 @@ section {
 
 /* ===== ANIMATIONS ===== */
 @keyframes glowText {
-  from {
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
-  }
-  to {
-      text-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+   0%, 100% {
+    text-shadow: 0 0 0px rgba(255, 255, 255, 0.8),
+                 0 0 0px rgba(255, 255, 255, 0.9),
+                 0 0 5px rgba(255, 255, 255, 1);
   }
 }
 
