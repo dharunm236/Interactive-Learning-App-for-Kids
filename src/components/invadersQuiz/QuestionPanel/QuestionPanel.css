@@ -71,4 +71,7 @@
 .score {
   font-size: 1.2rem;
   margin-top: 1rem;
+  font-family: 'Press Start 2P', cursive;
+  color: #0f0;
+  text-shadow: 0 0 5px #0f0;
 }

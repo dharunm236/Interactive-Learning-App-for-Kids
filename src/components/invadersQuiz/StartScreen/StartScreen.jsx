@@ -17,7 +17,7 @@ function StartScreen() {
 
   return (
     <div className="invstart-screen">
-      <h1 className="invtitle">QUIZ INVADERS</h1>
+      <h1 className="invtitle" style={{ color: '#0f0' }}>QUIZ INVADERS</h1>
       <button className="invstart-button" onClick={handleStartClick}>
         PRESS START
       </button>
