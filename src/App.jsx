@@ -20,7 +20,8 @@ import CourseContentPage from "./components/lecture/CourseContentPage";
 import QuizPage from "./components/lecture/QuizPage";
 import QuizBoard from './components/QuizBoard.jsx';
 import InvadersQuiz from './components/invadersQuiz/InvadersQuiz';
-import ImageQuiz from  './components/imageQuiz/Quiz.jsx'
+import ImageQuiz from  './components/imageQuiz/Quiz.jsx';
+import ProgressPage  from './components/progress/ProgressPage';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -40,8 +41,7 @@ function App() {
   };
 
   if (!authInitialized) {
-    // Render a loading state until the Firebase auth state is determined
-    return <div>Loading...</div>;
+     return <div>Loading...</div>;
   }
 
   return (
@@ -87,6 +87,7 @@ function App() {
           <Route path="/quizzes" element={user ? <QuizBoard /> : <Navigate to="/login" />}/>
           <Route path="/quizzes/invaders" element={user ? <InvadersQuiz /> : <Navigate to="/login" />}/>
           <Route path="/quizzes/imageQuiz" element={user ? <ImageQuiz /> : <Navigate to="/login" />}/>
+          <Route path="/progress" element={user ? <ProgressPage /> : <Navigate to="/login" />}/>
         </Routes>
       </div>
     </Router>

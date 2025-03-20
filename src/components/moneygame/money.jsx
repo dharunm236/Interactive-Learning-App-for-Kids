@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Howl } from "howler";
-import Lottie from "lottie-react";
-import kidAnimation from "./BoyAnimation.json";
 import correctSoundFile from "../assets/sounds/correct.mp3";
 import incorrectSoundFile from "../assets/sounds/incorrect.mp3";
 import coinSoundFile from "../assets/sounds/coin.mp3";
@@ -55,8 +53,6 @@ const Game = () => {
   const [items, setItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [message, setMessage] = useState("");
-  const [animationStopped, setAnimationStopped] = useState(false);
-  const [animationKey, setAnimationKey] = useState(0);
   const [budget, setBudget] = useState(10);
   const [difficulty, setDifficulty] = useState("easy"); // easy, medium, hard
   const [showFeedback, setShowFeedback] = useState(false);
@@ -148,8 +144,6 @@ const Game = () => {
     setItems(shuffled);
     setSelectedItems([]);
     setMessage("");
-    setAnimationStopped(false);
-    setAnimationKey(prev => prev + 1);
     setShowFeedback(false);
     setShowCashDrawer(false);
     setSelectedCash([]);
@@ -740,27 +734,12 @@ const Game = () => {
       {renderGameHeader()}
       {renderGameControls()}
       
-      <motion.div
-        key={animationKey}
-        className="kid-container"
-        initial={{ x: "-100vw" }}
-        animate={{ x: animationStopped ? "23vw" : "0vw" }}
-        transition={{ duration: 3, ease: "easeOut" }}
-        onAnimationComplete={() => setAnimationStopped(true)}
-      >
-        <Lottie 
-          animationData={kidAnimation} 
-          className="kid-animation" 
-          loop={!animationStopped} 
-        />
-      </motion.div>
-
       <AnimatePresence mode="wait">
         <motion.div
-          key={`game-content-${gameMode}-${animationKey}`}
+          key={`game-content-${gameMode}`}
           className="game-content"
           initial={{ opacity: 0 }}
-          animate={{ opacity: animationStopped ? 1 : 0 }}
+          animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
         >
