@@ -26,12 +26,12 @@ const QuizBoard = () => {
       </div>
       {/* Quiz Grid */}
       <div className={styles.quizGrid}>
-        {/* Math Quiz */}
+        {/* Invader Quiz */}
         <div className={styles.quizCard}>
           <div className={styles.quizCardContent}>
             <img
-              src="https://png.pngtree.com/png-clipart/20230821/original/pngtree-math-time-clock-cartoon-calculator-picture-image_8127309.png"
-              alt="Math Quiz"
+              src="https://img.freepik.com/free-vector/space-game-location_1284-57883.jpg?t=st=1742499587~exp=1742503187~hmac=74f55d6596c67dc46e3712cf95c9ab86fd85156af79091370e19d8eec255f007&w=1380"
+              alt="Invader Quiz"
               className={styles.quizImage}
             />
             <h2 className={styles.quizTitle}>🔢Invaders Quiz</h2>
@@ -42,11 +42,11 @@ const QuizBoard = () => {
           </div>
         </div>
 
-        {/* Vocabulary Quiz */}
+        {/* Image Quiz */}
         <div className={styles.quizCard}>
           <div className={styles.quizCardContent}>
             <img
-              src="https://png.pngtree.com/png-clipart/20230914/original/pngtree-abc-block-cartoon-alphabet-picture-image_8149965.png"
+              src="https://d1ymz67w5raq8g.cloudfront.net/Pictures/2000xAny/6/5/5/509655_shutterstock_1506580442_769367.jpg"
               alt="Image Quiz"
               className={styles.quizImage}
             />
@@ -62,7 +62,7 @@ const QuizBoard = () => {
         <div className={styles.quizCard}>
           <div className={styles.quizCardContent}>
             <img
-              src="https://png.pngtree.com/png-clipart/20230927/original/pngtree-science-lab-equipment-cartoon-picture-image_8189038.png"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUGB_h_HLfZ_U9sx_LmmX91s2Nb_wXCXt7Xg&s"
               alt="Science Quiz"
               className={styles.quizImage}
             />
