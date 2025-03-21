@@ -37,3 +37,18 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
+
+@media only screen and (max-width: 767px) and (orientation: portrait){
+  .end-screen {
+    padding-right: 0;
+    text-align: center;
+  }
+  
+  .invtitle {
+    font-size: 1.5rem;
+    margin: 0 auto;
+    display: block;
+    width: 80%;
+    text-align: center;
+  }
+}
