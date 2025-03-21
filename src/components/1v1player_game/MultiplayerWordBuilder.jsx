@@ -362,6 +362,26 @@ const MultiplayerWordBuilder = () => {
     navigate("/challenge-friend");
   };
 
+  const handleExitGame = async () => {
+    try {
+      if (confirm("Are you sure you want to exit this game? This will end the session.")) {
+        // Update the game session to mark it as completed
+        await updateDoc(doc(db, "gameSessions", sessionId), {
+          status: "completed",
+          endedAt: serverTimestamp(),
+          endedBy: currentUserId
+        });
+        
+        // Navigate back to challenges page
+        navigate("/challenge-friend");
+      }
+    } catch (error) {
+      console.error("Error ending game session:", error);
+      // Navigate anyway even if there's an error
+      navigate("/challenge-friend");
+    }
+  };
+
   if (loading) {
     return <div className="word-builder-container">Loading game...</div>;
   }
@@ -451,6 +471,24 @@ const MultiplayerWordBuilder = () => {
               </div>
             </div>
           </>
+        )}
+      </div>
+      <div className="button-container">
+        {!gameOver && (
+          <>
+            <button onClick={handleBack} className="leave-button">
+              Back to Challenges
+            </button>
+            <button onClick={handleExitGame} className="exit-button">
+              End Game Session
+            </button>
+          </>
+        )}
+        
+        {gameOver && (
+          <button onClick={handleBack} className="back-button">
+            Return to Challenges
+          </button>
         )}
       </div>
     </div>
