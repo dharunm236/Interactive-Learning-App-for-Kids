@@ -17,6 +17,7 @@ const SpeechChecker = () => {
   const [timeLeft, setTimeLeft] = useState(30); // 30 seconds timer (reduced from 60)
   const [timerActive, setTimerActive] = useState(false);
   const [stage, setStage] = useState('initial'); // 'initial', 'topic', 'recording', 'feedback'
+  const [apiFailCount, setApiFailCount] = useState(0);
   
   // Refs
   const recognitionRef = useRef(null);
@@ -228,52 +229,335 @@ const SpeechChecker = () => {
     setStage('initial');
   };
 
-  const simulateAnalysis = () => {
-    setLoading(true);
-    
-    // Get some words from the transcript for more personalized feedback
-    const userWords = transcript.split(/\s+/).filter(word => 
-      word.length > 3 && !['like', 'umm', 'just', 'very', 'really', 'that', 'this', 'then', 'when', 'with'].includes(word.toLowerCase())
-    );
-    
-    // Get 2-3 random words the user actually said
-    const sampleWords = [];
-    if (userWords.length > 0) {
-      for (let i = 0; i < Math.min(3, userWords.length); i++) {
-        const randomIndex = Math.floor(Math.random() * userWords.length);
-        sampleWords.push(userWords[randomIndex]);
-        userWords.splice(randomIndex, 1); // Remove the word to avoid duplicates
+  // Updating the simulateAnalysis function for robust API integration
+
+const simulateAnalysis = () => {
+  setLoading(true);
+  
+  // Check if the transcript is empty
+  if (!transcript || transcript.trim().length === 0) {
+    setError("No speech detected. Please try again.");
+    setLoading(false);
+    return;
+  }
+  
+  // Function to handle API calls with retries
+  const analyzeWithAI = async (retries = 2) => {
+    try {
+      console.log("Sending transcript to OpenRouter API for analysis...");
+      
+      const response = await axios.post(
+        "https://openrouter.ai/api/v1/chat/completions",
+        {
+          model: "anthropic/claude-3-sonnet-20240229",
+          messages: [
+            { 
+              role: "system", 
+              content: `You are a helpful speaking coach for children. Analyze the following speech about "${currentTopic}" and provide constructive feedback.
+              
+              Analyze these aspects:
+              1. Topic relevance: How well did they stay on topic?
+              2. Vocabulary: Did they use interesting or advanced words?
+              3. Sentence structure: Were sentences complete and varied?
+              4. Delivery: Did they use many filler words?
+              5. Overall effectiveness
+              
+              Return your response as a JSON object with these fields:
+              {
+                "overview": "Brief summary of the speech",
+                "topicAdherence": "Feedback on staying on topic",
+                "grammar": "Feedback on sentence structure",
+                "vocabulary": "Feedback on word choice",
+                "delivery": "Feedback on speaking style",
+                "strengths": "2-3 things they did well",
+                "improvementAreas": "2-3 things to improve",
+                "nextStepsTips": "Specific practice suggestions",
+                "score": "A number from 1-10",
+                "encouragement": "A positive encouraging message"
+              }
+              
+              Make the feedback friendly, specific, and encouraging for a child.
+              IMPORTANT: Format your response as valid JSON only, with NO additional text before or after the JSON.`
+            },
+            { 
+              role: "user", 
+              content: `Analyze this speech about "${currentTopic}": "${transcript}"` 
+            }
+          ],
+          response_format: { type: "json_object" }, // Request JSON format explicitly
+        },
+        {
+          headers: {
+            "Authorization": `Bearer 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`,
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://kids-interactive.com",
+            "X-Title": "Kids Interactive - Speech Analysis"
+          },
+          timeout: 15000, // 15 second timeout
+        }
+      );
+      
+      console.log("API response received:", response.status);
+      
+      if (!response.data || !response.data.choices || 
+          !response.data.choices[0] || !response.data.choices[0].message) {
+        throw new Error("Invalid API response structure");
+      }
+      
+      const content = response.data.choices[0].message.content;
+      
+      let analysisResult;
+      try {
+        // Try to parse the response as JSON
+        analysisResult = JSON.parse(content);
+        console.log("Successfully parsed API response");
+        
+        // Validate the required fields in the response
+        const requiredFields = [
+          "overview", "topicAdherence", "grammar", "vocabulary", 
+          "delivery", "strengths", "improvementAreas", 
+          "nextStepsTips", "score", "encouragement"
+        ];
+        
+        const missingFields = requiredFields.filter(field => !analysisResult.hasOwnProperty(field));
+        
+        if (missingFields.length > 0) {
+          console.warn("API response missing fields:", missingFields);
+          throw new Error(`API response missing fields: ${missingFields.join(", ")}`);
+        }
+        
+        // Ensure score is a number between 1-10
+        if (typeof analysisResult.score !== 'number') {
+          analysisResult.score = parseInt(analysisResult.score) || 5;
+        }
+        analysisResult.score = Math.min(10, Math.max(1, Math.round(analysisResult.score)));
+        
+        // Update the UI with the feedback
+        setFeedback(analysisResult);
+        setStage('feedback');
+        setLoading(false);
+      } catch (parseError) {
+        console.error("Failed to parse API response:", parseError);
+        
+        if (retries > 0) {
+          console.log(`Retrying API call. Retries left: ${retries}`);
+          await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retry
+          return analyzeWithAI(retries - 1);
+        } else {
+          throw new Error("Could not parse API response after multiple attempts");
+        }
+      }
+    } catch (error) {
+      console.error("API error:", error);
+      
+      if (retries > 0) {
+        console.log(`Retrying API call. Retries left: ${retries}`);
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retry
+        return analyzeWithAI(retries - 1);
+      } else {
+        // After exhausting retries, use local analysis as a last resort
+        console.log("All API retries failed. Falling back to local analysis");
+        setApiFailCount(prevCount => prevCount + 1);
+        const localAnalysis = analyzeTranscript(transcript, currentTopic);
+        setFeedback(localAnalysis);
+        setStage('feedback');
+        setLoading(false);
+        
+        // If we've had multiple API failures, show a persistent error
+        if (apiFailCount >= 2) {
+          setError("We're experiencing issues connecting to our AI service. Your feedback is being generated locally instead.");
+        }
       }
     }
+  };
+  
+  // Add notification for user
+  setError("Analyzing your speech... This might take a few moments.");
+  
+  // Start the analysis process with retry capability
+  analyzeWithAI();
+};
+
+  // Analyze the transcript for real metrics
+  const analyzeTranscript = (text, topic) => {
+    // Text preprocessing
+    const words = text.trim().split(/\s+/);
+    const wordCount = words.length;
+    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+    const sentenceCount = sentences.length;
     
-    // Default words if we couldn't find any
-    if (sampleWords.length === 0) {
-      sampleWords.push('interesting', 'exciting', 'favorite');
-    }
+    // Word-level analysis
+    const uniqueWords = new Set(words.map(w => w.toLowerCase()));
+    const vocabularyRichness = uniqueWords.size / wordCount;
     
-    // Count filler words
-    const fillerWordCount = (transcript.match(/umm|uhh|like|you know|sort of|kind of/gi) || []).length;
+    // Sentence length analysis
+    const avgWordsPerSentence = wordCount / Math.max(1, sentenceCount);
     
-    // Simulate API delay
-    setTimeout(() => {
-      setFeedback({
-        overview: `You did a great job speaking about "${currentTopic}"! Your ideas were creative and you expressed yourself clearly in ${transcript.split(/\s+/).length} words.`,
-        topicAdherence: "You stayed on topic and covered several interesting aspects of " + currentTopic,
-        grammar: "Your grammar was generally good. I noticed you used complete sentences most of the time.",
-        vocabulary: `You used a nice variety of descriptive words. Some impressive words you used were '${sampleWords.join("', '")}', which added color to your speech.`,
-        delivery: fillerWordCount > 0 
-          ? `You spoke with good pace. I noticed about ${fillerWordCount} filler words like 'um' and 'like'. Try to reduce these for clearer speech.` 
-          : "You spoke clearly with excellent pace and very few filler words. Great job!",
-        strengths: "Creative thinking. Clear expression of ideas. Good storytelling.",
-        improvementAreas: "Using more complex sentences. Reducing filler words. Adding more specific details.",
-        nextStepsTips: "Practice speaking for longer periods. Try using new vocabulary words. Record yourself and listen back.",
-        score: Math.floor(Math.random() * 3) + 8, // Random score between 8-10
-        encouragement: "You're becoming a confident speaker! Keep practicing and you'll continue to improve!"
-      });
+    // Filler words detection - expanded list
+    const fillerWords = (text.match(/um|uh|like|you know|sort of|kind of|basically|actually|well|so|anyway|i mean|i guess|right|okay|just|stuff|things/gi) || []);
+    const fillerWordCount = fillerWords.length;
+    const fillerWordRatio = fillerWordCount / wordCount;
+    
+    // Topic relevance (enhanced keyword matching)
+    const topicKeywords = topic.toLowerCase().split(/\s+/).filter(w => 
+      w.length > 3 && !['the', 'and', 'that', 'this', 'with', 'from', 'what', 'would', 'about', 'have', 'when', 'your', 'will'].includes(w)
+    );
+    
+    // Extract key concepts from the topic
+    const topicConcepts = new Set(topicKeywords);
+    
+    // Count keyword occurrences and weights
+    let topicRelevanceScore = 0;
+    let keywordsFound = 0;
+    
+    topicKeywords.forEach(keyword => {
+      const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
+      const matches = text.match(regex) || [];
+      if (matches.length > 0) {
+        keywordsFound++;
+        // More occurrences give diminishing returns
+        topicRelevanceScore += Math.min(3, matches.length) / 3;
+      }
+    });
+    
+    // Normalize relevance score (0-1)
+    topicRelevanceScore = Math.min(1, topicRelevanceScore / Math.max(1, topicKeywords.length));
+    
+    // Analyze sentence complexity
+    const complexSentences = sentences.filter(s => {
+      const sentenceWords = s.trim().split(/\s+/);
+      return sentenceWords.length >= 10 || // Longer sentences
+             s.includes(",") || // Contains commas (likely complex)
+             /because|therefore|however|although|since|while|whereas|if|when|despite|though|unless/i.test(s); // Contains connecting words
+    }).length;
+    
+    const sentenceComplexityRatio = complexSentences / Math.max(1, sentenceCount);
+    
+    // Impressive words (longer words the user used)
+    const impressiveWords = words
+      .filter(w => w.length > 6)
+      .filter(w => !['because', 'different', 'something', 'everything', 'anything', 'another', 'probably', 'actually', 'basically'].includes(w.toLowerCase()))
+      .slice(0, 5);
+    
+    // Check for repetition
+    const wordFrequency = {};
+    words.forEach(word => {
+      const normalizedWord = word.toLowerCase();
+      if (normalizedWord.length > 3) { // Only count meaningful words
+        wordFrequency[normalizedWord] = (wordFrequency[normalizedWord] || 0) + 1;
+      }
+    });
+    
+    const repeatedWords = Object.entries(wordFrequency)
+      .filter(([word, count]) => count > 3 && !['this', 'that', 'with', 'have', 'like'].includes(word))
+      .map(([word, count]) => ({ word, count }));
+    
+    // Calculate score - more strict evaluation
+    let score = 5; // Lower base score
+    
+    // Adjust score based on metrics with stricter criteria
+    if (wordCount > 60) score += 0.5;
+    if (wordCount > 90) score += 0.5;
+    
+    // Vocabulary richness (penalize low diversity)
+    if (vocabularyRichness < 0.4) score -= 0.75;
+    if (vocabularyRichness > 0.6) score += 0.5;
+    if (vocabularyRichness > 0.7) score += 0.5;
+    
+    // Sentence structure
+    if (sentenceComplexityRatio < 0.3) score -= 0.5;
+    if (sentenceComplexityRatio > 0.5) score += 0.5;
+    if (avgWordsPerSentence < 5) score -= 0.5;
+    if (avgWordsPerSentence > 25) score -= 0.5;
+    
+    // Filler words (stricter penalties)
+    if (fillerWordRatio > 0.05) score -= 0.75;
+    if (fillerWordRatio > 0.1) score -= 0.5;
+    
+    // Topic relevance (higher standards)
+    if (topicRelevanceScore < 0.4) score -= 0.5;
+    if (topicRelevanceScore > 0.6) score += 0.5;
+    if (topicRelevanceScore > 0.8) score += 0.5;
+    
+    // Impressive vocabulary
+    if (impressiveWords.length >= 2) score += 0.5;
+    if (impressiveWords.length >= 4) score += 0.5;
+    
+    // Penalize repetition
+    if (repeatedWords.length > 2) score -= 0.7;
+    
+    score = Math.min(10, Math.max(1, Math.round(score)));
+    
+    // Generate more detailed, critical feedback
+    return {
+      overview: `You spoke about "${topic}" using ${wordCount} words in ${sentenceCount} sentences. ${
+        wordCount > 90 ? "You provided a thorough response." : 
+        wordCount > 60 ? "You gave a decent amount of information." : 
+        "Your response was quite brief. Try to speak more extensively next time."
+      }`,
       
-      setStage('feedback');
-      setLoading(false);
-    }, 1500);
+      topicAdherence: topicRelevanceScore > 0.7 
+        ? `You stayed on topic and clearly addressed the key aspects of "${topic}".` 
+        : topicRelevanceScore > 0.5
+          ? `You generally addressed the topic of "${topic}", but could have explored it more thoroughly.`
+          : `Your speech didn't fully address the topic "${topic}". Make sure to focus more directly on the assigned topic next time.`,
+      
+      grammar: sentenceComplexityRatio > 0.6
+        ? "You used a good mix of complex and simple sentences, which made your speech engaging."
+        : sentenceComplexityRatio > 0.3
+          ? "Your sentences were adequate, but try to vary your sentence structure more for better expression."
+          : "Your speech used mostly simple sentences. Work on creating more complex sentences by combining ideas with words like 'because,' 'however,' and 'although'.",
+      
+      vocabulary: impressiveWords.length > 3 
+        ? `You used impressive vocabulary like '${impressiveWords.slice(0, 3).join("', '")}', which enriched your speech.` 
+        : impressiveWords.length > 1
+          ? `You used some good words like '${impressiveWords.join("', '")}', but could expand your vocabulary further.`
+          : "Your word choice was basic. Try using more varied and descriptive vocabulary to make your speech more engaging.",
+      
+      delivery: fillerWordRatio > 0.1 
+        ? `I noticed frequent filler words like 'um' and 'like' (${Math.round(fillerWordRatio*100)}% of your speech). This significantly affects clarity and confidence.` 
+        : fillerWordRatio > 0.05
+          ? `You used some filler words (${Math.round(fillerWordRatio*100)}% of your speech), which occasionally interrupted your flow.`
+          : "You spoke with minimal filler words, which made your delivery clear and confident.",
+      
+      strengths: [
+        vocabularyRichness > 0.6 ? "Good vocabulary diversity" : null,
+        fillerWordRatio < 0.05 ? "Clear delivery with few filler words" : null,
+        sentenceComplexityRatio > 0.5 ? "Well-varied sentence structure" : null,
+        topicRelevanceScore > 0.7 ? "Strong focus on the assigned topic" : null,
+        impressiveWords.length >= 3 ? "Use of advanced vocabulary" : null,
+        wordCount > 80 ? "Thorough expression of ideas" : null
+      ].filter(Boolean).join(". ") + ".",
+      
+      improvementAreas: [
+        fillerWordRatio > 0.05 ? "Reduce filler words" : null,
+        vocabularyRichness < 0.5 ? "Use more varied vocabulary" : null,
+        wordCount < 70 ? "Speak more extensively about the topic" : null,
+        topicRelevanceScore < 0.6 ? "Stay more focused on the specific topic" : null,
+        sentenceComplexityRatio < 0.4 ? "Vary your sentence structure more" : null,
+        repeatedWords.length > 2 ? `Avoid repeating words like "${repeatedWords.slice(0, 2).map(w => w.word).join('", "')}"` : null,
+        avgWordsPerSentence < 6 ? "Work on creating longer, more detailed sentences" : null
+      ].filter(Boolean).join(". ") + ".",
+      
+      nextStepsTips: [
+        "Record yourself regularly and identify patterns in your speech.",
+        fillerWordRatio > 0.07 ? "Practice speaking slowly and pausing instead of using filler words." : null,
+        vocabularyRichness < 0.6 ? "Learn 3-5 new topic-related words before each practice session." : null,
+        sentenceComplexityRatio < 0.4 ? "Practice connecting simple sentences with words like 'because,' 'however,' and 'although.'" : null,
+        topicRelevanceScore < 0.6 ? "Before speaking, write down 3-5 key points about the topic you want to cover." : null,
+        "Try the '1-minute drill': speak for exactly one minute on various topics without stopping."
+      ].filter(Boolean).join(" "),
+      
+      score: score,
+      
+      encouragement: score >= 9 
+        ? "Excellent job! Your speaking skills are impressive!" 
+        : score >= 7 
+          ? "You're showing good speaking ability. Keep practicing specific areas to improve further." 
+          : score >= 5
+            ? "You have a solid foundation. With targeted practice on the areas mentioned, you'll see significant improvement."
+            : "Speaking skills develop with regular practice. Focus on the suggested improvements and you'll make progress!"
+    };
   };
 
   // Render different stages of the application
@@ -493,6 +777,32 @@ const SpeechChecker = () => {
     }
   };
 
+  // Add this new component to show errors in a better way
+  const StatusMessage = ({ error, loading, apiFailCount }) => {
+    if (!error && !loading) return null;
+    
+    return (
+      <div className={`${styles.statusMessage} ${error ? styles.errorMessage : styles.loadingMessage}`}>
+        {loading ? (
+          <>
+            <div className={styles.smallSpinner}></div>
+            <p>{error || "Processing your speech..."}</p>
+          </>
+        ) : (
+          <p>{error}</p>
+        )}
+        {apiFailCount >= 2 && !loading && (
+          <button 
+            className={styles.retryButton}
+            onClick={() => window.location.reload()}
+          >
+            Refresh Page
+          </button>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className={styles.speechCheckerContainer}>
       <motion.div 
@@ -522,7 +832,7 @@ const SpeechChecker = () => {
           </div>
         )}
         
-        {error && <p className={styles.error}>{error}</p>}
+        <StatusMessage error={error} loading={loading} apiFailCount={apiFailCount} />
         
         {loading ? (
           <div className={styles.loadingContainer}>

@@ -495,3 +495,21 @@
     transform: translateY(0px) rotate(0deg);
   }
 }
+
+/* Add these new styles */
+.offlineWarning {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 10px 15px;
+  margin: 15px 0;
+  border-radius: 8px;
+  border-left: 5px solid #ffeeba;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.loadingText {
+  margin-left: 8px;
+  font-size: 14px;
+}

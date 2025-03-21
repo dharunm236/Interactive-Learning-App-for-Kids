@@ -89,7 +89,7 @@ const GamesPage = () => {
         {/* Money Game */}
         <div className={styles.gameCard}>
           <div className={styles.gameCardContent}>
-            <img src= "public\images\money.png" alt="Money Game" className={styles.gameImage}/>
+            <img src= "https://img.freepik.com/free-vector/collection-vector-cartoon-bags-with-banknotes_1441-327.jpg" alt="Money Game" className={styles.gameImage}/>
             <h2 className={styles.gameTitle}>💰 Money Game</h2>
             <p className={styles.gameDescription}>Learn to count and manage money in this game!</p>
             <button onClick={() => navigate('/moneygame')} className={styles.playButton}>

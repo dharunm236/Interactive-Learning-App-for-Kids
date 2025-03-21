@@ -4,7 +4,7 @@ import ProgressReport from './ProgressReport'; // Import the ProgressReport comp
 import goodJobImage from './images/good-job.png';
 import './Quiz.css';
 import { db, auth } from '../../firebaseConfig';
-import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, serverTimestamp, collection, getDocs } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
 const Quiz = () => {
@@ -77,19 +77,61 @@ const Quiz = () => {
   ];
 
   // State variables
+  const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [isAnswered, setIsAnswered] = useState(false);
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
   const [isQuizComplete, setIsQuizComplete] = useState(false);
-  const [quizData, setQuizData] = useState([...questions]);
+  const [quizData, setQuizData] = useState([]);
+
+  // Fetch questions from Firestore
+  const fetchQuestions = async () => {
+    try {
+      const questionsRef = collection(db, "imagequiz");
+      const querySnapshot = await getDocs(questionsRef);
+      
+      if (!querySnapshot.empty) {
+        const fetchedQuestions = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          fetchedQuestions.push({
+            id: doc.id,
+            question: data.question,
+            options: data.options,
+            answer: data.answer,
+            imageLink: data.imageLink,
+            userAnswer: null
+          });
+        });
+        
+        // Shuffle questions and pick 10 random ones
+        const shuffled = fetchedQuestions.sort(() => 0.5 - Math.random());
+        const selected = shuffled.slice(0, 10);
+        
+        setQuestions(selected);
+        setQuizData(selected);
+      }
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+    }
+  };
+
+  // Reset image loading state when current question changes
+  useEffect(() => {
+    setImageLoading(true);
+  }, [currentQuestionIndex]);
 
   // Check authentication and load previous attempt data
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         setUserId(user.uid);
-        // Check if user has previously attempted the quiz
+        
+        // First fetch questions from Firestore
+        await fetchQuestions();
+        
+        // Then check if user has previously attempted the quiz
         try {
           const quizRef = doc(db, "imageQuiz", user.uid);
           const quizDoc = await getDoc(quizRef);
@@ -106,11 +148,12 @@ const Quiz = () => {
         } catch (error) {
           console.error("Error fetching quiz data:", error);
         }
+        
+        setLoading(false);
       } else {
         // Redirect unauthenticated users to login
         navigate('/login');
       }
-      setLoading(false);
     });
 
     return () => unsubscribe();
@@ -137,7 +180,7 @@ const Quiz = () => {
 
     // Move to next question after a short delay
     setTimeout(() => {
-      if (currentQuestionIndex < questions.length - 1) {
+      if (currentQuestionIndex < quizData.length - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
         setIsAnswered(false);
         setSelectedOptionIndex(null);
@@ -147,6 +190,11 @@ const Quiz = () => {
         saveQuizResults(updatedQuizData, score + (isCorrect ? 1 : 0));
       }
     }, 1500);
+  };
+
+  // Handle image loading
+  const handleImageLoad = () => {
+    setImageLoading(false);
   };
 
   // Save quiz results to Firestore
@@ -162,8 +210,8 @@ const Quiz = () => {
         completed: true,
         completedAt: serverTimestamp(),
         score: finalScore,
-        totalQuestions: questions.length,
-        percentage: (finalScore / questions.length) * 100,
+        totalQuestions: quizData.length,
+        percentage: (finalScore / quizData.length) * 100,
         quizData: quizData,
         lastUpdated: serverTimestamp()
       };
@@ -191,7 +239,9 @@ const Quiz = () => {
     setIsAnswered(false);
     setSelectedOptionIndex(null);
     setIsQuizComplete(false);
-    const resetQuizData = [...questions].map(q => ({ ...q, userAnswer: null }));
+    
+    // Reset all userAnswers to null
+    const resetQuizData = quizData.map(q => ({ ...q, userAnswer: null }));
     setQuizData(resetQuizData);
 
     if (userId) {
@@ -213,9 +263,6 @@ const Quiz = () => {
     }
   };
 
-  // Current question to display
-  const currentQuestion = quizData[currentQuestionIndex];
-
   // Determine button class based on selection and correctness
   const getButtonClass = (index) => {
     if (!isAnswered || selectedOptionIndex !== index) {
@@ -226,7 +273,7 @@ const Quiz = () => {
     return isCorrect ? "option-button option-correct" : "option-button option-incorrect";
   };
 
-  if (loading) {
+  if (loading || quizData.length === 0) {
     return (
       <div className="quiz-page">
         <div className="quiz-container">
@@ -235,6 +282,9 @@ const Quiz = () => {
       </div>
     );
   }
+
+  // Current question to display
+  const currentQuestion = quizData[currentQuestionIndex];
 
   return (
     <div className="quiz-page">
@@ -253,8 +303,27 @@ const Quiz = () => {
         ) : (
           <>
             <h2 id="progress">Question {currentQuestionIndex + 1} of {questions.length}</h2>
-            <p id="question">{currentQuestion.question}</p>
-
+            <div className="question-content">
+              <div className="image-container">
+                {imageLoading && (
+                  <div className="image-loading-placeholder">
+                    <div className="spinner"></div>
+                    <p>Loading image...</p>
+                  </div>
+                )}
+                {currentQuestion.imageLink && (
+                  <img 
+                    src={currentQuestion.imageLink} 
+                    alt={currentQuestion.question}
+                    className={`question-image ${imageLoading ? 'hidden' : ''}`}
+                    style={{ width: '200px', height: '200px', objectFit: 'cover' }}
+                    onLoad={handleImageLoad}
+                  />
+                )}
+              </div>
+              <p id="question">{currentQuestion.question}</p>
+            </div>
+            
             <div id="options" className="options-container">
               {currentQuestion.options.map((option, index) => (
                 <button

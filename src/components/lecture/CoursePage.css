@@ -49,12 +49,16 @@ body {
 
 /* Main Container */
 .course-page {
-  max-width: 800px;
+  max-width: 1000px; /* Increased width */
   margin: 0 auto;
   padding: 20px;
   text-align: center;
   position: relative;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
 }
 
 /* Page Title */
@@ -98,6 +102,8 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 30px;
   margin-bottom: 40px;
+  width: 100%; /* Ensure it takes full width */
+  justify-content: center; /* Center the grid items */
 }
 
 /* Course Cards */

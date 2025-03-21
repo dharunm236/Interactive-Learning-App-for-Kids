@@ -525,3 +525,23 @@
   font-weight: bold;
   font-size: 24px;
 }
+.recommendationsList, .statsGrid {
+  max-height: 400px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+/* Styling for webkit browsers */
+.recommendationsList::-webkit-scrollbar, .statsGrid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.recommendationsList::-webkit-scrollbar-track, .statsGrid::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.recommendationsList::-webkit-scrollbar-thumb, .statsGrid::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 6px;
+}

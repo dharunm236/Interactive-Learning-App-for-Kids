@@ -254,8 +254,8 @@ const Game = ({ numberOfBalloons, gameDuration }) => {
           {(state) => (
             <div className={`balloons-screen balloons-screen--${state}`}>
               <div className="game-nav">
-                <div className="instructions-container">
-                  <h1 className="instructions">Press the 🔊 button to hear the word</h1>
+                <div className="balinstructions-container">
+                  <h1 className="balinstructions">Press the 🔊 button to hear the word</h1>
                   <SpButton onClick={speakWord} />
                 </div>
                 <div className="game-settings">
