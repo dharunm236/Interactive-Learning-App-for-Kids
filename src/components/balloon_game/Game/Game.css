@@ -23,14 +23,16 @@
   background-color: var(--pri-color);
 }
 
-.balloon-game .instructions {
+.balloon-game .balinstructions {
   margin: 0;
   padding: 0;
   text-align: left;
   margin-left: 25%;
+  color: var(--acc-color);
+  text-shadow: none;
 }
 
-.balloon-game .instructions-container {
+.balloon-game .balinstructions-container {
   display: flex;
   align-items: center;
   gap: 4em;
