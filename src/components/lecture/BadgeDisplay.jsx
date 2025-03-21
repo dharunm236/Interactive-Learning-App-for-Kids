@@ -19,8 +19,7 @@ const BadgeDisplay = ({ earned }) => {
             <h2 className="congrats">🎉 Congratulations!</h2>
             <p>You've successfully completed the course and earned your badge.</p>
             <div className="badge-actions">
-              <button className="badge-share">Share Achievement</button>
-              <button className="badge-download">Download Badge</button>
+              {/* Removed Share and Download buttons */}
             </div>
           </div>
         </div>

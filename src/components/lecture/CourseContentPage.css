@@ -208,11 +208,15 @@
     flex-grow: 1;
     background-color: rgba(25, 25, 100, 0.7);
     border-radius: 20px;
-    padding: 15px; /* Reduced padding to save space */
-    box-shadow: 0 0 15px #6b76ff;
+    padding: 30px; /* Increased padding for more content space */
+    box-shadow: 0 0 20px #6b76ff;
     border: 3px solid #8a2be2;
-    margin-bottom: 10px; /* Added margin to prevent overflow */
-}
+    margin-bottom: 20px; /* Added margin to prevent overflow */
+    width: 95%; /* Increased width to make the container bigger */
+    max-width: 1200px; /* Set a maximum width for larger screens */
+    margin-left: auto;
+    margin-right: auto;
+  }
   
   .space-video-section h2 {
     color: #ffff00;
