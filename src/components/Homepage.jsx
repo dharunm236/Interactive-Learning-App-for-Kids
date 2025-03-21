@@ -219,7 +219,7 @@ function Homepage({ onLogout, currentUserId }) {
                 <img src="https://png.pngtree.com/png-clipart/20240315/original/pngtree-3d-cute-student-character-with-a-math-png-image_14595985.png" alt="Math Adventures" />
               </div>
               <div className="activity-content">
-                <h2>Math Adventures <span className="emoji">➕</span></h2>
+                <h2>Math Adventures <span className="emoji"></span></h2>
                 <p>Solve puzzles with friendly monsters and become a math wizard!</p>
                 <button className="activity-button">Start Learning</button>
               </div>
