@@ -1,31 +1,75 @@
 import { useEffect, useRef, useState } from 'react';
 import './homepageCSS/Homepage.css';
 import './homepageCSS/dropdown.css';
-import { FaHome, FaBook, FaGamepad, FaChartLine, FaUser, FaSignOutAlt, FaUserFriends, FaStar, FaMagic } from "react-icons/fa";
+import { FaHome, FaBook, FaGamepad, FaChartLine, FaUser, FaSignOutAlt, FaUserFriends, FaStar, FaMagic, FaBars, FaTimes } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { motion } from 'framer-motion'; // You'll need to install framer-motion
+import { motion, AnimatePresence } from 'framer-motion'; // Added AnimatePresence
 
 function Homepage({ onLogout, currentUserId }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const canvasRef = useRef(null);
   const navigate = useNavigate();
+  const navbarRef = useRef(null);
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
 
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+    // Close profile dropdown when opening/closing mobile menu
+    if (showDropdown) setShowDropdown(false);
+  };
+
   const handleLogout = () => {
     setShowDropdown(false);
+    setMobileMenuOpen(false);
     onLogout();
   };
   
   const goToStory = () => {
     navigate('/create-story'); 
+  };
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (navbarRef.current && !navbarRef.current.contains(event.target)) {
+        setMobileMenuOpen(false);
+      }
+    }
+    
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Close mobile menu when screen size changes to desktop
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth > 768 && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    }
+    
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [mobileMenuOpen]);
+
+  // Handle navigation item click on mobile
+  const handleNavItemClick = () => {
+    if (window.innerWidth <= 768) {
+      setMobileMenuOpen(false);
+    }
   };
 
   const sendChallenge = async () => {
@@ -51,52 +95,72 @@ function Homepage({ onLogout, currentUserId }) {
 
   return (
     <div className="homepage-container">
-      <nav className="navbar">
-        <div className="logo">
-          <span className="logo-text">FunLearn</span>
-          <span className="logo-stars">
-            <FaStar className="star-icon" />
-            <FaStar className="star-icon" />
-          </span>
-        </div>
-        <div className="nav-links">
-          <a href="#home" className="nav-item">
-            <FaHome className="nav-icon" /> <span>Home</span>
-          </a>
-          <Link to="/lecture" className="nav-item">
-            <FaGamepad className="nav-icon" /> <span>Lessons</span>
-          </Link>
-          <Link to="/games" className="nav-item">
-            <FaGamepad className="nav-icon" /> <span>Games</span>
-          </Link>
-          <Link to="/quizzes" className="nav-item">
-            <FaMagic className="nav-icon" /> <span>Quiz</span>
-          </Link>
-          <Link to="/progress" className="nav-item">
-            <FaMagic className="nav-icon" /> <span>progress</span>
-          </Link>
-          <div className="profile-menu" onClick={toggleDropdown} aria-label="Profile Menu">
-            <div className="profile-preview">
-              <img src="https://cdn-icons-png.flaticon.com/512/5294/5294712.png" alt="User Profile" />
-            </div>
-            {showDropdown && (
-              <div className="profile-dropdown">
-                <div className="dropdown-item" onClick={() => navigate("/profile-page")}>
-                <FaUser className="dropdown-icon" /> Profile
-                </div>
-                <Link to="/send-friend-request" className="dropdown-item dropdown-link">
-                  <FaUserFriends className="dropdown-icon" /> Add Friend
-                </Link>
-                <Link to="/friend-requests" className="dropdown-item dropdown-link">
-                  <FaUserFriends className="dropdown-icon" /> Pending Requests
-                </Link>
-                <div className="dropdown-separator"></div>
-                <div className="dropdown-item logout-item" onClick={handleLogout}>
-                  <FaSignOutAlt className="dropdown-icon" /> Logout
-                </div>
-              </div>
-            )}
+      <nav className={`navbar ${mobileMenuOpen ? 'mobile-open' : ''}`} ref={navbarRef}>
+        <div className="nav-container">
+          <div className="logo">
+            <span className="logo-text">FunLearn</span>
+            <span className="logo-stars">
+              <FaStar className="star-icon" />
+              <FaStar className="star-icon" />
+            </span>
           </div>
+          
+          <div className="mobile-menu-toggle" onClick={toggleMobileMenu} aria-label="Toggle Menu">
+            {mobileMenuOpen ? <FaTimes /> : <FaBars />}
+          </div>
+          
+          <AnimatePresence>
+            {(mobileMenuOpen || window.innerWidth > 768) && (
+              <motion.div 
+                className="nav-links"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <a href="#home" className="nav-item" onClick={handleNavItemClick}>
+                  <FaHome className="nav-icon" /> <span>Home</span>
+                </a>
+                <Link to="/lecture" className="nav-item" onClick={handleNavItemClick}>
+                  <FaGamepad className="nav-icon" /> <span>Lessons</span>
+                </Link>
+                <Link to="/games" className="nav-item" onClick={handleNavItemClick}>
+                  <FaGamepad className="nav-icon" /> <span>Games</span>
+                </Link>
+                <Link to="/quizzes" className="nav-item" onClick={handleNavItemClick}>
+                  <FaMagic className="nav-icon" /> <span>Quiz</span>
+                </Link>
+                <Link to="/progress" className="nav-item" onClick={handleNavItemClick}>
+                  <FaChartLine className="nav-icon" /> <span>Progress</span>
+                </Link>
+                <div className="profile-menu" onClick={toggleDropdown} aria-label="Profile Menu">
+                  <div className="profile-preview">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5294/5294712.png" alt="User Profile" />
+                  </div>
+                  {showDropdown && (
+                    <div className="profile-dropdown">
+                      <div className="dropdown-item" onClick={() => {
+                        navigate("/profile-page");
+                        handleNavItemClick();
+                      }}>
+                        <FaUser className="dropdown-icon" /> Profile
+                      </div>
+                      <Link to="/send-friend-request" className="dropdown-item dropdown-link" onClick={handleNavItemClick}>
+                        <FaUserFriends className="dropdown-icon" /> Add Friend
+                      </Link>
+                      <Link to="/friend-requests" className="dropdown-item dropdown-link" onClick={handleNavItemClick}>
+                        <FaUserFriends className="dropdown-icon" /> Pending Requests
+                      </Link>
+                      <div className="dropdown-separator"></div>
+                      <div className="dropdown-item logout-item" onClick={handleLogout}>
+                        <FaSignOutAlt className="dropdown-icon" /> Logout
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </nav>
 
