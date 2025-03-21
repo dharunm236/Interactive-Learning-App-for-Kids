@@ -290,3 +290,30 @@
   95% { opacity: 0.98; }
   100% { opacity: 0.99; }
 }
+
+/* Add this media query at the end of the file */
+
+@media only screen and (max-width: 767px) and (orientation: portrait) {
+  /* Container adjustments for mobile */
+  .invgame-container {
+    width: 100%;
+    max-height: 100%;
+    top: 7%;
+    right: 0;
+  }
+  
+  /* Hide TV overlay on mobile devices only */
+  .tv-overlay {
+    display: none;
+  }
+  
+  /* Adjust the CRT screen for mobile  */
+  .crt-screen {
+    border-radius: 0;
+  }
+  
+  /* Expand game area to use full width */
+  .invgame-area {
+    width: 100%;
+  }
+}
