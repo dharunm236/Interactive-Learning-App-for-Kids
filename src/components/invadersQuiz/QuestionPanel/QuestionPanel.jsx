@@ -35,7 +35,7 @@ function QuestionPanel() {
             <span key={i} className="heart">♥</span>
           ))}
         </div>
-        <div className="score">SCORE: {score}</div>
+        <div className="qscore">SCORE: {score}</div>
       </div>
     </div>
   );
