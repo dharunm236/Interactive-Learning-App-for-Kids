@@ -262,9 +262,9 @@ const Game = ({ numberOfBalloons, gameDuration }) => {
               <div className="game-nav">
                 <div className="balinstructions-container">
                   <h1 className="balinstructions">Press the 🔊 button to hear the word</h1>
-                  <SpButton onClick={speakWord} />
                 </div>
                 <div className="game-settings">
+                  <SpButton onClick={speakWord} />
                   <ScoreCard score={score} time={timeRemaining} />
                   <Button type="alert" onClick={stopGame}>Stop</Button>
                 </div>

@@ -85,3 +85,9 @@
 .balloon-cell:active {
   cursor: url(../../assets/pin.svg) 8 4, pointer;
 }
+
+@media only screen and (max-width: 767px) and (orientation: portrait){
+  .balloon-cell {
+    max-height: 200px;
+  }
+}
