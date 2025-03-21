@@ -355,44 +355,8 @@ body {
   50% { transform: translateY(-20px); }
 }
 
-.floating-elements {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-}
 
-.floating-element {
-  position: absolute;
-  font-size: 2rem;
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
-}
 
-.element-1 {
-  top: 15%;
-  left: 10%;
-  animation: floatElement 10s ease-in-out infinite;
-}
-
-.element-2 {
-  top: 60%;
-  left: 15%;
-  animation: floatElement 12s ease-in-out 1s infinite;
-}
-
-.element-3 {
-  top: 20%;
-  right: 10%;
-  animation: floatElement 9s ease-in-out 0.5s infinite;
-}
-
-.element-4 {
-  bottom: 15%;
-  right: 15%;
-  animation: floatElement 11s ease-in-out 1.5s infinite;
-}
 
 @keyframes floatElement {
   0%, 100% { transform: translate(0, 0); }
