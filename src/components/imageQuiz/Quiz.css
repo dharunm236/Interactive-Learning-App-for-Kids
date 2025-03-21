@@ -40,11 +40,11 @@ body {
 }
 
 h1 {
-  font-family: 'Bubblegum Sans', cursive;
-  color: #ff5757;
+  font-family:'Times New Roman', Times, serif;
+  color: #136940;
   text-align: center;
   font-size: 3.5rem;
-  text-shadow: 2px 2px 0 #ffde59;
+  text-shadow: 2px 2px 0 #abb33a;
   margin-bottom: 1rem;
 }
 
@@ -179,7 +179,7 @@ hr {
 }
 
 #quiz-completed-container h2 {
-  font-family: 'Bubblegum Sans', cursive;
+  font-family:'Times New Roman', Times, serif;
   font-size: 2.5rem;
   color: #5b62ff;
   margin: 1rem 0;
