@@ -22,6 +22,12 @@ import QuizBoard from './components/QuizBoard.jsx';
 import InvadersQuiz from './components/invadersQuiz/InvadersQuiz';
 import ImageQuiz from  './components/imageQuiz/Quiz.jsx';
 import ProgressPage  from './components/progress/ProgressPage';
+// Import challenge system components
+import ChallengePage from './components/1v1player_game/ChallengePage';
+import MultiplayerWordBuilder from './components/1v1player_game/MultiplayerWordBuilder';
+// Placeholder imports for other multiplayer games (create these files as needed)
+import MathChallenge from './components/1v1player_game/MathChallenge';
+import MemoryMatchMultiplayer from './components/1v1player_game/MemoryMatchMultiplayer';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -63,8 +69,6 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/check-email" element={<CheckEmail />} />
-          <Route path="/" element={user ? <Homepage onLogout={handleLogout} /> : <Navigate to="/login" />}/>
-          <Route path="/games" element={user ? <GamesPage /> : <Navigate to="/login" />}/>
           <Route path="/moneygame" element={<MoneyGame />} /> 
           <Route
             path="/games/Ballongame"
@@ -88,6 +92,12 @@ function App() {
           <Route path="/quizzes/invaders" element={user ? <InvadersQuiz /> : <Navigate to="/login" />}/>
           <Route path="/quizzes/imageQuiz" element={user ? <ImageQuiz /> : <Navigate to="/login" />}/>
           <Route path="/progress" element={user ? <ProgressPage /> : <Navigate to="/login" />}/>
+          
+          {/* Challenge System Routes */}
+          <Route path="/challenge-friend" element={user ? <ChallengePage /> : <Navigate to="/login" />} />
+          <Route path="/word-builder/:sessionId" element={user ? <MultiplayerWordBuilder /> : <Navigate to="/login" />} />
+          <Route path="/math-challenge/:sessionId" element={user ? <MathChallenge /> : <Navigate to="/login" />} />
+          <Route path="/memory-match/:sessionId" element={user ? <MemoryMatchMultiplayer /> : <Navigate to="/login" />} />
         </Routes>
       </div>
     </Router>
