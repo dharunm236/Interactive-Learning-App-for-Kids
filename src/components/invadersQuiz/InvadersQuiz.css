@@ -17,7 +17,7 @@
   min-height: 100vh;
 }
 
-.back-button {
+.invback-button {
   position: absolute;
   top: 20px;
   left: 20px;
@@ -37,7 +37,7 @@
   transition: all 0.3s ease;
 }
 
-.back-button:hover {
+.invback-button:hover {
 
   box-shadow: 0 0 10px #0f0;
 }

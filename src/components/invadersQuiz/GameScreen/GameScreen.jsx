@@ -6,6 +6,7 @@ import QuestionPanel from '../QuestionPanel/QuestionPanel';
 import soundService from '../services/soundService';
 import { useEffect } from 'react';
 import './GameScreen.css';
+import MobileControls from '../MobileControls/MobileControls';
 
 function GameScreen() {
   const { shipPos, aliens, lasers } = useGame();
@@ -43,6 +44,7 @@ function GameScreen() {
       </div>
 
       <QuestionPanel />
+      <MobileControls />
     </div>
   );
 }
