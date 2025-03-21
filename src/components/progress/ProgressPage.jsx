@@ -30,9 +30,11 @@ const ProgressPage = () => {
   
   // State for all progress data
   const [progressData, setProgressData] = useState({
-    moneyGame: { history: [], averageScore: 0, totalGames: 0 },
-    balloonGame: { history: [], averageScore: 0, totalGames: 0 },
-    imageQuiz: { completed: false, score: 0, percentage: 0, attempts: 0 },
+    overallProgress: { completed: 0, total: 5, percentage: 0 },
+    moneyGame: { history: [], totalGames: 0, averageScore: 0 },
+    balloonGame: { history: [], totalGames: 0, averageScore: 0 },
+    basicArith: { history: [], totalGames: 0, averageScore: 0, bestStreak: 0 }, // New addition
+    imageQuiz: { completed: false, score: 0, totalQuestions: 0, percentage: 0, attempts: 0 },
     invadersQuiz: { completed: false, score: 0, highestScore: 0, attempts: 0 },
     spaceCourse: { completed: false, quizScore: 0, quizPercentage: 0 },
     overallProgress: { completed: 0, total: 5, percentage: 0 } // 5 components to track
@@ -80,14 +82,17 @@ const ProgressPage = () => {
     
     // 2. Fetch Balloon Game data
     await fetchGameData(userId, 'balloonGame', data.balloonGame);
+
+    // 3. Fetch Basic Arith Game data (NEW)
+    await fetchGameData(userId, 'basicArith', data.basicArith);
     
-    // 3. Fetch Image Quiz data
+    // 4. Fetch Image Quiz data
     await fetchQuizData(userId, 'imageQuiz', data.imageQuiz);
     
-    // 4. Fetch Invaders Quiz data
+    // 5. Fetch Invaders Quiz data
     await fetchInvaderQuizData(userId, data.invadersQuiz);
     
-    // 5. Fetch Space Course data
+    // 6. Fetch Space Course data
     await fetchSpaceCourseData(userId, data.spaceCourse);
     
     // Calculate overall progress
@@ -262,13 +267,15 @@ const ProgressPage = () => {
 
   // Prepare Skills Radar chart data
   const skillsRadarData = {
-    labels: ['Money Management', 'Word Recognition', 'General Knowledge', 'Vocabulary', 'Space Knowledge'],
+    labels: ['Money Management', 'Word Recognition', 'Math Skills', 'General Knowledge', 'Vocabulary', 'Space Knowledge'],
     datasets: [
       {
         label: 'Skills Proficiency',
         data: [
           progressData.moneyGame.averageScore / 10, // Normalized to 0-10 scale
           progressData.balloonGame.averageScore / 5, // Normalized to 0-10 scale
+          progressData.basicArith.history.length > 0 ? // New data point for math skills
+            Math.min(10, progressData.basicArith.history.reduce((sum, g) => sum + g.correctAnswers, 0) / 5) : 0,
           progressData.invadersQuiz.highestScore ? progressData.invadersQuiz.highestScore / 50 : 0, // Normalized to 0-10 scale
           progressData.imageQuiz.percentage / 10, // Normalized to 0-10 scale
           progressData.spaceCourse.quizPercentage / 10 // Normalized to 0-10 scale
@@ -545,6 +552,45 @@ const ProgressPage = () => {
                 <p className={styles.statNumber}>
                   {progressData.balloonGame.history.length > 0 ? 
                     formatDate(progressData.balloonGame.history[progressData.balloonGame.history.length-1].createdAt) : 'N/A'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <h3 className={styles.secondGameTitle}>Basic Arithmetic Game Details</h3>
+          <div className={styles.gameStats}>
+            <div className={styles.gameStatDetail}>
+              <span className={styles.statIcon}></span>
+              <div>
+                <p className={styles.statTitle}>Total Games</p>
+                <p className={styles.statNumber}>{progressData.basicArith.totalGames}</p>
+              </div>
+            </div>
+            <div className={styles.gameStatDetail}>
+              <span className={styles.statIcon}></span>
+              <div>
+                <p className={styles.statTitle}>Correct Answers</p>
+                <p className={styles.statNumber}>
+                  {progressData.basicArith.history.length > 0 ? 
+                    progressData.basicArith.history.reduce((sum, g) => sum + g.correctAnswers, 0) : 0}
+                </p>
+              </div>
+            </div>
+            <div className={styles.gameStatDetail}>
+              <span className={styles.statIcon}></span>
+              <div>
+                <p className={styles.statTitle}>Best Streak</p>
+                <p className={styles.statNumber}>{progressData.basicArith.history.length > 0 ? 
+                  Math.max(...progressData.basicArith.history.map(g => g.bestStreak)) : 0}</p>
+              </div>
+            </div>
+            <div className={styles.gameStatDetail}>
+              <span className={styles.statIcon}></span>
+              <div>
+                <p className={styles.statTitle}>Last Played</p>
+                <p className={styles.statNumber}>
+                  {progressData.basicArith.history.length > 0 ? 
+                    formatDate(progressData.basicArith.history[progressData.basicArith.history.length-1].createdAt) : 'N/A'}
                 </p>
               </div>
             </div>

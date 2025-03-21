@@ -5,11 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math Drag & Drop Game</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <script>
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsOYgm3s2v5h3iBKK-CgNWsDnBcpxBBms",
+            authDomain: "kids-interactive.firebaseapp.com",
+            projectId: "kids-interactive",
+            storageBucket: "kids-interactive.firebasestorage.app",
+            messagingSenderId: "400569866966",
+            appId: "1:400569866966:web:a7fcce5bf48b6e93d0c777",
+            measurementId: "G-H8X6SEPVHF"
+        };
+        
+        // Initialize Firebase
+        if (typeof firebase !== 'undefined') {
+            firebase.initializeApp(firebaseConfig);
+        } else {
+            console.error("Firebase SDK not loaded");
+        }
+    </script>
 </head>
 <body>
     <h1>Math Drag & Drop Game</h1>
 
     <div class="game-container">
+        <div class="timer">Time: <span id="timerValue">30</span>s</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        
         <div class="problem">
             <span id="num1"></span>
             <div id="operatorZone" class="drop-zone">?</div>
@@ -19,13 +50,44 @@
         </div>
 
         <div class="options" id="optionsContainer"></div>
+        
+        <div class="difficulty">
+            <label for="difficultySelect">Difficulty:</label>
+            <select id="difficultySelect">
+                <option value="easy">Easy</option>
+                <option value="medium" selected>Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </div>
+        
         <button onclick="generateProblem()">New Problem</button>
+        <button id="finishGameButton" class="finish-button" onclick="finishGame()">Finish Game</button>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-label">Correct</div>
+                <div class="stat-value" id="correctCount">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Incorrect</div>
+                <div class="stat-value" id="incorrectCount">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Streak</div>
+                <div class="stat-value" id="currentStreak">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Best Streak</div>
+                <div class="stat-value" id="bestStreak">0</div>
+            </div>
+        </div>
     </div>
 
     <p id="message"></p>
 
     <audio id="dragSound" src="sounds/match.wav"></audio>
     <audio id="winSound" src="sounds/win.wav"></audio>
+    <audio id="errorSound" src="sounds/error.wav" preload="auto"></audio>
 
     <script src="script.js"></script>
 </body>
