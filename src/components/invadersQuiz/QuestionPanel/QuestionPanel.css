@@ -77,9 +77,9 @@
   text-align: center;
 }
 
-.score {
+.qscore {
   font-size: 1.2rem;
-  margin-top: 1rem;
+  margin-top: 1px;
   font-family: 'Press Start 2P', cursive;
   color: #0f0;
   text-shadow: 0 0 5px #0f0;
