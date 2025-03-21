@@ -200,12 +200,6 @@ function Homepage({ onLogout, currentUserId }) {
                 alt="FunLearn GIF"
                 className="welcome-gif"
               />
-              <div className="floating-elements">
-                <div className="floating-element element-1">🧩</div>
-                <div className="floating-element element-2">📚</div>
-                <div className="floating-element element-3">🔍</div>
-                <div className="floating-element element-4">🎨</div>
-              </div>
             </motion.div>
           </div>
           <canvas ref={canvasRef} id="three-canvas"></canvas>
