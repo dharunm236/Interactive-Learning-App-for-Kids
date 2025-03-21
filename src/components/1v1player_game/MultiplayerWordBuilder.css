@@ -1,0 +1,229 @@
+.word-builder-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.time-display, .score-display {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.time-display {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.score-display {
+  background-color: #e8f5e9;
+  color: #388e3c;
+}
+
+.letters-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.letter {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  color: white;
+  font-size: 32px;
+  font-weight: bold;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.letter:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.word-input {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.word-input input {
+  flex-grow: 1;
+  padding: 12px 15px;
+  font-size: 18px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+}
+
+.word-input button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.word-input button:hover {
+  background-color: #45a049;
+}
+
+.word-input button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.message {
+  text-align: center;
+  font-size: 18px;
+  margin: 15px 0;
+  padding: 10px;
+  border-radius: 6px;
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.words-found {
+  background-color: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  margin-bottom: 15px;
+}
+
+.words-found.opponent {
+  background-color: #f5f5f5;
+  border: 1px solid #e0e0e0;
+}
+
+.words-found h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.words-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.word-chip {
+  padding: 5px 10px;
+  background-color: #e8eaf6;
+  color: #3949ab;
+  border-radius: 15px;
+  font-weight: 500;
+}
+
+.word-chip.opponent {
+  background-color: #fce4ec;
+  color: #c2185b;
+}
+
+.game-over {
+  text-align: center;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.game-over h3 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.results {
+  margin: 20px 0;
+}
+
+.results p {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.winner {
+  font-size: 22px;
+  font-weight: bold;
+  color: #ff9800;
+  margin-top: 15px;
+}
+
+.game-over button {
+  padding: 12px 30px;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.game-over button:hover {
+  background-color: #1976d2;
+}
+
+.player-vs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.player {
+  font-weight: bold;
+  font-size: 18px;
+  padding: 8px 12px;
+  border-radius: 5px;
+}
+
+.player.current-player {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.vs {
+  font-size: 20px;
+  font-weight: bold;
+  color: #f44336;
+}
+
+.you-indicator {
+  margin-left: 5px;
+  font-size: 14px;
+  color: #1976d2;
+  font-weight: bold;
+}
