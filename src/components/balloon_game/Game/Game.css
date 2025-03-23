@@ -100,6 +100,14 @@
   .balloon-game .instructions-container {
     gap: 2em; /* Reduce gap between items */
   }
+  
+  .balloon-game .balinstructions {
+    margin-left: 10%; /* Reduce margin for smaller screens */
+  }
+
+  .balloon-game .balinstructions-container {
+    gap: 2em; /* Reduce gap between items */
+  }
 
   .balloon-game .game-nav {
     padding: 1em; /* Reduce padding */
@@ -116,28 +124,32 @@
 
 /* For mobile phones */
 @media (max-width: 480px) {
-  .balloon-game .instructions {
-    margin-left: 5%; /* Further reduce margin */
-    text-align: center; /* Center-align text */
+
+  
+  .balloon-game .balinstructions {
+    margin-left: 0; /* Remove left margin */
+    text-align:left; /* Center text for better mobile view */
+    font-size: 2em; /* Slightly smaller text */
   }
 
-  .balloon-game .instructions-container {
+  .balloon-game .balinstructions-container {
     flex-direction: column; /* Stack items vertically */
-    gap: 1em;
+    gap: 0.5em;
+    align-items: center; /* Center items horizontally */
+    padding: 0 10px; /* Add some horizontal padding */
   }
 
   .balloon-game .game-nav {
-    flex-direction: column; /* Stack nav items vertically */
     padding: 0.5em;
   }
 
   .balloon-game .game-settings {
     flex-direction: column; /* Stack settings items vertically */
-    gap: 0.5em;
+    gap: 0em;
   }
 
   .balloon-game .gaps {
-    gap: 0.3em; /* Reduce gap between gaps */
+    gap: 0.5em; /* Reduce gap between gaps */
   }
 
   .balloon-game .gap {
@@ -146,5 +158,13 @@
 
   .balloon-game .speak-button {
     font-size: 0.8em; /* Further reduce button font size */
+  }
+
+  .balloon-game .game-settings {
+    display: flex;
+    flex-direction: column; /* Stack settings items vertically */
+    gap: 0em;
+    margin-top: 10px; /* Add margin to move it down */
+    align-items: center; /* Center items horizontally */
   }
 }

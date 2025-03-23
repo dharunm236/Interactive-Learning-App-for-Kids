@@ -32,6 +32,7 @@ const Game = ({ numberOfBalloons, gameDuration }) => {
   const [filledGaps, setFilledGaps] = useState([]);
   const [showCelebration, setShowCelebration] = useState(false);
   const [user, setUser] = useState(null);
+  const [justCompleted, setJustCompleted] = useState(false); // new state
 
   const timerRef = useRef(null);
 
@@ -191,6 +192,7 @@ const Game = ({ numberOfBalloons, gameDuration }) => {
     setGameStopped(false);
     setCurrentLetterIndex(0);
     setFilledGaps([]);
+    setJustCompleted(false); // Reset justCompleted when starting a new game
   };
 
   //Stop the game and save score
@@ -201,6 +203,7 @@ const Game = ({ numberOfBalloons, gameDuration }) => {
     
     setGameStarted(false);
     setGameStopped(true);
+    setJustCompleted(true); // Set justCompleted to true when the game stops
   
     // Force the function to run after state updates
     setTimeout(() => {
@@ -233,6 +236,9 @@ const Game = ({ numberOfBalloons, gameDuration }) => {
     if (timeRemaining === 0 && !gameStarted && gameStopped) {
       console.log("%c Game ended due to timer", "background: orange; color: black");
       
+      // Set justCompleted to true when the game ends due to timer
+      setJustCompleted(true);
+      
       if (user && user.uid) {
         console.log("%c Auto-saving score after timer end", "background: green; color: white");
         try {
@@ -248,7 +254,7 @@ const Game = ({ numberOfBalloons, gameDuration }) => {
     <div className="balloon-game">
       <div className="balloon-game-container">
         {(!gameStarted || gameStopped) && (
-          <CoverScreen score={score} onStartGame={startGame} duration={Constants.gameDuration} />
+          <CoverScreen score={score} onStartGame={startGame} duration={Constants.gameDuration} justCompleted={justCompleted} /> // Pass the justCompleted state
         )}
         <CSSTransition in={gameStarted} timeout={250} classNames="balloons-screen" mountOnEnter unmountOnExit>
           {(state) => (
@@ -256,9 +262,9 @@ const Game = ({ numberOfBalloons, gameDuration }) => {
               <div className="game-nav">
                 <div className="balinstructions-container">
                   <h1 className="balinstructions">Press the 🔊 button to hear the word</h1>
-                  <SpButton onClick={speakWord} />
                 </div>
                 <div className="game-settings">
+                  <SpButton onClick={speakWord} />
                   <ScoreCard score={score} time={timeRemaining} />
                   <Button type="alert" onClick={stopGame}>Stop</Button>
                 </div>

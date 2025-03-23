@@ -17,7 +17,7 @@
   min-height: 100vh;
 }
 
-.back-button {
+.invback-button {
   position: absolute;
   top: 20px;
   left: 20px;
@@ -37,7 +37,7 @@
   transition: all 0.3s ease;
 }
 
-.back-button:hover {
+.invback-button:hover {
 
   box-shadow: 0 0 10px #0f0;
 }
@@ -289,4 +289,31 @@
   90% { opacity: 0.99; }
   95% { opacity: 0.98; }
   100% { opacity: 0.99; }
+}
+
+/* Add this media query at the end of the file */
+
+@media only screen and (max-width: 767px) and (orientation: portrait) {
+  /* Container adjustments for mobile */
+  .invgame-container {
+    width: 100%;
+    max-height: 100%;
+    top: 7%;
+    right: 0;
+  }
+  
+  /* Hide TV overlay on mobile devices only */
+  .tv-overlay {
+    display: none;
+  }
+  
+  /* Adjust the CRT screen for mobile  */
+  .crt-screen {
+    border-radius: 0;
+  }
+  
+  /* Expand game area to use full width */
+  .invgame-area {
+    width: 100%;
+  }
 }

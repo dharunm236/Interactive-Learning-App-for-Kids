@@ -43,7 +43,7 @@ const GamesPage = () => {
         <div className={styles.gameCard}>
           <div className={styles.gameCardContent}>
             <img
-              src="https://parspng.com/wp-content/uploads/2022/01/balloonpng.parspng.com-2.png"
+              src="https://img.freepik.com/premium-vector/balloon-game-character_586360-246.jpg"
               alt="Balloon Game"
               className={styles.gameImage}
             />
@@ -59,7 +59,7 @@ const GamesPage = () => {
         <div className={styles.gameCard}>
           <div className={styles.gameCardContent}>
             <img
-              src="https://png.pngtree.com/png-clipart/20220117/original/pngtree-childhood-games-png-image_7140637.png"
+              src="https://img.freepik.com/free-vector/educational-match-game-kids-with-fruits_23-2148790647.jpg"
               alt="Memory Match Game"
               className={styles.gameImage}
             />

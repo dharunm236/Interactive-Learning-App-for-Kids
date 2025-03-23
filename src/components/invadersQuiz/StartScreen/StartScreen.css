@@ -19,23 +19,43 @@
 
 @media (max-width: 768px) {
   .invstart-screen {
-    padding-top: 15vh;
+    padding-top: 20vh;
+    margin-top: 30%;
+    padding-right: 0;
     width: 95%;
+    align-items: center;
+    justify-content: center;
   }
   
   .invtitle {
     font-size: 2.5rem;
+    text-align: center;
+  }
+  
+  .invstart-button {
+    width: 80%;
+    max-width: 300px;
+    padding: 0.8rem 1.5rem;
+    font-size: 1.3rem;
   }
 }
 
 @media (max-width: 480px) {
   .invstart-screen {
-    padding-top: 10vh;
-    width: 98%;
+    padding-top: 15vh;
+    width: 90%;
   }
   
   .invtitle {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .invstart-button {
+    width: 90%;
+    padding: 0.7rem 1rem;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
   }
 }
 
