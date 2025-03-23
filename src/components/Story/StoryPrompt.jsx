@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import styles from "./StoryPrompt.module.css";
 import { useNavigate } from 'react-router-dom';
-import { motion } from "framer-motion"; // Add framer-motion for animations
+import { motion } from "framer-motion";
+import config from "../../config";
 
 const StoryPrompt = () => {
   const [prompt, setPrompt] = useState("");
@@ -16,7 +17,7 @@ const StoryPrompt = () => {
   const storyContainerRef = useRef(null);
   const navigate = useNavigate();
 
-  const apiKey = "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";
+  const apiKey = config.openRouterApiKey;
   console.log("API Key status:", apiKey ? "Loaded" : "Not loaded");
   
   const languages = [
