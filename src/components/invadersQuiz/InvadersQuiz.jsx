@@ -54,7 +54,7 @@ function InvadersQuiz() {
 
   return (
     <div className="invaders-quiz-container">
-      <div className="back-button" onClick={handleBackClick}>
+      <div className="invback-button" onClick={handleBackClick}>
         ← Back
       </div>
 

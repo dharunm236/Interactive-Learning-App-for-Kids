@@ -18,7 +18,7 @@
   background-color: black;
 }
 
-@media (max-width: 768px) {
+@media only screen and (max-width: 767px) and (orientation: portrait){
   .invgame-container {
     flex-direction: column;
   }
@@ -26,6 +26,6 @@
   .invgame-area {
     flex: 1;
     border-right: none;
-    border-bottom: 3px solid #0f0;
+
   }
 }

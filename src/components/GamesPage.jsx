@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './GamesPage.module.css'; // Import the CSS module
+import ChallengeButton from './1v1player_game/ChallengeButton';
 
 const GamesPage = () => {
   const navigate = useNavigate();
@@ -20,7 +21,6 @@ const GamesPage = () => {
     window.location.href = "/games/Memory-Game/index_M.html";
   };
 
-
   return (
     <div className={styles.gamesPage}>
       {/* Header */}
@@ -36,29 +36,30 @@ const GamesPage = () => {
           onClick={handleBackClick}
         />
       </div>
+      
       {/* Games Grid */}
       <div className={styles.gamesGrid}>
         {/* Balloon Game */}
-<div className={styles.gameCard}>
-  <div className={styles.gameCardContent}>
-    <img
-      src="https://parspng.com/wp-content/uploads/2022/01/balloonpng.parspng.com-2.png"
-      alt="Balloon Game"
-      className={styles.gameImage}
-    />
-    <h2 className={styles.gameTitle}>🎈 Balloon Game</h2>
-    <p className={styles.gameDescription}>Pop balloons and learn math in this fun game!</p>
-    <button onClick={() => navigate('/games/Ballongame')} className={styles.playButton}>
-      Play Now
-    </button>
-  </div>
-</div>
+        <div className={styles.gameCard}>
+          <div className={styles.gameCardContent}>
+            <img
+              src="https://img.freepik.com/premium-vector/balloon-game-character_586360-246.jpg"
+              alt="Balloon Game"
+              className={styles.gameImage}
+            />
+            <h2 className={styles.gameTitle}>🎈 Balloon Game</h2>
+            <p className={styles.gameDescription}>Pop balloons and learn math in this fun game!</p>
+            <button onClick={() => navigate('/games/Ballongame')} className={styles.playButton}>
+              Play Now
+            </button>
+          </div>
+        </div>
 
         {/* Memory Match */}
         <div className={styles.gameCard}>
           <div className={styles.gameCardContent}>
             <img
-              src="https://png.pngtree.com/png-clipart/20220117/original/pngtree-childhood-games-png-image_7140637.png"
+              src="https://img.freepik.com/free-vector/educational-match-game-kids-with-fruits_23-2148790647.jpg"
               alt="Memory Match Game"
               className={styles.gameImage}
             />
@@ -115,11 +116,9 @@ const GamesPage = () => {
         </div>
       </div>
 
-      {/* Challenge a Friend */}
+      {/* Challenge a Friend - Using just the ChallengeButton component */}
       <div className={styles.challengeSection}>
-        <button onClick={() => navigate('/challenge-friend')} className={styles.ctaButton}>
-          Challenge a Friend 🏆
-        </button>
+        <ChallengeButton />
       </div>
     </div>
   );
