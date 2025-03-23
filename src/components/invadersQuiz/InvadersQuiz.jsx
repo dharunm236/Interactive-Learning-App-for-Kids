@@ -14,19 +14,28 @@ import './InvadersQuiz.css';
 function GameContent() {
   const { gameState, isLoading } = useGame();
   const [, forceUpdate] = useState();
-  
+
   // Force re-render when gameState changes
   useEffect(() => {
     const timer = setTimeout(() => forceUpdate({}), 100);
     return () => clearTimeout(timer);
   }, [gameState]);
-  
+
   if (isLoading) {
     return <Loading />;
   }
-  
+
   return (
     <div className={`crt-screen ${gameState === 'playing' ? 'game-active' : ''}`}>
+      {/* Conditionally render TV Frame Overlay only during the playing state */}
+      {gameState === 'playing' && (
+        <div
+          className="tv-overlay"
+          style={{ backgroundImage: `url(${TVFrame})` }}
+        ></div>
+      )}
+
+      {/* Render game screens */}
       {gameState === 'start' && <StartScreen />}
       {gameState === 'playing' && <GameScreen />}
       {gameState === 'won' && <WinScreen />}
@@ -38,23 +47,19 @@ function GameContent() {
 // Main wrapper component with navigation and providers
 function InvadersQuiz() {
   const navigate = useNavigate();
-  
+
   const handleBackClick = () => {
     navigate('/quizzes');
   };
-  
+
   return (
     <div className="invaders-quiz-container">
       <div className="invback-button" onClick={handleBackClick}>
         ← Back
       </div>
-      
+
       <GameProvider>
         <div className="tv-container">
-          <div 
-            className="tv-overlay" 
-            style={{ backgroundImage: `url(${TVFrame})` }}
-          ></div>
           <AudioControls />
           <GameContent />
         </div>

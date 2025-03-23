@@ -1,0 +1,162 @@
+.progress-report-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: white;
+    padding: 2rem;
+    z-index: 999;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .report-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #2b6cb0;
+  }
+  
+  .report-header h1 {
+    font-size: 2.5rem;
+    color: #4CAF50;
+    margin-bottom: 0.5rem;
+  }
+  
+  .header-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #7ec8e3;
+  }
+  
+  .performance-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .overview-card, .chart-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+  }
+  
+  .stats-row {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+  }
+  
+  .stat-item {
+    text-align: center;
+    padding: 1rem;
+  }
+  
+  .stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #4CAF50;
+  }
+  
+  .stat-label {
+    color: #7ec8e3;
+    font-size: 0.9rem;
+  }
+  
+  .chart-card h3 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .detailed-analysis {
+    margin-top: 2rem;
+  }
+  
+  .suggestions-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+  }
+  
+  .suggestion-content {
+    display: flex;
+    align-items: start;
+    gap: 1rem;
+  }
+  
+  .suggestion-icon {
+    font-size: 2rem;
+    color: #4CAF50;
+  }
+  
+  .question-review {
+    margin-top: 2rem;
+  }
+  
+  .question-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid;
+    animation: fadeIn 0.5s ease-in-out;
+    animation-fill-mode: both;
+  }
+  
+  .question-item.correct {
+    border-color: #4CAF50;
+  }
+  
+  .question-item.incorrect {
+    border-color: #FF5252;
+  }
+  
+  .question-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  
+  .status-badge {
+    font-size: 1.2rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+  }
+  
+  .answer-comparison {
+    display: grid;
+    gap: 1rem;
+    padding-left: 1rem;
+  }
+  
+  .user-answer span:first-child,
+  .correct-answer span:first-child {
+    color: #7ec8e3;
+    margin-right: 0.5rem;
+  }
+  
+  .report-footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid #2b6cb0;
+    color: #7ec8e3;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }

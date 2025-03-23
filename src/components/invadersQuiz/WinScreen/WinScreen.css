@@ -1,41 +1,52 @@
+/* WinScreen.css / GameOver.css */
 .end-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  padding-right: 7.5em;
 }
 
-.flash {
-  animation: flash 1s ease-in-out infinite;
+.game-end-buttons {
+  position: relative;
+  z-index: 1001;
+  margin-top: 2rem;
 }
 
-.invtitle{
-  background: #000;
-  color: #0f0;
-  padding: 0.75rem 1.5rem;
-  font-size: 2.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 2rem;
-  font-family: 'Press Start 2P', cursive;
-  display: inline-block;
-  width: auto;
-  min-width: fit-content;
+.invtitle.flash {
+  position: relative;
+  z-index: 1001;
 }
-
 
 .invscore {
+  position: relative;
+  z-index: 1001;
   font-size: 1rem;
   margin-bottom: 2rem;
   font-family: 'Press Start 2P', cursive;
 }
-
-
 @keyframes flash {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+@media only screen and (max-width: 767px) and (orientation: portrait){
+  .end-screen {
+    padding-right: 0;
+    text-align: center;
+  }
+  
+  .invtitle {
+    font-size: 1.5rem;
+    margin: 0 auto;
+    display: block;
+    width: 80%;
+    text-align: center;
+  }
 }
 
 @media only screen and (max-width: 767px) and (orientation: portrait){
