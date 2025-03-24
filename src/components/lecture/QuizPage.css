@@ -232,6 +232,27 @@
   position: relative;
   z-index: 1;
 }
+/* Ensure buttons are always clickable */
+.space-home-button,
+.space-retry-button {
+  cursor: pointer;
+  pointer-events: auto; /* Ensure buttons are clickable */
+  z-index: 10; /* Ensure buttons are above other elements */
+  position: relative; /* Ensure z-index works */
+}
+
+/* Add hover effects for better UX */
+.space-home-button:hover,
+.space-retry-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+/* Ensure buttons are not covered by animations */
+.space-results-footer {
+  position: relative;
+  z-index: 10; /* Ensure footer is above animations */
+}
 
 /* Add cosmic background glow */
 .space-results-container::before {
@@ -678,6 +699,26 @@
   background: linear-gradient(to left, rgba(255, 255, 255, 0.8), transparent);
   transform: translateX(-100%);
 }
+/* Responsive buttons */
+.space-results-footer button {
+  padding: 12px 20px;
+  font-size: 1rem;
+}
+
+@media (max-width: 480px) {
+  .space-results-footer button {
+    width: 100%;
+  }
+}
+
+.animated-star {
+  animation: twinkle 1.5s infinite alternate;
+}
+
+@keyframes twinkle {
+  from { opacity: 0.8; }
+  to { opacity: 1; }
+}
 
 @keyframes float-planet {
   0% { transform: translateY(0) rotate(0deg); }
@@ -721,327 +762,5 @@
       font-size: 1rem; /* Smaller font size for mobile */
       right: 20px; /* Adjusted position for mobile */
       bottom: 30px; /* Adjusted position for mobile */
-  }
-}
-/* Space Badge Container */
-.badge-container {
-  max-width: 600px;
-  margin: 20px auto;
-  font-family: "Comic Sans MS", cursive, sans-serif;
-  color: #e0e7ff;
-  background-color: rgba(25, 25, 100, 0.7);
-  padding: 2rem;
-  border-radius: 20px;
-  border: 3px solid #8a2be2;
-  box-shadow: 0 0 20px #6b76ff;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-}
-
-/* Badge Earned and Locked States */
-.badge-earned, .badge-locked {
-  display: flex;
-  align-items: center;
-  padding: 1.5rem;
-  border-radius: 20px;
-  background: rgba(50, 50, 150, 0.7);
-  gap: 2rem;
-  border: 2px solid #5d7bf3;
-  box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
-  transition: transform 0.3s;
-}
-
-.badge-earned:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 0 20px #00ffff;
-}
-
-/* Badge Circle */
-.badge-circle {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-/* Shine Animation for Earned Badge */
-.shine {
-  background: linear-gradient(135deg, #ff00ff, #4169E1);
-  box-shadow: 0 0 25px #ff00ff;
-  border: 3px solid #00ffff;
-  position: relative;
-  overflow: hidden;
-}
-
-.shine:before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    to bottom right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.1) 20%,
-    rgba(255, 255, 255, 0.5) 50%,
-    rgba(255, 255, 255, 0.1) 80%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transform: rotate(30deg);
-  animation: shine 4s infinite linear;
-}
-
-@keyframes shine {
-  0% {
-    transform: translateX(-100%) translateY(-100%) rotate(30deg);
-  }
-  100% {
-    transform: translateX(100%) translateY(100%) rotate(30deg);
-  }
-}
-
-/* Locked Badge Circle */
-.locked {
-  background: rgba(20, 20, 70, 0.7);
-  border: 3px solid #5d7bf3;
-  box-shadow: 0 0 10px rgba(109, 118, 255, 0.3);
-}
-
-/* Badge Icon */
-.badge-icon {
-  position: relative;
-  width: 70%;
-  height: 70%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.badge-icon svg {
-  width: 100%;
-  height: 100%;
-  stroke: #ffff00;
-  filter: drop-shadow(0 0 8px #ff00ff);
-}
-
-.faded svg {
-  stroke: #6d76ff;
-  opacity: 0.7;
-  filter: none;
-}
-
-/* Badge Lock Icon */
-.badge-lock {
-  position: absolute;
-  bottom: -10px;
-  right: -10px;
-  width: 40px;
-  height: 40px;
-  background: #111166;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #5d7bf3;
-  box-shadow: 0 0 10px rgba(109, 118, 255, 0.5);
-}
-
-.badge-lock svg {
-  width: 60%;
-  height: 60%;
-  stroke: #6d76ff;
-}
-
-/* Badge Info Section */
-.badge-info {
-  flex-grow: 1;
-}
-
-.congrats {
-  color: #ffff00;
-  margin: 0 0 0.5rem;
-  font-size: 1.5rem;
-  text-shadow: 0 0 8px #ff00ff;
-}
-
-.locked-text {
-  color: #00ffff;
-  margin: 0 0 0.5rem;
-  font-size: 1.5rem;
-}
-
-.badge-info p {
-  color: #ffffff;
-  margin: 0 0 1.5rem;
-  font-size: 1.1rem;
-}
-
-/* Badge Actions (Buttons) */
-.badge-actions {
-  display: flex;
-  gap: 0.75rem;
-}
-
-.badge-share, .badge-download {
-  padding: 0.75rem 1.25rem;
-  border-radius: 15px;
-  border: none;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s;
-  font-family: "Comic Sans MS", cursive, sans-serif;
-}
-
-.badge-share {
-  background: linear-gradient(135deg, #ff00ff, #00ffff);
-  color: white;
-  box-shadow: 0 0 15px #ff00ff;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.badge-share:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px #ffff00;
-}
-
-.badge-download {
-  background: rgba(50, 50, 150, 0.7);
-  color: #00ffff;
-  border: 2px solid #5d7bf3;
-  font-size: 1.1rem;
-}
-
-.badge-download:hover {
-  transform: scale(1.05);
-  background: rgba(80, 80, 200, 0.7);
-  box-shadow: 0 0 10px #00ffff;
-}
-
-/* Badge Requirements */
-.badge-requirements {
-  margin-top: 1.5rem;
-  padding: 1rem;
-  background: rgba(25, 25, 100, 0.7);
-  border-radius: 15px;
-  border: 2px solid #5d7bf3;
-}
-
-.requirement {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.75rem;
-  color: #00ffff;
-  font-size: 1.1rem;
-}
-
-.requirement-icon {
-  margin-right: 0.75rem;
-  color: #ffff00;
-  font-size: 1.2rem;
-}
-
-/* Stars Animation for badge container */
-.badge-container:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.05) 0%, transparent 25%),
-              radial-gradient(circle at 90% 90%, rgba(255, 255, 255, 0.05) 0%, transparent 25%);
-  z-index: -1;
-}
-
-/* Add floating stars to badge container */
-.badge-star {
-  position: absolute;
-  background-color: #fff;
-  border-radius: 50%;
-  z-index: -1;
-  opacity: 0.7;
-  animation: twinkle 3s infinite;
-}
-
-.badge-star:nth-child(1) { width: 3px; height: 3px; top: 10%; left: 5%; animation-delay: 0s; }
-.badge-star:nth-child(2) { width: 2px; height: 2px; top: 20%; left: 15%; animation-delay: 0.5s; }
-.badge-star:nth-child(3) { width: 4px; height: 4px; top: 15%; left: 25%; animation-delay: 1s; }
-.badge-star:nth-child(4) { width: 2px; height: 2px; top: 5%; left: 35%; animation-delay: 1.5s; }
-.badge-star:nth-child(5) { width: 3px; height: 3px; top: 25%; left: 45%; animation-delay: 2s; }
-.badge-star:nth-child(6) { width: 2px; height: 2px; top: 10%; left: 55%; animation-delay: 2.5s; }
-.badge-star:nth-child(7) { width: 4px; height: 4px; top: 20%; left: 65%; animation-delay: 3s; }
-.badge-star:nth-child(8) { width: 3px; height: 3px; top: 15%; left: 75%; animation-delay: 3.5s; }
-.badge-star:nth-child(9) { width: 2px; height: 2px; top: 5%; left: 85%; animation-delay: 4s; }
-.badge-star:nth-child(10) { width: 3px; height: 3px; top: 25%; left: 95%; animation-delay: 4.5s; }
-
-@keyframes twinkle {
-  0%, 100% { opacity: 0.2; transform: scale(0.8); }
-  50% { opacity: 0.9; transform: scale(1.2); }
-}
-
-/* Add a comet effect */
-.comet {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: white;
-  border-radius: 50%;
-  box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.5);
-  animation: comet 15s linear infinite;
-  opacity: 0;
-  z-index: -1;
-}
-
-.comet:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100px;
-  height: 2px;
-  background: linear-gradient(to left, rgba(255, 255, 255, 0.8), transparent);
-  transform: translateX(-100%);
-}
-
-@keyframes comet {
-  0% { top: -10%; left: -10%; opacity: 1; }
-  20% { opacity: 1; }
-  30% { opacity: 0; }
-  100% { top: 110%; left: 110%; opacity: 0; }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .badge-earned, .badge-locked {
-    flex-direction: column;
-    text-align: center;
-    padding: 1.25rem;
-  }
-  
-  .badge-circle {
-    width: 100px;
-    height: 100px;
-  }
-  
-  .congrats, .locked-text {
-    font-size: 1.3rem;
-  }
-  
-  .badge-actions {
-    flex-direction: column;
-    width: 100%;
-  }
-  
-  .badge-share, .badge-download {
-    width: 100%;
   }
 }

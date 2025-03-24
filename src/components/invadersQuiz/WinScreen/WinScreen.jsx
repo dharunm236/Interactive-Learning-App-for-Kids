@@ -1,5 +1,6 @@
 import { useGame } from '../contexts/GameContext';
 import soundService from '../services/soundService';
+import InvaderProgressReport from '../ProgressReport/InvaderProgressReport';
 import './WinScreen.css';
 
 function WinScreen() {
@@ -12,9 +13,12 @@ function WinScreen() {
 
   return (
     <div className="end-screen">
-      <h1 className="invtitle flash">CONGRATULATIONS</h1>
-      <div className="invscore">FINAL SCORE: {score}</div>
-      <button className="invstart-button" onClick={handlePlayAgain}>PLAY AGAIN</button>
+      <InvaderProgressReport />
+      <div className="game-end-buttons">
+        <button className="invstart-button" onClick={handlePlayAgain}>
+          PLAY AGAIN
+        </button>
+      </div>
     </div>
   );
 }

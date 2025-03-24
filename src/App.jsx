@@ -28,6 +28,7 @@ import MultiplayerWordBuilder from './components/1v1player_game/MultiplayerWordB
 // Placeholder imports for other multiplayer games (create these files as needed)
 import MathChallenge from './components/1v1player_game/MathChallenge';
 import MemoryMatchMultiplayer from './components/1v1player_game/MemoryMatchMultiplayer';
+import LectureProgressReport from './components/lecture/LectureProgressReport'; // Import the new component
 
 function App() {
   const [user, setUser] = useState(null);
@@ -54,22 +55,20 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
+          {/* Authentication Routes */}
           <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
-          <Route
-            path="/"
-            element={
-              user ? <Homepage onLogout={handleLogout} /> : <Navigate to="/login" />
-            }
-          />
-          <Route path="/profile-page" element={user ? <ProfilePage /> : <Navigate to="/login" />} />
-          <Route
-            path="/games"
-            element={user ? <GamesPage /> : <Navigate to="/login" />}
-          />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/check-email" element={<CheckEmail />} />
-          <Route path="/moneygame" element={<MoneyGame />} /> 
+
+          {/* Protected Routes */}
+          <Route
+            path="/"
+            element={user ? <Homepage onLogout={handleLogout} /> : <Navigate to="/login" />}
+          />
+          <Route path="/profile-page" element={user ? <ProfilePage /> : <Navigate to="/login" />} />
+          <Route path="/games" element={user ? <GamesPage /> : <Navigate to="/login" />} />
+          <Route path="/moneygame" element={user ? <MoneyGame /> : <Navigate to="/login" />} />
           <Route
             path="/games/Ballongame"
             element={
@@ -80,10 +79,6 @@ function App() {
               )
             }
           />
-          <Route path="/lecture" element={<CoursePage />} />
-          <Route path="/lecture/course-content" element={<CourseContentPage />} />
-          <Route path="/lecture/quiz" element={<QuizPage />} />
-          <Route path="/profile-page" element={user ? <ProfilePage /> : <Navigate to="/login" />} />
           <Route path="/send-friend-request" element={user ? <SendFriendRequest /> : <Navigate to="/login" />} />
           <Route path="/friend-requests" element={user ? <FriendRequestNotifications /> : <Navigate to="/login" />} />
           <Route path="/create-story" element={user ? <StoryPrompt /> : <Navigate to="/login" />} />
@@ -92,12 +87,19 @@ function App() {
           <Route path="/quizzes/invaders" element={user ? <InvadersQuiz /> : <Navigate to="/login" />}/>
           <Route path="/quizzes/imageQuiz" element={user ? <ImageQuiz /> : <Navigate to="/login" />}/>
           <Route path="/progress" element={user ? <ProgressPage /> : <Navigate to="/login" />}/>
-          
           {/* Challenge System Routes */}
           <Route path="/challenge-friend" element={user ? <ChallengePage /> : <Navigate to="/login" />} />
           <Route path="/word-builder/:sessionId" element={user ? <MultiplayerWordBuilder /> : <Navigate to="/login" />} />
           <Route path="/math-challenge/:sessionId" element={user ? <MathChallenge /> : <Navigate to="/login" />} />
           <Route path="/memory-match/:sessionId" element={user ? <MemoryMatchMultiplayer /> : <Navigate to="/login" />} />
+          {/* Lecture Module Routes */}
+          <Route path="/lecture" element={user ? <CoursePage /> : <Navigate to="/login" />} />
+          <Route path="/lecture/course-content" element={user ? <CourseContentPage /> : <Navigate to="/login" />} />
+          <Route path="/lecture/quiz" element={user ? <QuizPage /> : <Navigate to="/login" />} />
+          <Route 
+            path="/lecture/progress-report" 
+            element={user ? <LectureProgressReport /> : <Navigate to="/login" />} 
+          />
         </Routes>
       </div>
     </Router>
