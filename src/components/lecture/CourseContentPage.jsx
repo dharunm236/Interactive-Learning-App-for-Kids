@@ -1,78 +1,73 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { db, auth } from "../../firebaseConfig";
+import { doc, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import "./CourseContentPage.css";
 
 const SpaceCourseContentPage = () => {
   const navigate = useNavigate();
   const [completedSections, setCompletedSections] = useState([]);
   const [activeSection, setActiveSection] = useState(1);
+  const [courseDoc, setCourseDoc] = useState(null);
+  const courseId = "space-adventure";
 
   const sections = [
-    { 
-      id: 1, 
-      title: "Meet the Planets", 
-      videoUrl: "https://www.youtube.com/embed/IBwE4baZyh0", 
-      icon: "🪐"
-    },
-    { 
-      id: 2, 
-      title: "Stars and the Sun", 
-      videoUrl: "https://www.youtube.com/embed/sePqPIXMsAc",
-      icon: "⭐" 
-    },
-    { 
-      id: 3, 
-      title: "Spaceships and Rockets", 
-      videoUrl: "https://www.youtube.com/embed/o2FFtPPM3iY",
-      icon: "🚀" 
-    },
-    { 
-      id: 4, 
-      title: "Astronauts in Space", 
-      videoUrl: "https://www.youtube.com/embed/nnCM_ar9Zig",
-      icon: "👨‍🚀" 
-    },
-    { 
-      id: 5, 
-      title: "Exploring Mars", 
-      videoUrl: "https://www.youtube.com/embed/oupKhIPIh7g",
-      icon: "🔴" 
-    },
-    { 
-      id: 6, 
-      title: "Saturn and Its Rings", 
-      videoUrl: "https://www.youtube.com/embed/BxY8v4lNltM",
-      icon: "⭕" 
-    },
-    { 
-      id: 7, 
-      title: "Jupiter: The Giant Planet", 
-      videoUrl: "https://www.youtube.com/embed/E4k-QBikhvc",
-      icon: "🪐" 
-    },
-    { 
-      id: 8, 
-      title: "The Moon: Earth's Companion", 
-      videoUrl: "https://www.youtube.com/embed/rzg3-D2Ru8c",
-      icon: "🌕" 
-    },
-    { 
-      id: 9, 
-      title: "The Night Sky and Stars", 
-      videoUrl: "https://www.youtube.com/embed/lSuAPFMXcYM",
-      icon: "✨" 
-    },
-    { 
-      id: 10, 
-      title: "Life as an Astronaut", 
-      videoUrl: "https://www.youtube.com/embed/jhD8GFwy734",
-      icon: "👨‍🚀" 
-    }
+    { id: 1, title: "Meet the Planets", videoUrl: "https://www.youtube.com/embed/IBwE4baZyh0", icon: "🪐" },
+    { id: 2, title: "Stars and the Sun", videoUrl: "https://www.youtube.com/embed/sePqPIXMsAc", icon: "⭐" },
+    { id: 3, title: "Spaceships and Rockets", videoUrl: "https://www.youtube.com/embed/o2FFtPPM3iY", icon: "🚀" },
+    { id: 4, title: "Astronauts in Space", videoUrl: "https://www.youtube.com/embed/nnCM_ar9Zig", icon: "👨‍🚀" },
+    { id: 5, title: "Exploring Mars", videoUrl: "https://www.youtube.com/embed/oupKhIPIh7g", icon: "🔴" },
+    { id: 6, title: "Saturn and Its Rings", videoUrl: "https://www.youtube.com/embed/BxY8v4lNltM", icon: "⭕" },
+    { id: 7, title: "Jupiter: The Giant Planet", videoUrl: "https://www.youtube.com/embed/E4k-QBikhvc", icon: "🪐" },
+    { id: 8, title: "The Moon: Earth's Companion", videoUrl: "https://www.youtube.com/embed/rzg3-D2Ru8c", icon: "🌕" },
+    { id: 9, title: "The Night Sky and Stars", videoUrl: "https://www.youtube.com/embed/lSuAPFMXcYM", icon: "✨" },
+    { id: 10, title: "Life as an Astronaut", videoUrl: "https://www.youtube.com/embed/jhD8GFwy734", icon: "👨‍🚀" }
   ];
 
-  const markCompleted = (id) => {
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const courseRef = doc(db, "user_courses", `${user.uid}_${courseId}`);
+        const docSnapshot = await getDoc(courseRef);
+        
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data();
+          setCourseDoc(data);
+
+          // Ensure completedSections is always an array
+          if (Array.isArray(data.completedSections)) {
+            setCompletedSections(data.completedSections);
+          } else if (typeof data.completedSections === "number") {
+            // Convert number to array of section IDs
+            const completedIds = Array.from({ length: data.completedSections }, (_, i) => i + 1);
+            setCompletedSections(completedIds);
+          } else {
+            // Default to empty array
+            setCompletedSections([]);
+          }
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const markCompleted = async (id) => {
     if (!completedSections.includes(id)) {
-      setCompletedSections([...completedSections, id]);
+      const newCompleted = [...completedSections, id];
+      setCompletedSections(newCompleted);
+      
+      if (auth.currentUser) {
+        try {
+          const courseRef = doc(db, "user_courses", `${auth.currentUser.uid}_${courseId}`);
+          await updateDoc(courseRef, {
+            completedSections: newCompleted.length, // Store as number
+            lastUpdated: serverTimestamp()
+          });
+        } catch (error) {
+          console.error("Error updating progress:", error);
+        }
+      }
     }
   };
 
@@ -104,6 +99,12 @@ const SpaceCourseContentPage = () => {
               style={{ width: `${(completedSections.length / sections.length) * 100}%` }}
             ></div>
           </div>
+          <button 
+            onClick={() => navigate("/lecture/progress-report")}
+            className="space-progress-report-btn"
+          >
+            View Progress Report
+          </button>
         </div>
       </div>
 

@@ -1,27 +1,46 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
-.invend-screen {
+/* GameOver.css */
+.end-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  padding-right: 18vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  z-index: 1000; /* Ensure it's above the TV Frame Overlay */
+}
+
+.game-end-buttons {
+  position: relative;
+  z-index: 1001; /* Ensure buttons are above the report */
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.invtitle {
+  font-size: 3.5rem;
+  color: rgb(255 0 0);
+  margin-bottom: 1rem;
+}
+
+.invstatus {
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 1.5rem;
 }
 
 .invstart-button {
-  background: #000;
-  border: 3px solid #0f0;
-  color: #0f0;
-  padding: 0.75rem 1.5rem;
-  font-size: 1.5rem;
+  padding: 0.8rem 2rem;
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 2rem;
-  font-family: 'Press Start 2P', cursive;
-  display: inline-block;
-  width: auto;
-  min-width: fit-content;
+  font-weight: bold;
+  transition: background 0.3s ease;
 }
 
 .invstart-button:hover {
@@ -29,34 +48,69 @@
   box-shadow: 0 0 20px #0f0;
 }
 
-.invstatus {
-  position: absolute;
-  font-size: 22px;
-  font-family: 'Press Start 2P', cursive;
-  text-align: right;
-}
 
-.invtitle {
-  font-size: 3rem;
-  margin-bottom: 2rem;
-  animation: glow 2s ease-in-out infinite;
-  font-family: 'Press Start 2P', cursive;
-}
 
-.score {
-  font-size: 2rem;
-  margin-bottom: 2rem;
-  font-family: 'Press Start 2P', cursive;
-}
-
-@keyframes glow {
-  0% {
-    text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+@media only screen and (max-width: 767px) and (orientation: portrait){
+  .invend-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding-right: 0;  /* Remove the padding on mobile */
+    text-align: center; /* Center text content */
   }
-  50% {
-    text-shadow: 0 0 20px rgba(0, 255, 0, 0.8), 0 0 30px rgba(0, 255, 0, 0.4);
+  .invstatus {
+    position: relative;
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
   }
-  100% {
-    text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+
+  .invtitle {
+    font-size: 2rem;
+  }
+
+  .score {
+    font-size: 1.5rem;
+  }
+
+  .invstart-button {
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+
+@media only screen and (max-width: 767px) and (orientation: portrait){
+  .invend-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding-right: 0;  /* Remove the padding on mobile */
+    text-align: center; /* Center text content */
+  }
+  .invstatus {
+    position: relative;
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .invtitle {
+    font-size: 2rem;
+  }
+
+  .score {
+    font-size: 1.5rem;
+  }
+
+  .invstart-button {
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
   }
 }

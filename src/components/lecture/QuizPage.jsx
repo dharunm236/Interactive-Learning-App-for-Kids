@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./QuizPage.css";
 import { db, auth } from "../../firebaseConfig";
-import { doc, getDoc, updateDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
+import "./QuizPage.css";
 
 const SpaceQuizPage = () => {
   const navigate = useNavigate();
@@ -10,48 +10,9 @@ const SpaceQuizPage = () => {
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [showResults, setShowResults] = useState(false);
   const [userId, setUserId] = useState(null);
-  const courseId = "space-adventure"; // Match this with CourseContentPage
+  const courseId = "space-adventure";
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        setUserId(user.uid);
-        // Check if user has already attempted the quiz
-        const courseRef = doc(db, "user_courses", `${user.uid}_${courseId}`);
-        const courseDoc = await getDoc(courseRef);
-        
-        if (courseDoc.exists()) {
-          const data = courseDoc.data();
-          // If quiz was already completed, redirect to results with saved score
-          if (data.quizCompleted) {
-            setScore(data.quizScore);
-            setSelectedAnswers(data.quizAnswers || {});
-            setShowResults(true);
-          }
-        } else {
-          // Create the course document if it doesn't exist
-          try {
-            await setDoc(courseRef, {
-              userId: user.uid,
-              courseId: courseId,
-              started: true,
-              startedAt: serverTimestamp(),
-              completed: false,
-              quizCompleted: false,
-              lastUpdated: serverTimestamp()
-            });
-          } catch (error) {
-            console.error("Error initializing course document:", error);
-          }
-        }
-      } else {
-        navigate('/login');
-      }
-    });
-
-    return () => unsubscribe();
-  }, [navigate]);
-
+  // Quiz questions
   const questions = [
     { 
       question: "What planet do we live on?", 
@@ -105,48 +66,60 @@ const SpaceQuizPage = () => {
     }
   ];
 
-  const handleOptionSelect = (questionIndex, option) => {
-    setSelectedAnswers({
-      ...selectedAnswers,
-      [questionIndex]: option
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        setUserId(user.uid);
+        const courseRef = doc(db, "user_courses", `${user.uid}_${courseId}`);
+        const courseDoc = await getDoc(courseRef);
+
+        if (!courseDoc.exists() || courseDoc.data().completedSections !== 10) {
+          navigate("/lecture/course-content");
+          return;
+        }
+
+        const data = courseDoc.data();
+        if (data.quizCompleted) {
+          setScore(data.quizScore);
+          setSelectedAnswers(data.quizAnswers || {});
+          setShowResults(true);
+        }
+      } else {
+        navigate('/login');
+      }
     });
+
+    return () => unsubscribe();
+  }, [navigate]);
+
+  const handleOptionSelect = (questionIndex, option) => {
+    setSelectedAnswers(prev => ({ ...prev, [questionIndex]: option }));
   };
 
   const handleSubmit = async () => {
-    let correctAnswers = 0;
-    
-    questions.forEach((q, index) => {
-      if (selectedAnswers[index] === q.answer) {
-        correctAnswers++;
-      }
-    });
-    
-    setScore(correctAnswers);
-    setShowResults(true);
+    const correctAnswers = questions.reduce((acc, q, index) => 
+      selectedAnswers[index] === q.answer ? acc + 1 : acc, 0);
 
-    // Save quiz results to Firebase
     if (userId) {
       try {
         const courseRef = doc(db, "user_courses", `${userId}_${courseId}`);
-        const isPassing = correctAnswers >= (questions.length / 2);
-        
         await updateDoc(courseRef, {
           quizCompleted: true,
           quizCompletedAt: serverTimestamp(),
           quizScore: correctAnswers,
           quizTotalQuestions: questions.length,
           quizPercentage: (correctAnswers / questions.length) * 100,
-          quizPassingStatus: isPassing,
+          quizPassingStatus: correctAnswers >= questions.length / 2,
           quizAnswers: selectedAnswers,
-          // Update course completion status if quiz is passed
-          completed: isPassing, 
-          completedAt: isPassing ? serverTimestamp() : null,
           lastUpdated: serverTimestamp()
         });
       } catch (error) {
         console.error("Error saving quiz results:", error);
       }
     }
+
+    setScore(correctAnswers);
+    setShowResults(true);
   };
 
   const allQuestionsAnswered = Object.keys(selectedAnswers).length === questions.length;
@@ -248,11 +221,12 @@ const SpaceQuizPage = () => {
               </div>
             </div>
             <div className="space-results-footer">
-              <button className="space-home-button" onClick={() => navigate("/")}>
-                <span className="rocket-icon">🚀</span> Back to Space Station
-              </button>
-              <button className="space-retry-button" onClick={() => navigate("/lecture/course-content")}>
-                <span className="rocket-icon">🔄</span> Review Course
+              
+              <button 
+                className="space-home-button" 
+                onClick={() => navigate("/lecture/progress-report")}
+              >
+                <span className="rocket-icon">📊</span> View Progress Report
               </button>
             </div>
           </div>

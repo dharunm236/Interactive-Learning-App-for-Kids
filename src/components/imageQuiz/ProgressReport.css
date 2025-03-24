@@ -1,0 +1,196 @@
+/* ProgressReport.css */
+.progress-report {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem 3rem;
+  background: #fff;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  color: #2d3748;
+  animation: fadeIn 0.6s ease-out;
+}
+
+.report-header {
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.report-header h1 {
+  font-size: 2.25rem;
+  font-weight: 600;
+  color: #1a365d;
+  margin-bottom: 0.25rem;
+}
+
+.school-tagline {
+  color: #718096;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+}
+
+.header-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  background: #f7fafc;
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin-top: 1.5rem;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.meta-label {
+  font-size: 0.9rem;
+  color: #718096;
+  margin-bottom: 0.25rem;
+}
+
+.meta-value {
+  font-weight: 500;
+  color: #2d3748;
+}
+
+.performance-overview {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.overview-card {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.overview-card.primary {
+  background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%);
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.score-display {
+  font-size: 3.5rem;
+  font-weight: 600;
+  margin: 1.5rem 0;
+}
+
+.score-total {
+  font-size: 1.25rem;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.progress-bar {
+  background: rgba(255, 255, 255, 0.15);
+  height: 12px;
+  border-radius: 6px;
+  margin: 2rem 0;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.stat-card {
+  background: #fff;
+  padding: 1.75rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.stat-value {
+  font-size: 1.75rem;
+  color: #1a365d;
+  margin: 0.75rem 0;
+}
+
+.suggestion-box {
+  background: #f0fff4;
+  border-left: 4px solid #48bb78;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.suggestion-icon {
+  font-size: 2rem;
+  color: #48bb78;
+}
+
+.comparison-chart {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2.5rem 0;
+}
+
+.footer-actions {
+  margin-top: 2rem;
+  gap: 1.5rem;
+}
+
+.print-btn, .retake-btn {
+  padding: 0.9rem 2.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.print-btn {
+  background: #1a365d;
+  color: white;
+}
+
+.print-btn:hover {
+  background: #142849;
+}
+
+.retake-btn {
+  background: #2b6cb0;
+  color: white;
+}
+
+.retake-btn:hover {
+  background: #1e4e8a;
+}
+
+@media (max-width: 768px) {
+  .performance-overview {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

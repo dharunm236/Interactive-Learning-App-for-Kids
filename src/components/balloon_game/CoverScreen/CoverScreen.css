@@ -11,9 +11,11 @@
   translate: -50% -50%;
 }
 
-.title {
-  font-size: 1.65em;
+.baltitle {
+  font-size: 1.55em;
   margin: 0 0 1rem;
+  color: var(--acc-color);
+  text-shadow: none;
 }
 
 .description {

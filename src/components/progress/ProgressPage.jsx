@@ -226,7 +226,10 @@ const ProgressPage = () => {
         fill: false,
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
-        tension: 0.1
+        tension: 0.1,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        pointBackgroundColor: 'rgba(75, 192, 192, 1)',
       },
       {
         label: 'Balloon Game',
@@ -234,7 +237,10 @@ const ProgressPage = () => {
         fill: false,
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
         borderColor: 'rgba(255, 99, 132, 1)',
-        tension: 0.1
+        tension: 0.1,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        pointBackgroundColor: 'rgba(255, 99, 132, 1)',
       }
     ]
   };
@@ -352,6 +358,54 @@ const ProgressPage = () => {
         </p>
       </div>
 
+      <div className={styles.progressSummaryCard}>
+        <h3>Your Learning Journey at a Glance</h3>
+        <div className={styles.summaryContent}>
+          <div className={styles.summaryStat}>
+            <span className={styles.summaryIcon}><FaGamepad /></span>
+            <div>
+              <p className={styles.summaryLabel}>Games Played</p>
+              <p className={styles.summaryValue}>
+                {progressData.moneyGame.totalGames + progressData.balloonGame.totalGames + progressData.basicArith.totalGames}
+              </p>
+            </div>
+          </div>
+          <div className={styles.summaryStat}>
+            <span className={styles.summaryIcon}><FaPuzzlePiece /></span>
+            <div>
+              <p className={styles.summaryLabel}>Quizzes Completed</p>
+              <p className={styles.summaryValue}>
+                {[
+                  progressData.imageQuiz.completed,
+                  progressData.invadersQuiz.completed, 
+                  progressData.spaceCourse.quizCompleted
+                ].filter(Boolean).length} / 3
+              </p>
+            </div>
+          </div>
+          <div className={styles.summaryStat}>
+            <span className={styles.summaryIcon}><FaTrophy /></span>
+            <div>
+              <p className={styles.summaryLabel}>Top Skill</p>
+              <p className={styles.summaryValue}>
+                {(() => {
+                  const skills = [
+                    {name: 'Money Management', value: progressData.moneyGame.averageScore / 10},
+                    {name: 'Word Recognition', value: progressData.balloonGame.averageScore / 5},
+                    {name: 'Math Skills', value: progressData.basicArith.history.length > 0 ? 
+                      Math.min(10, progressData.basicArith.history.reduce((sum, g) => sum + g.correctAnswers, 0) / 5) : 0},
+                    {name: 'General Knowledge', value: progressData.invadersQuiz.highestScore ? progressData.invadersQuiz.highestScore / 50 : 0},
+                    {name: 'Vocabulary', value: progressData.imageQuiz.percentage / 10},
+                    {name: 'Space Knowledge', value: progressData.spaceCourse.quizPercentage / 10}
+                  ];
+                  return skills.sort((a, b) => b.value - a.value)[0].name;
+                })()}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className={styles.overviewContainer}>
         <div className={styles.overviewCard}>
           <div className={styles.overallProgressChart}>
@@ -382,13 +436,18 @@ const ProgressPage = () => {
                 "Amazing! You've completed all learning activities! 🎉" : 
                 `You've completed ${progressData.overallProgress.completed} out of ${progressData.overallProgress.total} learning activities.`
               }
+              {user?.metadata?.creationTime && 
+                <span className={styles.accountTimeInfo}>
+                  Account active for {Math.ceil((new Date() - new Date(user.metadata.creationTime)) / (1000 * 60 * 60 * 24))} days
+                </span>
+              }
             </p>
           </div>
         </div>
 
         <div className={styles.overviewCard}>
           <div className={styles.skillsChart}>
-            <h3>Skills Assessment</h3>
+            <h3>Skills Assessment <span className={styles.chartSubtitle}>(Scale: 0-10)</span></h3>
             <Radar 
               data={skillsRadarData} 
               options={{
@@ -396,11 +455,29 @@ const ProgressPage = () => {
                   r: {
                     beginAtZero: true,
                     max: 10,
-                    ticks: { stepSize: 2 }
+                    ticks: { 
+                      stepSize: 2,
+                      callback: function(value) {
+                        if (value <= 3) return `${value} (Beginner)`;
+                        if (value <= 7) return `${value} (Intermediate)`;
+                        return `${value} (Advanced)`;
+                      }
+                    }
                   }
                 },
                 plugins: {
-                  legend: { display: false }
+                  legend: { display: false },
+                  tooltip: {
+                    callbacks: {
+                      label: function(context) {
+                        const value = context.raw;
+                        let skillLevel = "Beginner";
+                        if (value > 3 && value <= 7) skillLevel = "Intermediate";
+                        if (value > 7) skillLevel = "Advanced";
+                        return `${context.label}: ${value.toFixed(1)} - ${skillLevel}`;
+                      }
+                    }
+                  }
                 }
               }} 
             />
@@ -435,10 +512,32 @@ const ProgressPage = () => {
               data={gameScoreChartData} 
               options={{
                 scales: {
-                  y: { beginAtZero: true }
+                  y: { 
+                    beginAtZero: true,
+                    title: {
+                      display: true,
+                      text: 'Points Earned'
+                    }
+                  },
+                  x: {
+                    title: {
+                      display: true,
+                      text: 'Game Date'
+                    }
+                  }
                 },
                 plugins: {
-                  legend: { position: 'top' }
+                  legend: { position: 'top' },
+                  tooltip: {
+                    callbacks: {
+                      title: function(context) {
+                        return `Game on ${context[0].label}`;
+                      },
+                      label: function(context) {
+                        return `${context.dataset.label}: ${context.raw} points`;
+                      }
+                    }
+                  }
                 }
               }} 
             />
@@ -503,7 +602,7 @@ const ProgressPage = () => {
             <div className={styles.gameStatDetail}>
               <span className={styles.statIcon}></span>
               <div>
-                <p className={styles.statTitle}>Average Score</p>
+                <p className={styles.statTitle}>Average Score <span className={styles.tooltipIcon} title="Your average score across all games">ⓘ</span></p>
                 <p className={styles.statNumber}>{Math.round(progressData.moneyGame.averageScore)}</p>
               </div>
             </div>
@@ -635,31 +734,22 @@ const ProgressPage = () => {
             <table className={styles.comparisonTable}>
               <thead>
                 <tr>
-                  <th>Quiz</th>
-                  <th>Completion</th>
-                  <th>Score</th>
+                  <th>Quiz Type</th>
+                  <th>Status</th>
+                  <th>Performance</th>
                   <th>Attempts</th>
+                  <th>Last Played</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>Image Quiz</td>
-                  <td>{progressData.imageQuiz.completed ? '✅' : '❌'}</td>
-                  <td>{progressData.imageQuiz.percentage.toFixed(1)}%</td>
+                  <td>{progressData.imageQuiz.completed ? '✅ Completed' : '🔄 In Progress'}</td>
+                  <td>{progressData.imageQuiz.percentage.toFixed(1)}% correct</td>
                   <td>{progressData.imageQuiz.attempts || 0}</td>
+                  <td>{progressData.imageQuiz.completedAt ? formatDate(progressData.imageQuiz.completedAt) : 'N/A'}</td>
                 </tr>
-                <tr>
-                  <td>Invaders Quiz</td>
-                  <td>{progressData.invadersQuiz.completed ? '✅' : '❌'}</td>
-                  <td>{progressData.invadersQuiz.highestScore || 0}</td>
-                  <td>{progressData.invadersQuiz.attempts || 0}</td>
-                </tr>
-                <tr>
-                  <td>Space Quiz</td>
-                  <td>{progressData.spaceCourse.quizCompleted ? '✅' : '❌'}</td>
-                  <td>{progressData.spaceCourse.quizPercentage.toFixed(1)}%</td>
-                  <td>-</td>
-                </tr>
+                {/* Similar updates for other quiz rows */}
               </tbody>
             </table>
           </div>

@@ -61,7 +61,7 @@
 
 .lives {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.1rem;
   color: #f00;
   /* Add this to prevent the row from wrapping */
   flex-wrap: nowrap;
@@ -77,12 +77,46 @@
   text-align: center;
 }
 
-.score {
+.qscore {
   font-size: 1.2rem;
-  margin-top: 1rem;
+  margin-top: 1px;
   font-family: 'Press Start 2P', cursive;
   color: #0f0;
   text-shadow: 0 0 5px #0f0;
   /* Add to ensure consistent text alignment */
   min-width: 100%;
+}
+
+@media only screen and (max-width: 767px) and (orientation: portrait){
+  .qscore {
+    font-size: 0.7rem;
+    font-family: 'Press Start 2P', cursive;
+    color: #0f0;
+    text-shadow: 0 0 5px #0f0;
+    /* Add to ensure consistent text alignment */
+    min-width: 100%;
+  }
+
+  .heart {
+    font-size: 0.9rem;
+    /* Prevent the hearts from changing size or position */
+    display: inline-block;
+    width: 1.5rem;
+    text-align: center;
+  }
+  .status {
+    position: absolute;
+    top: 22.5rem;
+    right: 2rem;
+    font-family: 'Press Start 2P', cursive;
+    width: 150px;
+    text-align: right;
+  }
+  .question-panel {
+    flex: 1;
+    padding: 2rem;
+    border-left: 0px solid #0f0;
+    font-family: 'Press Start 2P', cursive;
+  }
+  
 }

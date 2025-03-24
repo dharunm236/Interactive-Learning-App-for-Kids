@@ -49,7 +49,8 @@ body {
   background: rgba(30, 64, 175, 0.8); /* Darker blue with transparency */
   backdrop-filter: blur(12px);
   padding: 1rem 7%;
-  height: 80px;
+  height: auto;
+  min-height: 80px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -174,6 +175,25 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Mobile menu toggle button */
+.mobile-menu-toggle {
+  display: none;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  z-index: 1100;
+}
+
+/* Container for better positioning */
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 /* ===== HERO SECTION ===== */
@@ -355,44 +375,8 @@ body {
   50% { transform: translateY(-20px); }
 }
 
-.floating-elements {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-}
 
-.floating-element {
-  position: absolute;
-  font-size: 2rem;
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
-}
 
-.element-1 {
-  top: 15%;
-  left: 10%;
-  animation: floatElement 10s ease-in-out infinite;
-}
-
-.element-2 {
-  top: 60%;
-  left: 15%;
-  animation: floatElement 12s ease-in-out 1s infinite;
-}
-
-.element-3 {
-  top: 20%;
-  right: 10%;
-  animation: floatElement 9s ease-in-out 0.5s infinite;
-}
-
-.element-4 {
-  bottom: 15%;
-  right: 15%;
-  animation: floatElement 11s ease-in-out 1.5s infinite;
-}
 
 @keyframes floatElement {
   0%, 100% { transform: translate(0, 0); }
@@ -924,6 +908,77 @@ section {
   .mascot-card img {
     max-width: 200px;
     max-height: 200px;
+  }
+  
+  .mobile-menu-toggle {
+    display: block;
+  }
+  
+  .navbar {
+    padding: 1rem 5%;
+  }
+  
+  .navbar .nav-links {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    background: rgba(30, 64, 175, 0.95);
+    backdrop-filter: blur(12px);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem 0;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    z-index: 999;
+  }
+  
+  .navbar .nav-item {
+    width: 100%;
+    padding: 1rem 2rem;
+    border-radius: 0;
+  }
+  
+  .navbar .nav-item span {
+    display: inline-block; /* Show text on mobile when menu is open */
+    margin-left: 10px;
+  }
+  
+  .navbar .nav-item::after {
+    display: none;
+  }
+  
+  .navbar .profile-menu {
+    width: 100%;
+    padding: 1rem 2rem;
+  }
+  
+  .navbar .profile-dropdown {
+    position: relative;
+    top: 1rem;
+    right: auto;
+    left: 0;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+  
+  .navbar.mobile-open {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  .navbar:not(.mobile-open) .nav-links {
+    display: none;
+  }
+  
+  /* Fix for dropdown positioning */
+  .profile-dropdown {
+    right: 0;
+    left: auto;
+  }
+  
+  /* Ensure content starts below navbar */
+  .hero-section {
+    padding-top: 100px;
   }
 }
 
