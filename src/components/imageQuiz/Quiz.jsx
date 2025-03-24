@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import QuizSummary from './QuizSummary';
+import ProgressReport from './ProgressReport';
 import goodJobImage from './images/good-job.png';
 import './Quiz.css';
 import { db, auth } from '../../firebaseConfig';
@@ -10,8 +11,8 @@ const Quiz = () => {
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [imageLoading, setImageLoading] = useState(true);
-  
+  const [imageLoading, setImageLoading] = useState(true); // Added missing state
+
   // State variables
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -71,7 +72,7 @@ const Quiz = () => {
         try {
           const quizRef = doc(db, "imageQuiz", user.uid);
           const quizDoc = await getDoc(quizRef);
-          
+
           if (quizDoc.exists() && quizDoc.data().completed) {
             // If previous attempt exists, load that data
             const data = quizDoc.data();
@@ -91,29 +92,29 @@ const Quiz = () => {
         navigate('/login');
       }
     });
-    
+
     return () => unsubscribe();
   }, [navigate]);
 
   // Check answer when option is selected
   const checkAnswer = async (selectedIndex) => {
     if (isAnswered) return; // Prevent multiple selections
-    
+
     setIsAnswered(true);
     setSelectedOptionIndex(selectedIndex);
-    
+
     const currentQuestion = quizData[currentQuestionIndex];
     const updatedQuizData = [...quizData];
     updatedQuizData[currentQuestionIndex].userAnswer = currentQuestion.options[selectedIndex];
-    
-    const isCorrect = currentQuestion.options[selectedIndex] === currentQuestion.answer;
-    
+
+    const isCorrect = selectedIndex === currentQuestion.options.indexOf(currentQuestion.answer);
+
     if (isCorrect) {
       setScore(score + 1);
     }
 
     setQuizData(updatedQuizData);
-    
+
     // Move to next question after a short delay
     setTimeout(() => {
       if (currentQuestionIndex < quizData.length - 1) {
@@ -136,11 +137,11 @@ const Quiz = () => {
   // Save quiz results to Firestore
   const saveQuizResults = async (quizData, finalScore) => {
     if (!userId) return;
-    
+
     try {
       const quizRef = doc(db, "imageQuiz", userId);
       const quizDoc = await getDoc(quizRef);
-      
+
       const quizResultData = {
         userId: userId,
         completed: true,
@@ -151,7 +152,7 @@ const Quiz = () => {
         quizData: quizData,
         lastUpdated: serverTimestamp()
       };
-      
+
       if (quizDoc.exists()) {
         // Update existing document
         await updateDoc(quizRef, quizResultData);
@@ -179,12 +180,12 @@ const Quiz = () => {
     // Reset all userAnswers to null
     const resetQuizData = quizData.map(q => ({ ...q, userAnswer: null }));
     setQuizData(resetQuizData);
-    
+
     if (userId) {
       try {
         const quizRef = doc(db, "imageQuiz", userId);
         const quizDoc = await getDoc(quizRef);
-        
+
         if (quizDoc.exists()) {
           // Update attempts count
           await updateDoc(quizRef, {
@@ -204,9 +205,8 @@ const Quiz = () => {
     if (!isAnswered || selectedOptionIndex !== index) {
       return "option-button";
     }
-    
-    const currentQuestion = quizData[currentQuestionIndex];
-    const isCorrect = currentQuestion.options[index] === currentQuestion.answer;
+
+    const isCorrect = index === currentQuestion.options.indexOf(currentQuestion.answer);
     return isCorrect ? "option-button option-correct" : "option-button option-incorrect";
   };
 
@@ -228,28 +228,15 @@ const Quiz = () => {
       <div className="quiz-container">
         <h1>Fun quiz for kids</h1>
         <hr />
-        
+
         {isQuizComplete ? (
-          <>
-            <div id="quiz-completed-container">
-              <img src={goodJobImage} alt="A star containing the text 'good job'" />
-              <h2>Quiz Complete!</h2>
-              <h3>Your Score: <span id="score">{score} out of {quizData.length}</span></h3>
-              
-              {score === quizData.length ? (
-                <h3 className="perfect-score">Perfect Score! Great job! 🎉</h3>
-              ) : (
-                <>
-                  <h3>Questions you answered incorrectly:</h3>
-                  <QuizSummary questions={quizData} />
-                </>
-              )}
-            </div>
-            
-            <div className="refresh-container">
-              <button id="refresh-button" onClick={handleRestart}>Try Again?</button>
-            </div>
-          </>
+          <ProgressReport 
+            score={score}
+            totalQuestions={quizData.length}
+            quizData={quizData}
+            percentage={(score / quizData.length) * 100}
+            onRetakeQuiz={handleRestart} 
+          />
         ) : (
           <>
             <h2 id="progress">Question {currentQuestionIndex + 1} of {quizData.length}</h2>
