@@ -192,69 +192,97 @@ const Game = () => {
   };
 
   const handleCheck = () => {
-    let isCorrect = false;
-    let feedback = "";
+    const checkResult = gameMode === "shopping" 
+      ? checkShoppingMode() 
+      : checkMakeChangeMode();
     
-    if (gameMode === "shopping") {
-      if (totalAmount <= budget && totalAmount > 0) {
-        feedback = `Great job! You spent $${totalAmount.toFixed(2)} out of $${budget.toFixed(2)}. You saved $${(budget - totalAmount).toFixed(2)}.`;
-        isCorrect = true;
-        
-        if (level < 10) {
-          setLevel(level + 1);
-        }
-        
-        // Adjust budget based on level
-        if (level % 3 === 0) {
-          setBudget(budget + 5);
-        }
-        
-        setScore(score + (10 * difficulty === "easy" ? 1 : difficulty === "medium" ? 2 : 3));
-      } else if (totalAmount > budget) {
-        feedback = `You exceeded your budget of $${budget.toFixed(2)}. Try again!`;
-        sounds.incorrect.play();
-      } else {
-        feedback = "Please select at least one item.";
-        sounds.incorrect.play();
-      }
-    } else { // makeChange mode
-      const difference = Math.abs(totalCash - targetAmount);
-      
-      if (difference < 0.01) { // Account for floating point precision
-        feedback = `Perfect! You made the exact change of $${targetAmount.toFixed(2)}!`;
-        isCorrect = true;
-        setLevel(level + 1);
-        setScore(score + (15 * (difficulty === "easy" ? 1 : difficulty === "medium" ? 2 : 3)));
-      } else {
-        feedback = `Not quite right. You need to make $${targetAmount.toFixed(2)}. Your total is $${totalCash.toFixed(2)}.`;
-        sounds.incorrect.play();
-      }
-    }
-    
-    setMessage(feedback);
+    setMessage(checkResult.feedback);
     setShowFeedback(true);
     
-    if (isCorrect) {
+    if (checkResult.isCorrect) {
       sounds.correct.play();
       showConfetti();
       saveGameResult();
       
       // Add to game history
-      const historyItem = {
-        date: new Date(),
-        mode: gameMode,
-        difficulty,
-        score: gameMode === "shopping" ? 10 * (difficulty === "easy" ? 1 : difficulty === "medium" ? 2 : 3) : 15 * (difficulty === "easy" ? 1 : difficulty === "medium" ? 2 : 3),
-        items: selectedItems.map(item => item.name)
-      };
-      
-      setGameHistory([historyItem, ...gameHistory]);
+      addToGameHistory();
       
       // Progress to next level
       setTimeout(() => {
-        if (isCorrect) shuffleItems();
+        if (checkResult.isCorrect) shuffleItems();
       }, 3000);
     }
+  };
+
+  const checkShoppingMode = () => {
+    if (totalAmount <= 0) {
+      sounds.incorrect.play();
+      return {
+        isCorrect: false,
+        feedback: "Please select at least one item."
+      };
+    }
+    
+    if (totalAmount > budget) {
+      sounds.incorrect.play();
+      return {
+        isCorrect: false,
+        feedback: `You exceeded your budget of $${budget.toFixed(2)}. Try again!`
+      };
+    }
+    
+    // Shopping is correct
+    const newLevel = level < 10 ? level + 1 : level;
+    setLevel(newLevel);
+    
+    // Adjust budget based on level
+    if (level % 3 === 0) {
+      setBudget(budget + 5);
+    }
+    
+    const pointsEarned = 10 * (difficulty === "easy" ? 1 : difficulty === "medium" ? 2 : 3);
+    setScore(score + pointsEarned);
+    
+    return {
+      isCorrect: true,
+      feedback: `Great job! You spent $${totalAmount.toFixed(2)} out of $${budget.toFixed(2)}. You saved $${(budget - totalAmount).toFixed(2)}.`
+    };
+  };
+
+  const checkMakeChangeMode = () => {
+    const difference = Math.abs(totalCash - targetAmount);
+    
+    if (difference >= 0.01) { // Account for floating point precision
+      sounds.incorrect.play();
+      return {
+        isCorrect: false,
+        feedback: `Not quite right. You need to make $${targetAmount.toFixed(2)}. Your total is $${totalCash.toFixed(2)}.`
+      };
+    }
+    
+    // Make change is correct
+    setLevel(level + 1);
+    const pointsEarned = 15 * (difficulty === "easy" ? 1 : difficulty === "medium" ? 2 : 3);
+    setScore(score + pointsEarned);
+    
+    return {
+      isCorrect: true,
+      feedback: `Perfect! You made the exact change of $${targetAmount.toFixed(2)}!`
+    };
+  };
+
+  const addToGameHistory = () => {
+    const historyItem = {
+      date: new Date(),
+      mode: gameMode,
+      difficulty,
+      score: gameMode === "shopping" 
+        ? 10 * (difficulty === "easy" ? 1 : difficulty === "medium" ? 2 : 3) 
+        : 15 * (difficulty === "easy" ? 1 : difficulty === "medium" ? 2 : 3),
+      items: selectedItems.map(item => item.name)
+    };
+    
+    setGameHistory([historyItem, ...gameHistory]);
   };
 
   const useHint = () => {

@@ -73,29 +73,8 @@ const ProgressPage = () => {
     return () => unsubscribe();
   }, [navigate]);
 
-  // Fetch all user data from Firestore
-  const fetchAllUserData = async (userId) => {
-    const data = { ...progressData };
-    
-    // 1. Fetch Money Game data
-    await fetchGameData(userId, 'moneyGame', data.moneyGame);
-    
-    // 2. Fetch Balloon Game data
-    await fetchGameData(userId, 'balloonGame', data.balloonGame);
-
-    // 3. Fetch Basic Arith Game data (NEW)
-    await fetchGameData(userId, 'basicArith', data.basicArith);
-    
-    // 4. Fetch Image Quiz data
-    await fetchQuizData(userId, 'imageQuiz', data.imageQuiz);
-    
-    // 5. Fetch Invaders Quiz data
-    await fetchInvaderQuizData(userId, data.invadersQuiz);
-    
-    // 6. Fetch Space Course data
-    await fetchSpaceCourseData(userId, data.spaceCourse);
-    
-    // Calculate overall progress
+  // Extract the overall progress calculation to a separate function
+  const calculateOverallProgress = (data) => {
     const completedItems = [
       data.imageQuiz.completed,
       data.invadersQuiz.completed,
@@ -104,8 +83,40 @@ const ProgressPage = () => {
       data.balloonGame.totalGames > 0
     ].filter(Boolean).length;
     
-    data.overallProgress.completed = completedItems;
-    data.overallProgress.percentage = (completedItems / data.overallProgress.total) * 100;
+    return {
+      completed: completedItems,
+      total: data.overallProgress.total,
+      percentage: (completedItems / data.overallProgress.total) * 100
+    };
+  };
+
+  // Fetch all user data from Firestore
+  const fetchAllUserData = async (userId) => {
+    const data = { ...progressData };
+    
+    // Use Promise.all to fetch data concurrently
+    await Promise.all([
+      // 1. Fetch Money Game data
+      fetchGameData(userId, 'moneyGame', data.moneyGame),
+      
+      // 2. Fetch Balloon Game data
+      fetchGameData(userId, 'balloonGame', data.balloonGame),
+
+      // 3. Fetch Basic Arith Game data
+      fetchGameData(userId, 'basicArith', data.basicArith),
+      
+      // 4. Fetch Image Quiz data
+      fetchQuizData(userId, 'imageQuiz', data.imageQuiz),
+      
+      // 5. Fetch Invaders Quiz data
+      fetchInvaderQuizData(userId, data.invadersQuiz),
+      
+      // 6. Fetch Space Course data
+      fetchSpaceCourseData(userId, data.spaceCourse)
+    ]);
+    
+    // Calculate overall progress separately
+    data.overallProgress = calculateOverallProgress(data);
     
     setProgressData(data);
   };

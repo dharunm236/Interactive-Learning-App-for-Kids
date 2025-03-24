@@ -241,67 +241,90 @@ function checkAnswer() {
     const userOperator = operatorZone.textContent;
     const userAnswer = parseInt(answerZone.textContent);
     
-    if (userOperator === correctOperator && userAnswer === correctAnswer) {
-        // Correct answer
-        document.getElementById("winSound").play();
-        message.textContent = "Correct! Great job!";
-        message.className = "correct";
-        
-        // Update stats
-        correctCount++;
-        currentStreak++;
-        if (currentStreak > bestStreak) {
-            bestStreak = currentStreak;
-        }
-        
-        // Award bonus time based on difficulty
-        if (difficulty === "easy") {
-            timeLeft += 3;
-        } else if (difficulty === "medium") {
-            timeLeft += 5;
-        } else {
-            timeLeft += 7;
-        }
-        
-        // Generate new problem after a short delay
-        setTimeout(() => {
-            generateProblem();
-        }, 1500);
+    const isCorrect = userOperator === correctOperator && userAnswer === correctAnswer;
+    
+    if (isCorrect) {
+        handleCorrectAnswer(message);
     } else {
-        // Incorrect answer
-        if (document.getElementById("errorSound")) {
-            document.getElementById("errorSound").play();
-        }
-        
-        let errorMessage = "Try again! ";
-        
-        if (userOperator !== correctOperator && userAnswer !== correctAnswer) {
-            errorMessage += "Both the operator and answer are incorrect.";
-        } else if (userOperator !== correctOperator) {
-            errorMessage += "The operator is incorrect.";
-        } else {
-            errorMessage += "The answer is incorrect.";
-        }
-        
-        message.textContent = errorMessage;
-        message.className = "incorrect";
-        
-        // Update stats
-        incorrectCount++;
-        currentStreak = 0;
-        
-        // Penalty time
-        timeLeft = Math.max(5, timeLeft - 5);
+        handleIncorrectAnswer(message, userOperator, userAnswer);
     }
     
     // Update stats display
+    updateStatsDisplay();
+    
+    // Save stats
+    saveStats();
+}
+
+function handleCorrectAnswer(message) {
+    // Play sound and show message
+    document.getElementById("winSound").play();
+    message.textContent = "Correct! Great job!";
+    message.className = "correct";
+    
+    // Update stats
+    correctCount++;
+    currentStreak++;
+    if (currentStreak > bestStreak) {
+        bestStreak = currentStreak;
+    }
+    
+    // Award bonus time based on difficulty
+    awardBonusTime();
+    
+    // Generate new problem after a short delay
+    setTimeout(() => {
+        generateProblem();
+    }, 1500);
+}
+
+function handleIncorrectAnswer(message, userOperator, userAnswer) {
+    // Play error sound
+    if (document.getElementById("errorSound")) {
+        document.getElementById("errorSound").play();
+    }
+    
+    // Determine error message
+    message.textContent = generateErrorMessage(userOperator, userAnswer);
+    message.className = "incorrect";
+    
+    // Update stats
+    incorrectCount++;
+    currentStreak = 0;
+    
+    // Penalty time
+    timeLeft = Math.max(5, timeLeft - 5);
+}
+
+function generateErrorMessage(userOperator, userAnswer) {
+    let errorMessage = "Try again! ";
+    
+    if (userOperator !== correctOperator && userAnswer !== correctAnswer) {
+        errorMessage += "Both the operator and answer are incorrect.";
+    } else if (userOperator !== correctOperator) {
+        errorMessage += "The operator is incorrect.";
+    } else {
+        errorMessage += "The answer is incorrect.";
+    }
+    
+    return errorMessage;
+}
+
+function awardBonusTime() {
+    if (difficulty === "easy") {
+        timeLeft += 3;
+    } else if (difficulty === "medium") {
+        timeLeft += 5;
+    } else {
+        timeLeft += 7;
+    }
+}
+
+function updateStatsDisplay() {
     document.getElementById("correctCount").textContent = correctCount;
     document.getElementById("incorrectCount").textContent = incorrectCount;
     document.getElementById("currentStreak").textContent = currentStreak;
     document.getElementById("bestStreak").textContent = bestStreak;
-    
-    // Save stats
-    saveStats();
 }
 
 function startTimer() {

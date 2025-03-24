@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db, auth } from '../../firebaseConfig';
-import { doc, getDoc, updateDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, onSnapshot, serverTimestamp, deleteDoc } from 'firebase/firestore';
 import './MemoryMatchMultiplayer.css';
 
 const MemoryMatchMultiplayer = () => {
@@ -27,8 +27,21 @@ const MemoryMatchMultiplayer = () => {
     return () => unsubscribe();
   }, [sessionId, currentUserId]);
   
-  // Go back to challenges
-  const handleBack = () => {
+  // Go back to challenges and cancel game if needed
+  const handleBack = async () => {
+    try {
+      // Ask user if they want to end the game
+      if (confirm("Do you want to leave this game? This will end the session for both players.")) {
+        // End or delete the game session
+        await updateDoc(doc(db, "gameSessions", sessionId), {
+          status: "cancelled",
+          endedAt: serverTimestamp(),
+          endedBy: currentUserId
+        });
+      }
+    } catch (error) {
+      console.error("Error ending game session:", error);
+    }
     navigate("/challenge-friend");
   };
   

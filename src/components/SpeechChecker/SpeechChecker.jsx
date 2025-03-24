@@ -229,154 +229,172 @@ const SpeechChecker = () => {
     setStage('initial');
   };
 
-  // Updating the simulateAnalysis function for robust API integration
+  const simulateAnalysis = () => {
+    setLoading(true);
+    
+    if (!transcript || transcript.trim().length === 0) {
+      setError("No speech detected. Please try again.");
+      setLoading(false);
+      return;
+    }
+    
+    setError("Analyzing your speech... This might take a few moments.");
+    analyzeWithAI(2);
+  };
 
-const simulateAnalysis = () => {
-  setLoading(true);
-  
-  // Check if the transcript is empty
-  if (!transcript || transcript.trim().length === 0) {
-    setError("No speech detected. Please try again.");
-    setLoading(false);
-    return;
-  }
-  
-  // Function to handle API calls with retries
   const analyzeWithAI = async (retries = 2) => {
     try {
       console.log("Sending transcript to OpenRouter API for analysis...");
       
-      const response = await axios.post(
-        "https://openrouter.ai/api/v1/chat/completions",
-        {
-          model: "anthropic/claude-3-sonnet-20240229",
-          messages: [
-            { 
-              role: "system", 
-              content: `You are a helpful speaking coach for children. Analyze the following speech about "${currentTopic}" and provide constructive feedback.
-              
-              Analyze these aspects:
-              1. Topic relevance: How well did they stay on topic?
-              2. Vocabulary: Did they use interesting or advanced words?
-              3. Sentence structure: Were sentences complete and varied?
-              4. Delivery: Did they use many filler words?
-              5. Overall effectiveness
-              
-              Return your response as a JSON object with these fields:
-              {
-                "overview": "Brief summary of the speech",
-                "topicAdherence": "Feedback on staying on topic",
-                "grammar": "Feedback on sentence structure",
-                "vocabulary": "Feedback on word choice",
-                "delivery": "Feedback on speaking style",
-                "strengths": "2-3 things they did well",
-                "improvementAreas": "2-3 things to improve",
-                "nextStepsTips": "Specific practice suggestions",
-                "score": "A number from 1-10",
-                "encouragement": "A positive encouraging message"
-              }
-              
-              Make the feedback friendly, specific, and encouraging for a child.
-              IMPORTANT: Format your response as valid JSON only, with NO additional text before or after the JSON.`
-            },
-            { 
-              role: "user", 
-              content: `Analyze this speech about "${currentTopic}": "${transcript}"` 
-            }
-          ],
-          response_format: { type: "json_object" }, // Request JSON format explicitly
-        },
-        {
-          headers: {
-            "Authorization": `Bearer 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`,
-            "Content-Type": "application/json",
-            "HTTP-Referer": "https://kids-interactive.com",
-            "X-Title": "Kids Interactive - Speech Analysis"
-          },
-          timeout: 15000, // 15 second timeout
-        }
-      );
-      
+      const response = await callOpenRouterAPI();
       console.log("API response received:", response.status);
       
-      if (!response.data || !response.data.choices || 
-          !response.data.choices[0] || !response.data.choices[0].message) {
-        throw new Error("Invalid API response structure");
-      }
-      
-      const content = response.data.choices[0].message.content;
-      
-      let analysisResult;
-      try {
-        // Try to parse the response as JSON
-        analysisResult = JSON.parse(content);
-        console.log("Successfully parsed API response");
-        
-        // Validate the required fields in the response
-        const requiredFields = [
-          "overview", "topicAdherence", "grammar", "vocabulary", 
-          "delivery", "strengths", "improvementAreas", 
-          "nextStepsTips", "score", "encouragement"
-        ];
-        
-        const missingFields = requiredFields.filter(field => !analysisResult.hasOwnProperty(field));
-        
-        if (missingFields.length > 0) {
-          console.warn("API response missing fields:", missingFields);
-          throw new Error(`API response missing fields: ${missingFields.join(", ")}`);
-        }
-        
-        // Ensure score is a number between 1-10
-        if (typeof analysisResult.score !== 'number') {
-          analysisResult.score = parseInt(analysisResult.score) || 5;
-        }
-        analysisResult.score = Math.min(10, Math.max(1, Math.round(analysisResult.score)));
-        
-        // Update the UI with the feedback
-        setFeedback(analysisResult);
-        setStage('feedback');
-        setLoading(false);
-      } catch (parseError) {
-        console.error("Failed to parse API response:", parseError);
-        
-        if (retries > 0) {
-          console.log(`Retrying API call. Retries left: ${retries}`);
-          await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retry
-          return analyzeWithAI(retries - 1);
-        } else {
-          throw new Error("Could not parse API response after multiple attempts");
-        }
-      }
+      validateAPIResponse(response);
+      processAPIContent(response.data.choices[0].message.content);
     } catch (error) {
-      console.error("API error:", error);
-      
-      if (retries > 0) {
-        console.log(`Retrying API call. Retries left: ${retries}`);
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retry
-        return analyzeWithAI(retries - 1);
-      } else {
-        // After exhausting retries, use local analysis as a last resort
-        console.log("All API retries failed. Falling back to local analysis");
-        setApiFailCount(prevCount => prevCount + 1);
-        const localAnalysis = analyzeTranscript(transcript, currentTopic);
-        setFeedback(localAnalysis);
-        setStage('feedback');
-        setLoading(false);
-        
-        // If we've had multiple API failures, show a persistent error
-        if (apiFailCount >= 2) {
-          setError("We're experiencing issues connecting to our AI service. Your feedback is being generated locally instead.");
-        }
+      await handleAnalysisError(error, retries);
+    }
+  };
+
+  // Extracted error-handling logic
+  const handleAnalysisError = async (error, retries) => {
+    console.error("API error:", error);
+    
+    if (retries > 0) {
+      console.log(`Retrying API call. Retries left: ${retries}`);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      return analyzeWithAI(retries - 1);
+    } else {
+      handleAPIFailure();
+    }
+  };
+
+  // Helper function to make the API call
+  const callOpenRouterAPI = async () => {
+    return await axios.post(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+        model: "anthropic/claude-3-sonnet-20240229",
+        messages: [
+          { 
+            role: "system", 
+            content: createSystemPrompt()
+          },
+          { 
+            role: "user", 
+            content: `Analyze this speech about "${currentTopic}": "${transcript}"` 
+          }
+        ],
+        response_format: { type: "json_object" }, // Request JSON format explicitly
+      },
+      {
+        headers: {
+          "Authorization": `Bearer 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`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": "https://kids-interactive.com",
+          "X-Title": "Kids Interactive - Speech Analysis"
+        },
+        timeout: 15000, // 15 second timeout
       }
+    );
+  };
+  
+  // Helper function to create the system prompt
+  const createSystemPrompt = () => {
+    return `You are a helpful speaking coach for children. Analyze the following speech about "${currentTopic}" and provide constructive feedback.
+    
+    Analyze these aspects:
+    1. Topic relevance: How well did they stay on topic?
+    2. Vocabulary: Did they use interesting or advanced words?
+    3. Sentence structure: Were sentences complete and varied?
+    4. Delivery: Did they use many filler words?
+    5. Overall effectiveness
+    
+    Return your response as a JSON object with these fields:
+    {
+      "overview": "Brief summary of the speech",
+      "topicAdherence": "Feedback on staying on topic",
+      "grammar": "Feedback on sentence structure",
+      "vocabulary": "Feedback on word choice",
+      "delivery": "Feedback on speaking style",
+      "strengths": "2-3 things they did well",
+      "improvementAreas": "2-3 things to improve",
+      "nextStepsTips": "Specific practice suggestions",
+      "score": "A number from 1-10",
+      "encouragement": "A positive encouraging message"
+    }
+    
+    Make the feedback friendly, specific, and encouraging for a child.
+    IMPORTANT: Format your response as valid JSON only, with NO additional text before or after the JSON.`;
+  };
+  
+  // Helper function to validate API response
+  const validateAPIResponse = (response) => {
+    if (!response.data || !response.data.choices || 
+        !response.data.choices[0] || !response.data.choices[0].message) {
+      throw new Error("Invalid API response structure");
     }
   };
   
-  // Add notification for user
-  setError("Analyzing your speech... This might take a few moments.");
+  // Helper function to process API content
+  const processAPIContent = (content) => {
+    try {
+      // Try to parse the response as JSON
+      const analysisResult = JSON.parse(content);
+      console.log("Successfully parsed API response");
+      
+      validateResultFields(analysisResult);
+      normalizeScore(analysisResult);
+      
+      // Update the UI with the feedback
+      setFeedback(analysisResult);
+      setStage('feedback');
+      setLoading(false);
+    } catch (parseError) {
+      console.error("Failed to parse API response:", parseError);
+      throw parseError;
+    }
+  };
   
-  // Start the analysis process with retry capability
-  analyzeWithAI();
-};
+  // Helper function to validate required fields
+  const validateResultFields = (analysisResult) => {
+    const requiredFields = [
+      "overview", "topicAdherence", "grammar", "vocabulary", 
+      "delivery", "strengths", "improvementAreas", 
+      "nextStepsTips", "score", "encouragement"
+    ];
+    
+    const missingFields = requiredFields.filter(field => !analysisResult.hasOwnProperty(field));
+    
+    if (missingFields.length > 0) {
+      console.warn("API response missing fields:", missingFields);
+      throw new Error(`API response missing fields: ${missingFields.join(", ")}`);
+    }
+  };
+  
+  // Helper function to normalize score
+  const normalizeScore = (analysisResult) => {
+    // Ensure score is a number between 1-10
+    if (typeof analysisResult.score !== 'number') {
+      analysisResult.score = parseInt(analysisResult.score) || 5;
+    }
+    analysisResult.score = Math.min(10, Math.max(1, Math.round(analysisResult.score)));
+  };
+  
+  // Helper function to handle API failure
+  const handleAPIFailure = () => {
+    console.log("All API retries failed. Falling back to local analysis");
+    setApiFailCount(prevCount => prevCount + 1);
+    const localAnalysis = analyzeTranscript(transcript, currentTopic);
+    setFeedback(localAnalysis);
+    setStage('feedback');
+    setLoading(false);
+    
+    // If we've had multiple API failures, show a persistent error
+    if (apiFailCount >= 2) {
+      setError("We're experiencing issues connecting to our AI service. Your feedback is being generated locally instead.");
+    }
+  };
 
   // Analyze the transcript for real metrics
   const analyzeTranscript = (text, topic) => {
