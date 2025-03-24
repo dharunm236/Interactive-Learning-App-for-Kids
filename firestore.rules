@@ -1,0 +1,40 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Rules for quizScores
+    match /quizScores/{document} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+    
+    // Rules for invaderquiz
+    match /invaderquiz/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Rules for friendRequests
+    match /friendRequests/{document} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Rules for friends
+    match /friends/{document} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Rules for games
+    match /games/{document} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Rules for played_games
+    match /played_games/{document} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Default rule for other collections (if any)
+    match /{otherCollection}/{document} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}

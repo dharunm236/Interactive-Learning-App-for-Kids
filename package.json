@@ -9,7 +9,7 @@
     "chart.js": "^4.4.8",
     "classnames": "^2.5.1",
     "date-fns": "^4.1.0",
-    "firebase": "^11.3.0",
+    "firebase": "^11.5.0",
     "framer-motion": "^12.4.7",
     "howler": "^2.2.4",
     "install": "^0.13.0",

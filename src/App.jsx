@@ -98,6 +98,9 @@ function App() {
           <Route path="/word-builder/:sessionId" element={user ? <MultiplayerWordBuilder /> : <Navigate to="/login" />} />
           <Route path="/math-challenge/:sessionId" element={user ? <MathChallenge /> : <Navigate to="/login" />} />
           <Route path="/memory-match/:sessionId" element={user ? <MemoryMatchMultiplayer /> : <Navigate to="/login" />} />
+          <Route 
+            path="/lecture/progress-report" 
+            element={user ? <LectureProgressReport /> : <Navigate to="/login" />}/>
         </Routes>
       </div>
     </Router>
