@@ -142,26 +142,23 @@ const ChallengePage = () => {
       where("player2.id", "==", currentUserId)
     );
 
+    // Extract the document handling logic into a separate function
+    const handleGameSession = (doc) => {
+      const data = doc.data();
+      const gameObj = games.find(g => g.id === data.game) || { path: "/word-builder", name: "Word Builder" };
+      
+      // Navigate to the game
+      navigate(`${gameObj.path}/${doc.id}`);
+    };
+
     // Listen for sessions where user is player1
     const unsubscribe1 = onSnapshot(q, (querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        const gameObj = games.find(g => g.id === data.game) || { path: "/word-builder", name: "Word Builder" };
-        
-        // Navigate to the game
-        navigate(`${gameObj.path}/${doc.id}`);
-      });
+      querySnapshot.forEach(handleGameSession);
     });
 
     // Listen for sessions where user is player2
     const unsubscribe2 = onSnapshot(q2, (querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        const gameObj = games.find(g => g.id === data.game) || { path: "/word-builder", name: "Word Builder" };
-        
-        // Navigate to the game
-        navigate(`${gameObj.path}/${doc.id}`);
-      });
+      querySnapshot.forEach(handleGameSession);
     });
 
     return () => {
