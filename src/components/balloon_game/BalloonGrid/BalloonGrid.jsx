@@ -4,11 +4,18 @@ import Constants from "../utils/constants";
 import getRandomNumber from "../utils/randomNumber";
 import "./BalloonGrid.css";
 
-// Remove the crypto import and add secure random number generator
+// Secure random number generator
 const getSecureRandom = (max) => {
   const array = new Uint32Array(1);
   window.crypto.getRandomValues(array);
   return array[0] % max;
+};
+
+// Helper function for getting random letters
+const getRandomLetter = (excludeLetter) => {
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('')
+    .filter(letter => letter !== excludeLetter);
+  return letters[getSecureRandom(letters.length)];
 };
 
 const BalloonGrid = ({ numberOfBalloons, onBalloonClick, selectedWord, currentLetterIndex }) => {
@@ -17,36 +24,47 @@ const BalloonGrid = ({ numberOfBalloons, onBalloonClick, selectedWord, currentLe
   const intervalIdsRef = useRef([]);
   const balloonCountRef = useRef(0);
 
+  // Function to update active balloons
+  const updateActiveBalloons = (randomBalloonId) => {
+    setActiveBalloons((prevActiveBalloons) => {
+      if (prevActiveBalloons.includes(randomBalloonId)) {
+        return prevActiveBalloons.filter(
+          (activeId) => activeId !== randomBalloonId
+        );
+      } else {
+        return [...prevActiveBalloons, randomBalloonId];
+      }
+    });
+  };
+
+  // Function to update balloon letters
+  const updateBalloonLetters = (randomBalloonId) => {
+    setBalloonLetters((prevLetters) => {
+      const newLetters = [...prevLetters];
+      // Every 4th balloon should contain the correct letter
+      if (balloonCountRef.current % 4 === 0 && selectedWord && currentLetterIndex < selectedWord.length) {
+        newLetters[randomBalloonId] = selectedWord[currentLetterIndex];
+      } else {
+        newLetters[randomBalloonId] = getRandomLetter(selectedWord[currentLetterIndex]);
+      }
+      return newLetters;
+    });
+  };
+
+  // Function to generate a random balloon
+  const generateRandomBalloon = () => {
+    const randomBalloonId = getSecureRandom(numberOfBalloons);
+    balloonCountRef.current++;
+    
+    updateActiveBalloons(randomBalloonId);
+    updateBalloonLetters(randomBalloonId);
+  };
+
   useEffect(() => {
     intervalIdsRef.current = [];
     balloonCountRef.current = 0;
 
-    const generateRandomBalloon = () => {
-      const randomBalloonId = getSecureRandom(numberOfBalloons);
-      balloonCountRef.current++;
-
-      setActiveBalloons((prevActiveBalloons) => {
-        if (prevActiveBalloons.includes(randomBalloonId)) {
-          return prevActiveBalloons.filter(
-            (activeId) => activeId !== randomBalloonId
-          );
-        } else {
-          return [...prevActiveBalloons, randomBalloonId];
-        }
-      });
-
-      setBalloonLetters((prevLetters) => {
-        const newLetters = [...prevLetters];
-        // Every 4th balloon should contain the correct letter
-        if (balloonCountRef.current % 4 === 0 && selectedWord && currentLetterIndex < selectedWord.length) {
-          newLetters[randomBalloonId] = selectedWord[currentLetterIndex];
-        } else {
-          newLetters[randomBalloonId] = getRandomLetter(selectedWord[currentLetterIndex]);
-        }
-        return newLetters;
-      });
-    };
-
+    // Setup intervals for balloon generation
     for (let i = 0; i < numberOfBalloons; i++) {
       const intervalId = setInterval(
         generateRandomBalloon,
@@ -58,16 +76,11 @@ const BalloonGrid = ({ numberOfBalloons, onBalloonClick, selectedWord, currentLe
       intervalIdsRef.current.push(intervalId);
     }
 
+    // Cleanup intervals on unmount
     return () => {
       intervalIdsRef.current.forEach((intervalId) => clearInterval(intervalId));
     };
   }, [numberOfBalloons, selectedWord, currentLetterIndex]);
-
-  const getRandomLetter = (excludeLetter) => {
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('')
-      .filter(letter => letter !== excludeLetter);
-    return letters[getSecureRandom(letters.length)];
-  };
 
   const balloons = [];
 

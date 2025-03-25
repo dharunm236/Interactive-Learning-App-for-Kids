@@ -42,6 +42,91 @@ const MultiplayerWordBuilder = () => {
     return result.sort(() => Math.random() - 0.5);
   };
 
+  // Helper functions to reduce complexity
+  const updatePlayerName = async (playerData, playerField) => {
+    if (!playerData || !playerData.name) return null;
+    
+    // Only update if it looks like a user ID (long with no spaces)
+    if (playerData.name.length <= 20 || playerData.name.indexOf(' ') !== -1) {
+      return null;
+    }
+    
+    try {
+      const userDoc = await getDoc(doc(db, "users", playerData.id));
+      if (userDoc.exists() && userDoc.data().displayName) {
+        return { [playerField]: userDoc.data().displayName };
+      }
+    } catch (err) {
+      console.error(`Error fetching ${playerField} name:`, err);
+    }
+    
+    return null;
+  };
+
+  const processGameSessionData = async (data) => {
+    // Handle player names
+    const updates = {};
+    
+    const player1Update = await updatePlayerName(data.player1, "player1.name");
+    if (player1Update) Object.assign(updates, player1Update);
+    
+    const player2Update = await updatePlayerName(data.player2, "player2.name");
+    if (player2Update) Object.assign(updates, player2Update);
+    
+    // Update the session if names needed fixing
+    if (Object.keys(updates).length > 0) {
+      try {
+        await updateDoc(doc(db, "gameSessions", sessionId), updates);
+      } catch (updateErr) {
+        console.error("Error updating player names:", updateErr);
+      }
+    }
+    
+    setGameSession(data);
+    
+    // Check if current user is player1
+    const currentUserId = auth.currentUser?.uid;
+    const isP1 = data.player1.id === currentUserId;
+    setIsPlayer1(isP1);
+    setCurrentUserId(currentUserId);
+    
+    // Set player score
+    if (isP1) {
+      setPlayerScore(data.player1.score || 0);
+      setValidWords(data.player1.words || []);
+      setOpponentWords(data.player2.words || []);
+    } else {
+      setPlayerScore(data.player2.score || 0);
+      setValidWords(data.player2.words || []);
+      setOpponentWords(data.player1.words || []);
+    }
+    
+    // If letters aren't set yet but exist in game data, use those
+    if (letters.length === 0 && data.letters && data.letters.length > 0) {
+      setLetters(data.letters);
+    }
+    
+    // Check if game is over
+    if (data.status === "completed") {
+      setGameOver(true);
+    }
+    
+    // Calculate time left
+    if (data.startedAt && data.timeLimit) {
+      const startTime = data.startedAt.seconds;
+      const endTime = startTime + data.timeLimit;
+      const now = Math.floor(Date.now() / 1000);
+      const remaining = endTime - now;
+      setTimeLeft(remaining > 0 ? remaining : 0);
+      
+      if (remaining <= 0 && data.status !== "completed") {
+        handleGameEnd();
+      }
+    }
+    
+    setLoading(false);
+  };
+
   // Initialize the game
   useEffect(() => {
     const fetchGameSession = async () => {
@@ -53,89 +138,7 @@ const MultiplayerWordBuilder = () => {
         const unsubscribe = onSnapshot(sessionRef, async (docSnap) => {
           if (docSnap.exists()) {
             const data = docSnap.data();
-            
-            // Check if we need to update player names
-            let needsUpdate = false;
-            let updatedData = {...data};
-            
-            // Check if player1 name is a user ID and needs to be updated
-            if (data.player1 && data.player1.name && data.player1.name.length > 20 && data.player1.name.indexOf(' ') === -1) {
-              try {
-                const userDoc = await getDoc(doc(db, "users", data.player1.id));
-                if (userDoc.exists() && userDoc.data().displayName) {
-                  updatedData.player1.name = userDoc.data().displayName;
-                  needsUpdate = true;
-                }
-              } catch (err) {
-                console.error("Error fetching player1 name:", err);
-              }
-            }
-            
-            // Check if player2 name is a user ID and needs to be updated
-            if (data.player2 && data.player2.name && data.player2.name.length > 20 && data.player2.name.indexOf(' ') === -1) {
-              try {
-                const userDoc = await getDoc(doc(db, "users", data.player2.id));
-                if (userDoc.exists() && userDoc.data().displayName) {
-                  updatedData.player2.name = userDoc.data().displayName;
-                  needsUpdate = true;
-                }
-              } catch (err) {
-                console.error("Error fetching player2 name:", err);
-              }
-            }
-            
-            // Update the session if names needed fixing
-            if (needsUpdate) {
-              try {
-                await updateDoc(sessionRef, updatedData);
-              } catch (updateErr) {
-                console.error("Error updating player names:", updateErr);
-              }
-            }
-            
-            setGameSession(data);
-            
-            // Check if current user is player1
-            const currentUserId = auth.currentUser?.uid;
-            const isP1 = data.player1.id === currentUserId;
-            setIsPlayer1(isP1);
-            setCurrentUserId(currentUserId);
-            
-            // Set player score
-            if (isP1) {
-              setPlayerScore(data.player1.score || 0);
-              setValidWords(data.player1.words || []);
-              setOpponentWords(data.player2.words || []);
-            } else {
-              setPlayerScore(data.player2.score || 0);
-              setValidWords(data.player2.words || []);
-              setOpponentWords(data.player1.words || []);
-            }
-            
-            // If letters aren't set yet but exist in game data, use those
-            if (letters.length === 0 && data.letters && data.letters.length > 0) {
-              setLetters(data.letters);
-            }
-            
-            // Check if game is over
-            if (data.status === "completed") {
-              setGameOver(true);
-            }
-            
-            // Calculate time left
-            if (data.startedAt && data.timeLimit) {
-              const startTime = data.startedAt.seconds;
-              const endTime = startTime + data.timeLimit;
-              const now = Math.floor(Date.now() / 1000);
-              const remaining = endTime - now;
-              setTimeLeft(remaining > 0 ? remaining : 0);
-              
-              if (remaining <= 0 && data.status !== "completed") {
-                handleGameEnd();
-              }
-            }
-            
-            setLoading(false);
+            await processGameSessionData(data);
           } else {
             console.error("Game session not found");
             setMessage("Game session not found");
@@ -362,6 +365,26 @@ const MultiplayerWordBuilder = () => {
     navigate("/challenge-friend");
   };
 
+  const handleExitGame = async () => {
+    try {
+      if (confirm("Are you sure you want to exit this game? This will end the session.")) {
+        // Update the game session to mark it as completed
+        await updateDoc(doc(db, "gameSessions", sessionId), {
+          status: "completed",
+          endedAt: serverTimestamp(),
+          endedBy: currentUserId
+        });
+        
+        // Navigate back to challenges page
+        navigate("/challenge-friend");
+      }
+    } catch (error) {
+      console.error("Error ending game session:", error);
+      // Navigate anyway even if there's an error
+      navigate("/challenge-friend");
+    }
+  };
+
   if (loading) {
     return <div className="word-builder-container">Loading game...</div>;
   }
@@ -451,6 +474,24 @@ const MultiplayerWordBuilder = () => {
               </div>
             </div>
           </>
+        )}
+      </div>
+      <div className="button-container">
+        {!gameOver && (
+          <>
+            <button onClick={handleBack} className="leave-button">
+              Back to Challenges
+            </button>
+            <button onClick={handleExitGame} className="exit-button">
+              End Game Session
+            </button>
+          </>
+        )}
+        
+        {gameOver && (
+          <button onClick={handleBack} className="back-button">
+            Return to Challenges
+          </button>
         )}
       </div>
     </div>

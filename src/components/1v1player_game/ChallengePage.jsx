@@ -142,26 +142,23 @@ const ChallengePage = () => {
       where("player2.id", "==", currentUserId)
     );
 
+    // Extract the document handling logic into a separate function
+    const handleGameSession = (doc) => {
+      const data = doc.data();
+      const gameObj = games.find(g => g.id === data.game) || { path: "/word-builder", name: "Word Builder" };
+      
+      // Navigate to the game
+      navigate(`${gameObj.path}/${doc.id}`);
+    };
+
     // Listen for sessions where user is player1
     const unsubscribe1 = onSnapshot(q, (querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        const gameObj = games.find(g => g.id === data.game) || { path: "/word-builder", name: "Word Builder" };
-        
-        // Navigate to the game
-        navigate(`${gameObj.path}/${doc.id}`);
-      });
+      querySnapshot.forEach(handleGameSession);
     });
 
     // Listen for sessions where user is player2
     const unsubscribe2 = onSnapshot(q2, (querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        const gameObj = games.find(g => g.id === data.game) || { path: "/word-builder", name: "Word Builder" };
-        
-        // Navigate to the game
-        navigate(`${gameObj.path}/${doc.id}`);
-      });
+      querySnapshot.forEach(handleGameSession);
     });
 
     return () => {
@@ -169,6 +166,71 @@ const ChallengePage = () => {
       unsubscribe2();
     };
   }, [currentUserId, navigate]);
+
+  // Add this function at the appropriate place in the component:
+  // This cleans up any old game sessions for this user
+  const cleanupOldGameSessions = async () => {
+    if (!currentUserId) return;
+    
+    try {
+      // Find incomplete game sessions that are old (more than 24 hours)
+      const oneDayAgo = new Date();
+      oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+      
+      // First query: Get sessions where user is player1
+      const q1 = query(
+        collection(db, "gameSessions"),
+        where("player1.id", "==", currentUserId),
+        where("status", "in", ["active", "pending"])
+      );
+      
+      // Second query: Get sessions where user is player2
+      const q2 = query(
+        collection(db, "gameSessions"),
+        where("player2.id", "==", currentUserId),
+        where("status", "in", ["active", "pending"])
+      );
+      
+      // Execute queries
+      const [snap1, snap2] = await Promise.all([getDocs(q1), getDocs(q2)]);
+      
+      // Process both result sets
+      const oldSessions = [];
+      snap1.forEach(doc => {
+        const data = doc.data();
+        if (data.startedAt && data.startedAt.toDate() < oneDayAgo) {
+          oldSessions.push(doc.id);
+        }
+      });
+      snap2.forEach(doc => {
+        const data = doc.data();
+        if (data.startedAt && data.startedAt.toDate() < oneDayAgo) {
+          oldSessions.push(doc.id);
+        }
+      });
+      
+      // Update old sessions
+      for (const sessionId of oldSessions) {
+        await updateDoc(doc(db, "gameSessions", sessionId), {
+          status: "expired",
+          lastUpdated: serverTimestamp()
+        });
+      }
+      
+      if (oldSessions.length > 0) {
+        console.log(`Cleaned up ${oldSessions.length} old game sessions`);
+      }
+    } catch (error) {
+      console.error("Error cleaning up old game sessions:", error);
+    }
+  };
+
+  // Add this to the useEffect that runs when the component mounts
+  useEffect(() => {
+    if (currentUserId) {
+      cleanupOldGameSessions();
+    }
+  }, [currentUserId]);
 
   // Send a challenge
   const handleChallenge = async () => {
