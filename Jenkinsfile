@@ -36,8 +36,12 @@ pipeline {
         }
         stage('Deploy to Vercel') {
             steps {
-                bat 'vercel --token $VERCEL_TOKEN --prod'
-            }
+                tool nodeJS
+                withEnv(["PATH+NODE=${tool 'NodeJS'}/bin"]) {
+                    bat 'npm install -g vercel'
+                    bat 'vercel --token %VERCEL_TOKEN% --prod'
+        }
+    }
         }
     }
     post {
