@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        nodejs "Node" // Matches the NodeJS name in Global Tool Configuration
+        nodejs "Node23" // Matches the NodeJS name in Global Tool Configuration
     }
     environment {
         VERCEL_TOKEN = credentials('vercel-token') // ID of the stored Vercel token
