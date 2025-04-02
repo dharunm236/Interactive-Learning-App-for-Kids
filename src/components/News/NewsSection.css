@@ -5,6 +5,25 @@
   overflow: hidden;
 }
 
+.source-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #3b82f6;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(59, 130, 246, 0.3);
+  }
+  
+  /* Update positioning when both badges are present */
+  .tamil-news .source-badge {
+    top: 40px;  /* Position below the Tamil badge */
+  }
+
 /* Add a subtle pattern overlay for more visual interest */
 .news-section::before {
   content: '';
@@ -14,8 +33,8 @@
   right: 0;
   bottom: 0;
   background-image: 
-    radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.3) 0%, transparent 25%),
-    radial-gradient(circle at 80% 70%, rgba(96, 165, 250, 0.3) 0%, transparent 25%);
+    radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 25%),
+    radial-gradient(circle at 80% 70%, rgba(96, 165, 250, 0.15) 0%, transparent 25%);
   z-index: 0;
   pointer-events: none;
 }
@@ -28,9 +47,11 @@
 
 .news-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
   margin-top: 2.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 /* Update the Tamil language badge to match the color scheme */
@@ -63,6 +84,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .news-image {
@@ -90,14 +112,20 @@
 
 .news-content h3 {
   font-size: 1.2rem;
-  color: #2d3748;
+  color: #1e293b;
   margin-bottom: 0.75rem;
   font-weight: 600;
   line-height: 1.4;
+  height: auto;
+  min-height: 2.8rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .news-content p {
-  color: #718096;
+  color: #64748b;
   margin-bottom: 1.25rem;
   font-size: 0.95rem;
   line-height: 1.5;
@@ -106,7 +134,7 @@
 
 .read-more-button {
   padding: 0.6rem 1rem;
-  background-color: #4285f4;
+  background-color: #4361ee;
   color: white;
   border-radius: 6px;
   text-decoration: none;
@@ -114,10 +142,11 @@
   font-size: 0.9rem;
   align-self: flex-start;
   transition: background-color 0.2s ease;
+  box-shadow: 0 2px 4px rgba(67, 97, 238, 0.3);
 }
 
 .read-more-button:hover {
-  background-color: #3367d6;
+  background-color: #3851e0;
 }
 
 .loading-container {
@@ -126,6 +155,8 @@
   align-items: center;
   justify-content: center;
   height: 200px;
+  position: relative;
+  z-index: 1;
 }
 
 .loading-spinner {
@@ -133,7 +164,7 @@
   height: 40px;
   border: 4px solid rgba(0, 0, 0, 0.1);
   border-radius: 50%;
-  border-left-color: #4285f4;
+  border-left-color: #4361ee;
   animation: spin 1s linear infinite;
   margin-bottom: 1rem;
 }
@@ -161,5 +192,146 @@
   .news-card {
     max-width: 500px;
     margin: 0 auto;
+  }
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.section-header h1 {
+  color: #1e3a8a;
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+}
+
+.section-subtitle {
+  color: #334155;
+  font-size: 1.1rem;
+}
+
+/* Badge styles */
+.source-badge, .language-badge {
+  position: absolute;
+  padding: 3px 8px;
+  border-radius: 12px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 500;
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.source-badge {
+  top: 10px;
+  right: 10px;
+  background-color: #3b82f6;
+}
+
+.language-badge {
+  top: 10px;
+  right: 10px;
+  background-color: #4361ee;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+/* When both badges are present */
+.tamil-news .source-badge {
+  top: 40px;
+}
+
+/* Tamil news special styling */
+.tamil-news {
+  position: relative;
+  border-left: 4px solid #4361ee;
+}
+
+/* Loading state */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  position: relative;
+  z-index: 1;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-left-color: #4361ee;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Error state */
+.news-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 800px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.retry-button {
+  margin-top: 1rem;
+  padding: 0.6rem 1.5rem;
+  background-color: #4361ee;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 2px 4px rgba(67, 97, 238, 0.3);
+}
+
+.retry-button:hover {
+  background-color: #3851e0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .news-section {
+    padding: 3rem 1rem;
+  }
+  
+  .section-header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .section-subtitle {
+    font-size: 1rem;
+  }
+  
+  .news-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  .news-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
