@@ -14,29 +14,29 @@ pipeline {
         }
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                bat 'npm install'
             }
         }
         stage('Run Tests') {
             steps {
-                sh 'npm test' // Ensure tests are defined in package.json
+                bat 'npm test' // Ensure tests are defined in package.json
             }
         }
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') { // Matches the SonarQube server name in Jenkins
-                    sh 'sonar-scanner'
+                    bat 'sonar-scanner'
                 }
             }
         }
         stage('Build') {
             steps {
-                sh 'npm run build'
+                bat 'npm run build'
             }
         }
         stage('Deploy to Vercel') {
             steps {
-                sh 'vercel --token $VERCEL_TOKEN --prod'
+                bat 'vercel --token $VERCEL_TOKEN --prod'
             }
         }
     }
