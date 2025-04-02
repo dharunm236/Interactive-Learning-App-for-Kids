@@ -24,7 +24,7 @@ pipeline {
         }
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') { // Matches the SonarQube server name in Jenkins
+                withSonarQubeEnv('Kidz-learn') { // Matches the SonarQube server name in Jenkins
                     bat 'sonar-scanner'
                 }
             }
