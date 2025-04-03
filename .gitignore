@@ -44,6 +44,3 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
-babel.config.js
-jest.config.js
-src/setupTests.js
