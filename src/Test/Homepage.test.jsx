@@ -28,6 +28,9 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate
 }));
 
+// Mock window.open for new tab links
+window.open = jest.fn();
+
 // Mock window.location.href for the chatbot redirect
 Object.defineProperty(window, 'location', {
   value: { href: '' },
@@ -54,6 +57,7 @@ describe('Homepage Component', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    window.open.mockClear(); // Clear the window.open mock before each test
     console.log = jest.fn();
     console.error = jest.fn();
   });
@@ -169,13 +173,13 @@ describe('Homepage Component', () => {
     );
     
     // Find the spiritual guide mascot card and click it
-    const spiritualMascot = screen.getByText(/Try thiss!!/i).closest('.mascot-card');
+    const spiritualMascot = screen.getByText(/Try this!/i).closest('.mascot-card');
     await act(async () => {
       fireEvent.click(spiritualMascot);
     });
     
-    // Check if redirected to chatbot URL
-    expect(window.location.href).toBe('http://127.0.0.1:5000/');
+    // Check if window.open was called with the correct URL and target
+    expect(window.open).toHaveBeenCalledWith('https://sacredtext-chatbot.onrender.com/', '_blank');
   });
 
   test('renders mascot section with three mascots', async () => {
@@ -187,7 +191,7 @@ describe('Homepage Component', () => {
     
     expect(screen.getByText(/Meet Our Playful Mascots!/i)).toBeInTheDocument();
     expect(screen.getByText(/Story Time!/i)).toBeInTheDocument();
-    expect(screen.getByText(/Try thiss!!/i)).toBeInTheDocument();
+    expect(screen.getByText(/Try this!/i)).toBeInTheDocument();
     expect(screen.getByText(/Happy Hippo/i)).toBeInTheDocument();
   });
 
