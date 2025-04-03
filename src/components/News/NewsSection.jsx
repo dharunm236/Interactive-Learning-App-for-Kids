@@ -8,7 +8,10 @@ const NewsSection = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  // Helper function for delay
+
+  const API_KEY = '8243ad01604fe2c9e7aedabc23d535b2';
+  
+
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
   
   useEffect(() => {
@@ -16,78 +19,226 @@ const NewsSection = () => {
       try {
         setLoading(true);
         
-        // List of educational and science RSS feeds
-        const rssSources = [
-          {
-            url: 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.sciencedaily.com%2Frss%2Ftop%2Fscience.xml',
-            count: 10,
-            name: 'Science Daily'
-          },
-          {
-            url: 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.indiatoday.in%2Frss%2F1206578',
-            count: 10,
-            name: 'India Today Education'
-          },
-          {
-            url: 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.sciencenews.org%2Ffeed',
-            count: 10,
-            name: 'Science News'
-          },
-          {
-            url: 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.space.com%2Ffeeds%2Fall',
-            count: 10,
-            name: 'Space.com'
-          }
+        // Try different query approaches to maximize chances of getting real news
+        // Reduced number of queries to minimize rate limit issues
+        const queryOptions = [
+          { q: 'india kids education science discovery', country: 'in', lang: 'en' },
+          { q: 'children learning science facts', country: 'in', lang: 'en' },
+          { q: 'students innovation technology', country: 'in', lang: 'en' }
         ];
         
-        let allArticles = [];
+        let allEnglishArticles = [];
         
-        // Try each RSS feed until we get enough articles
-        for (const source of rssSources) {
-          if (allArticles.length >= 10) break;
+        // Try each query with delay between requests
+        for (const queryOption of queryOptions) {
+          if (allEnglishArticles.length >= 6) break; // Stop if we have enough articles
           
           try {
-            console.log(`Fetching from ${source.name}...`);
-            const response = await axios.get(source.url);
+            console.log(`Trying query: ${queryOption.q}`);
             
-            if (response.data && response.data.items && Array.isArray(response.data.items)) {
-              console.log(`Found ${response.data.items.length} items from ${source.name}`);
-              allArticles = [...allArticles, ...response.data.items.map(item => ({
-                ...item,
-                sourceName: source.name
-              }))];
+            const response = await axios.get('https://gnews.io/api/v4/search', {
+              params: {
+                ...queryOption,
+                max: 10,
+                sortby: 'relevance',
+                in: 'title,description',
+                apikey: API_KEY
+              },
+              // Add timeout to prevent hanging requests
+              timeout: 10000
+            });
+            
+            if (response.data.articles && Array.isArray(response.data.articles)) {
+              allEnglishArticles = [...allEnglishArticles, ...response.data.articles];
+              console.log(`Found ${response.data.articles.length} articles with query "${queryOption.q}"`);
             }
-          } catch (rssError) {
-            console.error(`Error fetching from ${source.name}:`, rssError);
+            
+            // Add delay between API calls to avoid rate limiting
+            await delay(1000);
+            
+          } catch (queryError) {
+            console.error(`Error with query "${queryOption.q}":`, queryError);
+            
+            // Check if this is a rate limit error
+            if (queryError.response && queryError.response.status === 429) {
+              console.log("Rate limit hit. Waiting longer before next request...");
+              await delay(3000); // Wait longer if we hit rate limit
+            }
           }
-          
-          // Add delay between requests to avoid rate limits
-          await delay(500);
         }
         
-        // Filter inappropriate content
-        const filteredArticles = filterInappropriateContent(allArticles);
-        console.log(`Filtered to ${filteredArticles.length} appropriate articles`);
+        // Try to get Tamil news - only use one query to reduce API calls
+        let tamilArticles = [];
+        const tamilQueries = [
+          'குழந்தைகள் கல்வி அறிவியல்' // Children education science
+        ];
         
-        // Format articles into our required structure
-        const formattedEnglishNews = formatRssItems(filteredArticles)
+        for (const tamilQuery of tamilQueries) {
+          try {
+            console.log(`Trying Tamil query: ${tamilQuery}`);
+            
+            // Add delay before Tamil query
+            await delay(1000);
+            
+            const tamilResponse = await axios.get('https://gnews.io/api/v4/search', {
+              params: {
+                q: tamilQuery,
+                lang: 'ta',
+                country: 'in',
+                max: 5,
+                sortby: 'relevance',
+                apikey: API_KEY
+              },
+              timeout: 10000
+            });
+            
+            if (tamilResponse.data.articles && 
+                Array.isArray(tamilResponse.data.articles) && 
+                tamilResponse.data.articles.length > 0) {
+              tamilArticles = tamilResponse.data.articles;
+              console.log(`Found ${tamilArticles.length} Tamil articles with query "${tamilQuery}"`);
+            }
+          } catch (tamilError) {
+            console.error(`Error with Tamil query "${tamilQuery}":`, tamilError);
+            // Handle rate limiting for Tamil queries
+            if (tamilError.response && tamilError.response.status === 429) {
+              console.log("Rate limit hit on Tamil query.");
+            }
+          }
+        }
+        
+        // If we still don't have enough articles and haven't hit rate limits too much,
+        // try top headlines but only for one category
+        if (allEnglishArticles.length < 3) {
+          try {
+            // Add delay before headlines query
+            await delay(1000);
+            
+            const headlinesResponse = await axios.get('https://gnews.io/api/v4/top-headlines', {
+              params: {
+                category: 'science',
+                lang: 'en',
+                country: 'in',
+                max: 10,
+                apikey: API_KEY
+              },
+              timeout: 10000
+            });
+            
+            if (headlinesResponse.data.articles && Array.isArray(headlinesResponse.data.articles)) {
+              allEnglishArticles = [...allEnglishArticles, ...headlinesResponse.data.articles];
+              console.log(`Added ${headlinesResponse.data.articles.length} articles from science headlines`);
+            }
+          } catch (headlinesError) {
+            console.error("Error fetching headlines:", headlinesError);
+          }
+        }
+        
+        // Filter out inappropriate content for children
+        const inappropriateTerms = ['death', 'dead', 'kill', 'war', 'crime', 'gun', 'shot', 'violence', 
+                                   'murder', 'suicide', 'blood', 'attack', 'terror', 'porn', 'sex',
+                                   'abuse', 'assault', 'bomb', 'drunk', 'alcohol'];
+        
+        // Filter English articles
+        const filteredEnglishArticles = allEnglishArticles.filter(article => {
+          if (!article.title || !article.description) return false;
+          
+          const titleLower = article.title.toLowerCase();
+          const descLower = article.description.toLowerCase();
+          
+          return !inappropriateTerms.some(term => 
+            titleLower.includes(term) || descLower.includes(term)
+          );
+        });
+        
+        // Filter Tamil articles
+        const filteredTamilArticles = tamilArticles.filter(article => {
+          if (!article.title || !article.description) return false;
+          
+          const titleLower = article.title.toLowerCase();
+          const descLower = article.description.toLowerCase();
+          
+          // Filter out articles containing these terms that might be recognized in Tamil content
+          const tamilFilterTerms = ['death', 'dead', 'kill', 'murder', 'suicide', 'blood', 'terror'];
+          return !tamilFilterTerms.some(term => 
+            titleLower.includes(term) || descLower.includes(term)
+          );
+        });
+        
+        // Prepare final news collection
+        // First, try to get articles with images
+        let englishNewsWithImages = filteredEnglishArticles
+          .filter(article => article.image)
           .slice(0, 3);
         
-        // Add Tamil article
-        const tamilNews = {
-          title: "குழந்தைகளுக்கான அறிவியல் சோதனைகள்",
-          description: "வீட்டிலேயே செய்யக்கூடிய எளிய அறிவியல் சோதனைகள் மூலம் குழந்தைகள் அறிவியல் கருத்துகளை கற்றுக்கொள்ள உதவும் வழிகள்.",
-          image: "https://images.unsplash.com/photo-1566140967404-b8b3932483f5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
-          url: "https://ta.wikipedia.org/wiki/அறிவியல்",
-          publishedAt: new Date().toISOString(),
-          isTamil: true
-        };
+        // If not enough articles with images, add articles without images
+        if (englishNewsWithImages.length < 3) {
+          const englishNewsWithoutImages = filteredEnglishArticles
+            .filter(article => !article.image)
+            .slice(0, 3 - englishNewsWithImages.length);
+            
+          englishNewsWithImages = [...englishNewsWithImages, ...englishNewsWithoutImages];
+        }
+        
+        // Select Tamil news
+        let selectedTamilNews = [];
+        if (filteredTamilArticles.length > 0) {
+          // Prefer Tamil articles with images
+          const tamilWithImage = filteredTamilArticles.filter(article => article.image);
+          
+          if (tamilWithImage.length > 0) {
+            selectedTamilNews = [tamilWithImage[0]];
+          } else {
+            selectedTamilNews = [filteredTamilArticles[0]];
+          }
+          
+          // Add Tamil indicator
+          selectedTamilNews[0].isTamil = true;
+        }
         
         // Combine English and Tamil news
-        const finalNews = [...formattedEnglishNews, tamilNews];
+        const finalNews = [...englishNewsWithImages, ...selectedTamilNews];
         
+        // Check if we have any news articles
         if (finalNews.length === 0) {
-          setError("No news found. Please try again later.");
+          // Try a final, very general query as last resort
+          try {
+            await delay(2000); // Wait longer before last attempt
+            
+            const generalResponse = await axios.get('https://gnews.io/api/v4/top-headlines', {
+              params: {
+                lang: 'en',  
+                country: 'in',
+                max: 5,
+                apikey: API_KEY
+              },
+              timeout: 10000
+            });
+            
+            if (generalResponse.data.articles && 
+                Array.isArray(generalResponse.data.articles) && 
+                generalResponse.data.articles.length > 0) {
+                
+              // Filter for kid-friendly content
+              const safeGeneralArticles = generalResponse.data.articles.filter(article => {
+                const titleLower = article.title?.toLowerCase() || '';
+                const descLower = article.description?.toLowerCase() || '';
+                return !inappropriateTerms.some(term => 
+                  titleLower.includes(term) || descLower.includes(term)
+                );
+              }).slice(0, 3);
+              
+              if (safeGeneralArticles.length > 0) {
+                setNews(safeGeneralArticles);
+                setLoading(false);
+                return;
+              }
+            }
+          } catch (finalError) {
+            console.error("Final attempt failed:", finalError);
+          }
+          
+          setError("No suitable news found. Please try again later.");
           setLoading(false);
           return;
         }
@@ -105,69 +256,7 @@ const NewsSection = () => {
     fetchNews();
   }, []);
   
-  // Function to filter inappropriate content
-  const filterInappropriateContent = (items) => {
-    const inappropriateTerms = ['death', 'dead', 'kill', 'war', 'crime', 'gun', 'shot', 'violence', 
-                               'murder', 'suicide', 'blood', 'attack', 'terror', 'porn', 'sex',
-                               'abuse', 'assault', 'bomb', 'drunk', 'alcohol'];
-    
-    return items.filter(item => {
-      const titleLower = (item.title || '').toLowerCase();
-      const descLower = (item.description || '').toLowerCase();
-      const contentLower = (item.content || '').toLowerCase();
-      
-      return !inappropriateTerms.some(term => 
-        titleLower.includes(term) || descLower.includes(term) || contentLower.includes(term)
-      );
-    });
-  };
-  
-  // Function to format RSS items into our required structure
-  const formatRssItems = (items) => {
-    return items.map(item => {
-      // Extract the first image from the content if available
-      let image = item.thumbnail || null;
-      
-      if (!image && item.content) {
-        const imgMatch = item.content.match(/<img[^>]+src="([^">]+)"/);
-        if (imgMatch && imgMatch[1]) {
-          image = imgMatch[1];
-        }
-      }
-      
-      // If enclosure exists and it's an image, use that
-      if (!image && item.enclosure && item.enclosure.link) {
-        const link = item.enclosure.link;
-        if (link.match(/\.(jpeg|jpg|gif|png)$/)) {
-          image = link;
-        }
-      }
-      
-      // Clean HTML from description
-      let cleanDescription = item.description || '';
-      cleanDescription = cleanDescription.replace(/<[^>]*>/g, ' ')
-        .replace(/\s{2,}/g, ' ')
-        .trim();
-      
-      if (cleanDescription.length === 0 && item.content) {
-        cleanDescription = item.content.replace(/<[^>]*>/g, ' ')
-          .replace(/\s{2,}/g, ' ')
-          .trim()
-          .substring(0, 150) + '...';
-      }
-      
-      // Format to match our existing article structure
-      return {
-        title: item.title,
-        description: cleanDescription,
-        image: image,
-        url: item.link,
-        publishedAt: item.pubDate || new Date().toISOString(),
-        sourceName: item.sourceName || 'Educational News'
-      };
-    });
-  };
-  
+  // Improved error display with retry button
   const handleRetry = () => {
     window.location.reload();
   };
@@ -203,9 +292,6 @@ const NewsSection = () => {
               {item.isTamil && (
                 <div className="language-badge">தமிழ்</div>
               )}
-              {item.sourceName && !item.isTamil && (
-                <div className="source-badge">{item.sourceName}</div>
-              )}
               <div className="news-image">
                 <img 
                   src={item.image || "https://images.unsplash.com/photo-1584697964328-b1e7f63dca95?q=80&w=500&auto=format&fit=crop"} 
@@ -218,7 +304,7 @@ const NewsSection = () => {
               </div>
               <div className="news-content">
                 <h3>{item.title}</h3>
-                <p>{item.description?.substring(0, 120)}...</p>
+                <p>{item.description?.substring(0, 90)}...</p>
                 <a 
                   href={item.url} 
                   target="_blank" 

@@ -5,13 +5,7 @@ sonar-project.properties
 node_modules/
 /.pnp
 .pnp.js
-# Testing
-*.test.jsx
-*.spec.js
-__tests__/
-__mocks__/
-test/
-tests/
+
 # Environment variables
 .env
 .env.local
@@ -43,5 +37,4 @@ yarn-error.log*
 # Misc
 .DS_Store
 Thumbs.db
-jest.config.js
-babel.config.js
+
