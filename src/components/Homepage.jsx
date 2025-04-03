@@ -8,6 +8,7 @@ import { collection, addDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { motion, AnimatePresence } from 'framer-motion'; // Added AnimatePresence
+import NewsSection from './News/NewsSection';
 
 function Homepage({ onLogout, currentUserId }) {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -204,6 +205,8 @@ function Homepage({ onLogout, currentUserId }) {
           </div>
           <canvas ref={canvasRef} id="three-canvas"></canvas>
         </section>
+
+        <NewsSection />
 
         <section className="mascot-section" id="mascots">
           <div className="section-header">
