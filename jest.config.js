@@ -1,5 +1,6 @@
 module.exports = {
-    verbose:false,
+    verbose: false,  // Reduces detailed logging
+    reporters: ["default"],
     testEnvironment: "jsdom",
     setupFilesAfterEnv: ["<rootDir>/src/setupTests.js"],
     moduleNameMapper: {
