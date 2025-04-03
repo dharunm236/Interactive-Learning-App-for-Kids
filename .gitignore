@@ -6,7 +6,7 @@ node_modules/
 /.pnp
 .pnp.js
 # Testing
-*.test.js
+*.test.jsx
 *.spec.js
 __tests__/
 __mocks__/
@@ -43,3 +43,5 @@ yarn-error.log*
 # Misc
 .DS_Store
 Thumbs.db
+jest.config.js
+babel.config.js
