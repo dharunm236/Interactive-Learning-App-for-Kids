@@ -46,4 +46,4 @@ Thumbs.db
 
 babel.config.js
 jest.config.js
-setupTests.js
+src/setupTests.js
