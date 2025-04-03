@@ -1,6 +1,5 @@
 \node_modules
 .scannerwork/
-sonar-project.properties
 # Dependencies
 node_modules/
 /.pnp

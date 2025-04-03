@@ -234,16 +234,19 @@ function Homepage({ onLogout, currentUserId }) {
                 className="mascot-card"
                 whileHover={{ y: -10, boxShadow: "0 15px 30px rgba(0, 0, 0, 0.2)" }}
                 transition={{ type: "spring", stiffness: 300 }}
-                onClick={() => window.location.href = 'http://127.0.0.1:5000/'}
+                onClick={() => {
+                    // Open the Render hosted application in a new tab
+                    window.open('https://sacredtext-chatbot.onrender.com/', '_blank');
+                }}
                 style={{ cursor: 'pointer' }}
-              >
+            >
                 <div className="mascot-image-container">
-                 <img src="https://png.pngtree.com/png-vector/20230206/ourmid/pngtree-thiruvalluvar-vector-design-png-image_6587371.png " alt="Spiritual Guide" />                
-                 </div>
+                    <img src="https://png.pngtree.com/png-vector/20230206/ourmid/pngtree-thiruvalluvar-vector-design-png-image_6587371.png " alt="Spiritual Guide" />                
+                </div>
                 <div className="mascot-content">
-                  <h2>Try thiss!!</h2>
-                  <p>Join us to learn the values from sacred texts!</p>
-                  <span className="mascot-action">Explore! →</span>
+                    <h2>Try this!</h2>
+                    <p>Join us to learn the values from sacred texts!</p>
+                    <span className="mascot-action">Explore! →</span>
                 </div>
             </motion.div>
             

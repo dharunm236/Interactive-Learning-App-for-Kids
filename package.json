@@ -37,7 +37,7 @@
     "test": "jest --config=jest.config.js",
     "test:watch": "jest --watchAll --config=jest.config.js",
     "test:coverage": "jest --coverage --config=jest.config.js",
-    "start": "react-scripts start --host 0.0.0.0",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject"
   },
